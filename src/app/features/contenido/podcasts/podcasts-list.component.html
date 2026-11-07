@@ -25,8 +25,8 @@
     />
   } @else {
     <div class="grid grid--wide aparecer-lista">
-      @for (podcast of podcasts(); track podcast.id) {
-        <article class="card card--hover podcast">
+      @for (podcast of podcasts(); track podcast.id; let i = $index) {
+        <article class="card card--hover podcast" appInView="up" [retraso]="i * 70">
           @if (podcast.portada) {
             <img class="podcast__portada" [src]="podcast.portada" [alt]="'Portada de ' + podcast.titulo" loading="lazy" />
           } @else {

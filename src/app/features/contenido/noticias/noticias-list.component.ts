@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@ang
 import { RouterLink } from '@angular/router';
 
 import { CategoriaNoticia, Noticia } from '../../../core/models/api.models';
+import { InViewDirective } from '../../../core/animations/in-view.directive';
 import { NoticiaService } from '../../../core/services/noticia.service';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 
@@ -18,7 +19,7 @@ const CATEGORIAS: { valor: CategoriaNoticia | ''; etiqueta: string }[] = [
 @Component({
   selector: 'app-noticias-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, DatePipe, EmptyStateComponent],
+  imports: [RouterLink, DatePipe, EmptyStateComponent, InViewDirective],
   templateUrl: './noticias-list.component.html',
   styleUrl: './noticias-list.component.scss',
 })

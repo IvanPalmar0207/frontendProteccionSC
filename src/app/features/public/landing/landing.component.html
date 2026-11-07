@@ -1,6 +1,6 @@
 <section class="hero">
   <div class="container hero__grid">
-    <div class="hero__contenido aparecer">
+    <div class="hero__contenido" appInView="right">
       <span class="badge badge--info">Atención y acompañamiento</span>
       <h1 class="hero__titulo">
         Denunciá con seguridad. <span>No estás sola, no estás solo.</span>
@@ -21,24 +21,34 @@
       </ul>
     </div>
 
-    <div class="hero__ilustracion aparecer">
+    <figure class="hero__media" appInView="left">
       <img
-        src="/illustrations/acompanamiento.svg"
-        alt="Dos personas conversando en un espacio de calma y confianza"
+        appParallax
+        [intensidad]="2"
+        src="/photos/hero.webp"
+        alt="Personas reunidas conversando en un espacio luminoso"
       />
-    </div>
+      <figcaption class="hero__media-tarjeta">
+        <span class="hero__media-icono" aria-hidden="true">💬</span>
+        <div>
+          <strong>Chat privado</strong>
+          <span class="muted">con el profesional asignado</span>
+        </div>
+      </figcaption>
+    </figure>
   </div>
 </section>
 
 <section class="container seccion" aria-labelledby="beneficios-titulo">
-  <header class="seccion__encabezado">
+  <header class="seccion__encabezado" appInView>
+    <span class="seccion__eyebrow">Por qué confiar</span>
     <h2 id="beneficios-titulo">Pensada para acompañarte de verdad</h2>
     <p class="muted">Cada decisión de diseño prioriza tu seguridad y tu tranquilidad.</p>
   </header>
-  <div class="grid aparecer-lista">
-    @for (beneficio of beneficios; track beneficio.titulo) {
-      <article class="card card--hover">
-        <span class="card__icono" aria-hidden="true">{{ beneficio.icono }}</span>
+  <div class="grid">
+    @for (beneficio of beneficios; track beneficio.titulo; let i = $index) {
+      <article class="card card--hover beneficio" appInView="up" [retraso]="i * 90">
+        <span class="beneficio__icono" aria-hidden="true">{{ beneficio.icono }}</span>
         <h3>{{ beneficio.titulo }}</h3>
         <p class="muted">{{ beneficio.texto }}</p>
       </article>
@@ -48,58 +58,79 @@
 
 <section class="proceso" aria-labelledby="proceso-titulo">
   <div class="container">
-    <header class="seccion__encabezado">
+    <header class="seccion__encabezado" appInView>
+      <span class="seccion__eyebrow">El recorrido</span>
       <h2 id="proceso-titulo">Cómo funciona</h2>
-      <p class="muted">Cuatro pasos simples, sin trámites complicados.</p>
+      <p class="muted">Cuatro etapas claras, desde el primer registro hasta el seguimiento.</p>
     </header>
-    <ol class="proceso__lista">
-      @for (paso of pasos; track paso.numero) {
-        <li class="proceso__paso">
-          <span class="proceso__numero">{{ paso.numero }}</span>
-          <h3>{{ paso.titulo }}</h3>
-          <p class="muted">{{ paso.texto }}</p>
+
+    <ol class="timeline">
+      @for (paso of pasos; track paso.numero; let i = $index) {
+        <li class="timeline__item" [class.timeline__item--invertido]="i % 2 === 1">
+          <div class="timeline__media" appInView="scale">
+            <img [src]="paso.foto" [alt]="paso.alt" loading="lazy" />
+          </div>
+          <div class="timeline__texto" [appInView]="i % 2 === 1 ? 'left' : 'right'">
+            <span class="timeline__numero">{{ paso.numero }}</span>
+            <h3>{{ paso.titulo }}</h3>
+            <p class="muted">{{ paso.texto }}</p>
+          </div>
+          <span class="timeline__punto" aria-hidden="true"></span>
         </li>
       }
     </ol>
   </div>
 </section>
 
-<section class="container seccion" aria-labelledby="privacidad-titulo">
-  <div class="privacidad">
-    <div class="privacidad__texto">
-      <span class="badge badge--soft">Privacidad</span>
-      <h2 id="privacidad-titulo">Tu identidad, protegida por defecto</h2>
-      <p>
-        Cuando elegís una denuncia anónima, la relación con tu cuenta se mantiene de forma
-        interna para que puedas hacer seguimiento. El profesional que atiende el caso
-        <strong>no</strong> accede a tu nombre, correo, teléfono ni documento.
-      </p>
-      <p class="muted">
-        Las restricciones se aplican en el servidor, no sólo en la pantalla. El chat privado
-        tampoco es accesible para el rol administrador.
-      </p>
-      <a class="btn btn--soft" routerLink="/noticias">Conocer más</a>
-    </div>
-    <div class="privacidad__imagen">
-      <img src="/illustrations/privacidad.svg" alt="Escudo que representa privacidad y confidencialidad" />
+<section class="container seccion acompanamiento" aria-labelledby="acompanamiento-titulo">
+  <figure class="acompanamiento__media" appInView="right">
+    <img
+      appParallax
+      [intensidad]="2"
+      src="/photos/acompanamiento.webp"
+      alt="Persona brindando acompañamiento en un espacio sereno"
+      loading="lazy"
+    />
+  </figure>
+  <div class="acompanamiento__texto" appInView="left">
+    <span class="seccion__eyebrow">Acompañamiento</span>
+    <h2 id="acompanamiento-titulo">Una persona real del otro lado</h2>
+    <p>
+      Cuando registrás una denuncia, un profesional autorizado la toma, actualiza el estado y
+      deja observaciones en el seguimiento. Podés conversar por chat privado durante todo el
+      proceso.
+    </p>
+    <p class="muted">
+      Si elegís la modalidad anónima, el profesional ve que la denuncia es anónima y
+      <strong>no</strong> accede a tu nombre, correo, teléfono ni documento: esa restricción
+      se aplica en el servidor.
+    </p>
+    <div class="row row--wrap">
+      <a class="btn btn--soft" routerLink="/register">Empezar</a>
+      <a class="btn btn--ghost" routerLink="/noticias">Ver recursos</a>
     </div>
   </div>
 </section>
 
 @if (destacadas().length) {
   <section class="container seccion" aria-labelledby="noticias-titulo">
-    <header class="seccion__encabezado seccion__encabezado--fila">
+    <header class="seccion__encabezado seccion__encabezado--fila" appInView>
       <div>
+        <span class="seccion__eyebrow">Información</span>
         <h2 id="noticias-titulo">Noticias y recursos destacados</h2>
-        <p class="muted">Información para entender y prevenir.</p>
       </div>
       <a class="btn btn--ghost btn--sm" routerLink="/noticias">Ver todas</a>
     </header>
-    <div class="grid grid--wide aparecer-lista">
-      @for (noticia of destacadas(); track noticia.id) {
-        <article class="card card--hover noticia-mini">
+    <div class="grid grid--wide">
+      @for (noticia of destacadas(); track noticia.id; let i = $index) {
+        <article class="card card--hover noticia-mini" appInView="up" [retraso]="i * 90">
           @if (noticia.imagen) {
-            <img class="noticia-mini__imagen" [src]="noticia.imagen" [alt]="'Portada de ' + noticia.titulo" loading="lazy" />
+            <img
+              class="noticia-mini__imagen"
+              [src]="noticia.imagen"
+              [alt]="'Portada de ' + noticia.titulo"
+              loading="lazy"
+            />
           }
           <div class="noticia-mini__cuerpo">
             <span class="badge badge--info">{{ noticia.categoria_etiqueta }}</span>
@@ -117,27 +148,37 @@
 }
 
 <section class="container seccion" aria-labelledby="recursos-titulo">
+  <header class="seccion__encabezado" appInView>
+    <span class="seccion__eyebrow">Comunidad</span>
+    <h2 id="recursos-titulo">Recursos e intercambio</h2>
+    <p class="muted">Contenido para informarte y espacios para no transitar esto en soledad.</p>
+  </header>
   <div class="recursos">
-    <article class="card card--acento">
-      <img src="/illustrations/recursos.svg" alt="Ilustración de recursos informativos" class="recursos__imagen" />
-      <h3>Pódcast</h3>
-      <p class="muted">Episodios de acompañamiento y prevención en tu plataforma favorita.</p>
-      <a class="btn btn--primary btn--sm" routerLink="/podcasts">Escuchar</a>
+    <article class="recurso" appInView="up">
+      <img class="recurso__foto" src="/photos/recursos.webp" alt="Dos personas saludándose cordialmente" loading="lazy" />
+      <div class="recurso__cuerpo">
+        <h3>Pódcast</h3>
+        <p class="muted">Episodios de acompañamiento y prevención, alojados en su plataforma de origen.</p>
+        <a class="btn btn--primary btn--sm" routerLink="/podcasts">Escuchar</a>
+      </div>
     </article>
-    <article class="card card--acento">
-      <img src="/illustrations/comunidad.svg" alt="Ilustración de una comunidad que se acompaña" class="recursos__imagen" />
-      <h3>Foro</h3>
-      <p class="muted">Un espacio seguro para compartir experiencias y acompañarse.</p>
-      <a class="btn btn--primary btn--sm" routerLink="/foro">Participar</a>
+    <article class="recurso" appInView="up" [retraso]="120">
+      <img class="recurso__foto" src="/photos/comunidad.webp" alt="Grupo de personas compartiendo un momento" loading="lazy" />
+      <div class="recurso__cuerpo">
+        <h3>Foro</h3>
+        <p class="muted">Un espacio seguro para compartir experiencias y acompañarse entre pares.</p>
+        <a class="btn btn--primary btn--sm" routerLink="/foro">Participar</a>
+      </div>
     </article>
   </div>
 </section>
 
 <section class="cta-final">
-  <div class="container cta-final__contenido">
+  <img class="cta-final__fondo" src="/photos/cta.webp" alt="" aria-hidden="true" loading="lazy" />
+  <div class="container cta-final__contenido" appInView="scale">
     <h2>Dar el primer paso no tiene por qué ser difícil</h2>
     <p>Creá tu cuenta y contá lo que está pasando. El resto lo hacemos juntos.</p>
-    <div class="row">
+    <div class="row row--wrap">
       <a class="btn btn--primary btn--lg" routerLink="/register">Empezar ahora</a>
       <a class="btn btn--ghost btn--lg" routerLink="/login">Ingresar</a>
     </div>

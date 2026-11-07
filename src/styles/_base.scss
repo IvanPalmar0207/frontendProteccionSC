@@ -33,7 +33,12 @@ body {
   line-height: $lh-base;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  // `clip` avoids creating a scroll container, so sticky navigation keeps working.
+  overflow-x: clip;
 }
+
+// Anchored sections keep their heading clear of the sticky navigation.
+[id] { scroll-margin-top: 88px; }
 
 h1,
 h2,
@@ -375,8 +380,26 @@ legend { font-weight: 650; padding: 0 $e-2; }
 .aparecer { @include aparecer; }
 .aparecer-lista > * { @include aparecer; }
 
+// Reveal-on-scroll (usado por la directiva appInView).
+.reveal {
+  opacity: 0;
+  transition: opacity 620ms $ease, transform 620ms $ease;
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal--up { transform: translateY(28px); }
+.reveal--down { transform: translateY(-28px); }
+.reveal--left { transform: translateX(32px); }
+.reveal--right { transform: translateX(-32px); }
+.reveal--scale { transform: scale(0.94); }
+.reveal--fade { transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .reveal { opacity: 1 !important; transform: none !important; }
   *,
   *::before,
   *::after {

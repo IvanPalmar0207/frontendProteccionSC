@@ -5,7 +5,7 @@
         <a
           [routerLink]="item.ruta"
           routerLinkActive="is-active"
-          [routerLinkActiveOptions]="{ exact: item.ruta.split('/').length <= 2 }"
+          [routerLinkActiveOptions]="{ exact: !!item.exacto }"
         >
           {{ item.etiqueta }}
         </a>

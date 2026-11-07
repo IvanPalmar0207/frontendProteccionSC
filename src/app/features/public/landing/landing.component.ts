@@ -2,13 +2,23 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { InViewDirective } from '../../../core/animations/in-view.directive';
+import { ParallaxDirective } from '../../../core/animations/parallax.directive';
 import { Noticia } from '../../../core/models/api.models';
 import { NoticiaService } from '../../../core/services/noticia.service';
+
+interface Paso {
+  numero: string;
+  titulo: string;
+  texto: string;
+  foto: string;
+  alt: string;
+}
 
 @Component({
   selector: 'app-landing',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, InViewDirective, ParallaxDirective],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss',
 })
@@ -20,8 +30,8 @@ export class LandingComponent implements OnInit {
   readonly beneficios = [
     {
       icono: '🔒',
-      titulo: 'Denuncia anónima real',
-      texto: 'La identidad queda sólo en tu cuenta. El profesional ve la modalidad, nunca tus datos.',
+      titulo: 'Anonimato protegido',
+      texto: 'Tu identidad queda sólo en tu cuenta; el profesional ve la modalidad, nunca tus datos.',
     },
     {
       icono: '💬',
@@ -40,11 +50,36 @@ export class LandingComponent implements OnInit {
     },
   ];
 
-  readonly pasos = [
-    { numero: '1', titulo: 'Creá tu cuenta', texto: 'Registrate con tu correo en menos de un minuto.' },
-    { numero: '2', titulo: 'Contá lo que pasó', texto: 'Elegí denuncia pública o anónima y describí los hechos.' },
-    { numero: '3', titulo: 'Recibí acompañamiento', texto: 'Un profesional atiende tu caso y podés hablar por chat.' },
-    { numero: '4', titulo: 'Seguí tu proceso', texto: 'Mirá el estado y las actualizaciones desde tu panel.' },
+  /** These four steps describe exactly what the system does. */
+  readonly pasos: Paso[] = [
+    {
+      numero: '01',
+      titulo: 'Creás tu cuenta',
+      texto: 'Te registrás con tu correo en menos de un minuto y accedés a tu espacio personal.',
+      foto: '/photos/proceso-1.webp',
+      alt: 'Personas conversando en un espacio de trabajo luminoso',
+    },
+    {
+      numero: '02',
+      titulo: 'Registrás la denuncia',
+      texto: 'Elegís modalidad pública o anónima y describís lo sucedido con el detalle que puedas.',
+      foto: '/photos/proceso-2.webp',
+      alt: 'Personas conversando en una mesa, compartiendo información',
+    },
+    {
+      numero: '03',
+      titulo: 'La denuncia se procesa',
+      texto: 'Un profesional autorizado toma el caso, actualiza el estado y deja observaciones.',
+      foto: '/photos/proceso-3.webp',
+      alt: 'Dos personas manteniendo una conversación de acompañamiento',
+    },
+    {
+      numero: '04',
+      titulo: 'Seguís el avance',
+      texto: 'Consultás el seguimiento, conversás por chat y accedés a los canales de acompañamiento.',
+      foto: '/photos/proceso-4.webp',
+      alt: 'Persona sonriendo durante una conversación profesional',
+    },
   ];
 
   ngOnInit(): void {

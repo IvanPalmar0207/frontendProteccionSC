@@ -1,42 +1,134 @@
-<header class="nav-bar">
-  <a class="nav-bar__brand" routerLink="/">
-    <span class="nav-bar__logo" aria-hidden="true">SC</span>
-    <span class="nav-bar__name">Protección Inmediata</span>
-  </a>
+<header class="nav" [class.is-scrolled]="desplazado()" [class.is-open]="menuMovil()">
+  <div class="nav__bar container container--ancho">
+    <a class="nav__brand" routerLink="/" (click)="cerrarMenus()">
+      <span class="nav__logo" aria-hidden="true">SC</span>
+      <span class="nav__marca">
+        <strong>Protección Inmediata</strong>
+        <small>Denuncia y acompañamiento</small>
+      </span>
+    </a>
 
-  <nav class="nav-bar__links" aria-label="Navegación principal">
-    @if (!autenticado()) {
-      <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
-      <a routerLink="/noticias" routerLinkActive="is-active">Noticias</a>
-      <a routerLink="/podcasts" routerLinkActive="is-active">Pódcast</a>
-      <a class="btn btn--ghost btn--sm" routerLink="/login">Ingresar</a>
-      <a class="btn btn--primary btn--sm" routerLink="/register">Crear cuenta</a>
-    } @else {
-      <a routerLink="/noticias" routerLinkActive="is-active">Noticias</a>
-      <a routerLink="/podcasts" routerLinkActive="is-active">Pódcast</a>
-      <a routerLink="/foro" routerLinkActive="is-active">Foro</a>
-      <a routerLink="/chat" routerLinkActive="is-active">Chat</a>
-
-      <button
-        type="button"
-        class="nav-bar__bell"
-        (click)="irANotificaciones()"
-        [attr.aria-label]="'Notificaciones: ' + noLeidas() + ' sin leer'"
+    <nav class="nav__links" aria-label="Navegación principal">
+      <a
+        class="nav__link"
+        routerLink="/"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
       >
-        <span aria-hidden="true">🔔</span>
-        @if (noLeidas() > 0) {
-          <span class="nav-bar__badge">{{ noLeidas() }}</span>
-        }
-      </button>
+        Inicio
+      </a>
 
-      <div class="nav-bar__user">
-        <span class="nav-bar__user-name">{{ usuario()?.nombre_completo }}</span>
-        <span class="badge badge--soft">{{ usuario()?.role | rol }}</span>
+      <div class="nav__dropdown">
+        <button
+          type="button"
+          class="nav__link nav__link--boton"
+          [class.is-active]="menuRecursos()"
+          [attr.aria-expanded]="menuRecursos()"
+          (click)="toggleRecursos($event)"
+        >
+          Recursos
+          <span class="nav__caret" [class.is-open]="menuRecursos()" aria-hidden="true">▾</span>
+        </button>
+        @if (menuRecursos()) {
+          <div class="nav__menu" role="menu">
+            @for (recurso of recursos; track recurso.ruta) {
+              <a class="nav__menu-item" role="menuitem" [routerLink]="recurso.ruta">
+                {{ recurso.etiqueta }}
+              </a>
+            }
+          </div>
+        }
       </div>
 
-      <button type="button" class="btn btn--ghost btn--sm" (click)="cerrarSesion()">
-        Salir
-      </button>
-    }
-  </nav>
+      @if (autenticado()) {
+        <a class="nav__link" routerLink="/chat" routerLinkActive="is-active">Chat</a>
+
+        <a
+          class="nav__bell"
+          routerLink="/usuario"
+          [attr.aria-label]="'Notificaciones: ' + noLeidas() + ' sin leer'"
+        >
+          <span aria-hidden="true">🔔</span>
+          @if (noLeidas() > 0) {
+            <span class="nav__badge">{{ noLeidas() }}</span>
+          }
+        </a>
+
+        <div class="nav__dropdown">
+          <button
+            type="button"
+            class="nav__usuario"
+            [attr.aria-expanded]="menuUsuario()"
+            (click)="toggleUsuario($event)"
+          >
+            <span class="nav__avatar" aria-hidden="true">
+              {{ usuario()?.nombre_completo?.charAt(0) }}
+            </span>
+            <span class="nav__usuario-nombre">{{ usuario()?.nombre_completo }}</span>
+            <span class="nav__caret" [class.is-open]="menuUsuario()" aria-hidden="true">▾</span>
+          </button>
+          @if (menuUsuario()) {
+            <div class="nav__menu nav__menu--derecha" role="menu">
+              <span class="nav__menu-etiqueta">{{ usuario()?.role | rol }}</span>
+              @for (item of enlacesPanel(); track item.ruta) {
+                <a class="nav__menu-item" role="menuitem" [routerLink]="item.ruta">{{ item.etiqueta }}</a>
+              }
+              <button type="button" class="nav__menu-item nav__menu-salir" (click)="cerrarSesion()">
+                Cerrar sesión
+              </button>
+            </div>
+          }
+        </div>
+      } @else {
+        <a class="nav__link nav__link--login" routerLink="/login">Ingresar</a>
+        <a class="btn btn--primary btn--sm" routerLink="/register">Crear cuenta</a>
+      }
+    </nav>
+
+    <button
+      type="button"
+      class="nav__hamburguesa"
+      [class.is-open]="menuMovil()"
+      [attr.aria-expanded]="menuMovil()"
+      aria-label="Abrir menú"
+      (click)="toggleMovil()"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  @if (menuMovil()) {
+    <div class="nav__drawer" role="navigation" aria-label="Menú">
+      <div class="container">
+        @if (autenticado()) {
+          <div class="nav__drawer-usuario">
+            <span class="nav__avatar" aria-hidden="true">{{ usuario()?.nombre_completo?.charAt(0) }}</span>
+            <div>
+              <strong>{{ usuario()?.nombre_completo }}</strong>
+              <span class="badge badge--soft">{{ usuario()?.role | rol }}</span>
+            </div>
+          </div>
+          <ul class="nav__drawer-lista">
+            @for (item of enlacesPanel(); track item.ruta) {
+              <li><a [routerLink]="item.ruta">{{ item.etiqueta }}</a></li>
+            }
+          </ul>
+          <button type="button" class="btn btn--ghost btn--block" (click)="cerrarSesion()">
+            Cerrar sesión
+          </button>
+        } @else {
+          <ul class="nav__drawer-lista">
+            <li><a routerLink="/">Inicio</a></li>
+            @for (recurso of recursos; track recurso.ruta) {
+              <li><a [routerLink]="recurso.ruta">{{ recurso.etiqueta }}</a></li>
+            }
+          </ul>
+          <div class="nav__drawer-acciones">
+            <a class="btn btn--ghost btn--block" routerLink="/login">Ingresar</a>
+            <a class="btn btn--primary btn--block" routerLink="/register">Crear cuenta</a>
+          </div>
+        }
+      </div>
+    </div>
+  }
 </header>

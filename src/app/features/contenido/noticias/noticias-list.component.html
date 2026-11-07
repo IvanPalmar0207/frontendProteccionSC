@@ -32,8 +32,8 @@
     <app-empty-state titulo="Sin noticias" mensaje="No hay noticias para esta categoría." />
   } @else {
     <div class="grid grid--wide aparecer-lista">
-      @for (noticia of noticias(); track noticia.id) {
-        <article class="card card--hover noticia" [class.noticia--destacada]="noticia.destacada">
+      @for (noticia of noticias(); track noticia.id; let i = $index) {
+        <article class="card card--hover noticia" [class.noticia--destacada]="noticia.destacada" appInView="up" [retraso]="i * 70">
           @if (noticia.imagen) {
             <img class="noticia__imagen" [src]="noticia.imagen" [alt]="'Portada de ' + noticia.titulo" loading="lazy" />
           } @else {

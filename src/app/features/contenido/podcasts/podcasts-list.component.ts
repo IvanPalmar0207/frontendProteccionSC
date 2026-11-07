@@ -2,13 +2,14 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 
 import { PlataformaPodcast, Podcast } from '../../../core/models/api.models';
+import { InViewDirective } from '../../../core/animations/in-view.directive';
 import { PodcastService } from '../../../core/services/podcast.service';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-podcasts-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePipe, EmptyStateComponent],
+  imports: [DatePipe, EmptyStateComponent, InViewDirective],
   templateUrl: './podcasts-list.component.html',
   styleUrl: './podcasts-list.component.scss',
 })
