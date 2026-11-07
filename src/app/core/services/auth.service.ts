@@ -81,6 +81,30 @@ export class AuthService {
     );
   }
 
+  /**
+   * Restores the session from the stored token and resolves once the answer is
+   * known. Used as an app initializer so route guards always see the real role
+   * on a hard reload instead of bouncing to /login.
+   */
+  inicializar(): Promise<void> {
+    if (!this.tokens.accessToken) {
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => {
+      this.http.get<Usuario>(`${environment.apiUrl}/auth/me/`).subscribe({
+        next: (usuario) => {
+          this.usuario.set(usuario);
+          resolve();
+        },
+        error: () => {
+          this.tokens.limpiar();
+          this.usuario.set(null);
+          resolve();
+        },
+      });
+    });
+  }
+
   cargarSesion(): void {
     if (!this.tokens.accessToken || this.usuario() !== null) {
       return;

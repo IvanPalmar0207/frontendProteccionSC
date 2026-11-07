@@ -4,6 +4,7 @@ import {
   Component,
   OnDestroy,
   OnInit,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -33,6 +34,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
 
   private suscripcion?: Subscription;
   private id = 0;
+  private primeraConexion = true;
 
   readonly cargando = signal(true);
   readonly conversacion = signal<Conversacion | null>(null);
@@ -40,6 +42,20 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
   readonly enviando = signal(false);
   readonly usuarioId = this.auth.usuarioActual;
   readonly estadoConexion = this.socket.estadoConexion;
+
+  constructor() {
+    // On reconnect, recover any messages sent while the socket was down.
+    effect(() => {
+      if (this.socket.estadoConexion() !== 'conectado') {
+        return;
+      }
+      if (this.primeraConexion) {
+        this.primeraConexion = false;
+      } else if (this.conversacion()) {
+        this.cargarHistorial();
+      }
+    });
+  }
 
   readonly form = this.fb.nonNullable.group({
     contenido: ['', Validators.required],

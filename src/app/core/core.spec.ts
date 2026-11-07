@@ -98,4 +98,24 @@ describe('AuthService', () => {
     expect(request.request.headers.get('Authorization')).toBe('Bearer token-123');
     request.flush({});
   });
+
+  it('restores the session from a stored token on inicializar', async () => {
+    tokens.guardar('stored', 'r');
+    const pendiente = auth.inicializar();
+    http.expectOne((req) => req.url.endsWith('/auth/me/')).flush(USUARIO);
+    await pendiente;
+    expect(auth.autenticado()).toBe(true);
+    expect(auth.role()).toBe('USUARIO');
+  });
+
+  it('clears an invalid stored token on inicializar', async () => {
+    tokens.guardar('caducado', 'r');
+    const pendiente = auth.inicializar();
+    http
+      .expectOne((req) => req.url.endsWith('/auth/me/'))
+      .flush({ detail: 'no' }, { status: 401, statusText: 'Unauthorized' });
+    await pendiente;
+    expect(auth.autenticado()).toBe(false);
+    expect(tokens.accessToken).toBeNull();
+  });
 });
