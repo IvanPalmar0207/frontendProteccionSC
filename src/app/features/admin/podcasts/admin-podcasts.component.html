@@ -78,44 +78,69 @@
   @if (cargando()) {
     <p class="muted">Cargando episodios…</p>
   } @else {
-    <div class="tabla-wrap">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Episodio</th>
-            <th>Programa</th>
-            <th>Plataforma</th>
-            <th>Estado</th>
-            <th>Publicado</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (podcast of podcasts(); track podcast.id) {
-            <tr>
-              <td>
-                <strong>{{ podcast.titulo }}</strong>
-                <br />
-                <a [href]="podcast.enlace" target="_blank" rel="noopener noreferrer" class="muted">
-                  Ver enlace ↗
-                </a>
-              </td>
-              <td>{{ podcast.programa || '—' }}</td>
-              <td>{{ podcast.plataforma_etiqueta }}</td>
-              <td>
-                <span [class]="podcast.publicado ? 'badge badge--ok' : 'badge'">
-                  {{ podcast.publicado ? 'Publicado' : 'Borrador' }}
-                </span>
-              </td>
-              <td>{{ podcast.fecha_publicacion | date: 'short' }}</td>
-              <td class="row">
-                <button type="button" class="btn btn--ghost btn--sm" (click)="editar(podcast)">Editar</button>
-                <button type="button" class="btn btn--danger btn--sm" (click)="eliminar(podcast)">Eliminar</button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+    <div class="row row--between row--wrap">
+      <h2>Episodios publicados</h2>
+      <div class="field">
+        <label class="sr-only" for="buscar">Buscar episodio</label>
+        <input
+          id="buscar"
+          type="search"
+          placeholder="Buscar por título, programa…"
+          [ngModel]="busqueda"
+          (ngModelChange)="onBuscar($event)"
+        />
+      </div>
     </div>
+
+    @if (podcasts().length === 0) {
+      <p class="muted">No hay episodios que coincidan con la búsqueda.</p>
+    } @else {
+      <div class="tabla-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Episodio</th>
+              <th>Programa</th>
+              <th>Plataforma</th>
+              <th>Estado</th>
+              <th>Publicado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (podcast of podcasts(); track podcast.id) {
+              <tr>
+                <td>
+                  <strong>{{ podcast.titulo }}</strong>
+                  <br />
+                  <a [href]="podcast.enlace" target="_blank" rel="noopener noreferrer" class="muted">
+                    Ver enlace ↗
+                  </a>
+                </td>
+                <td>{{ podcast.programa || '—' }}</td>
+                <td>{{ podcast.plataforma_etiqueta }}</td>
+                <td>
+                  <span [class]="podcast.publicado ? 'badge badge--ok' : 'badge'">
+                    {{ podcast.publicado ? 'Publicado' : 'Borrador' }}
+                  </span>
+                </td>
+                <td>{{ podcast.fecha_publicacion | date: 'short' }}</td>
+                <td class="row">
+                  <button type="button" class="btn btn--ghost btn--sm" (click)="editar(podcast)">Editar</button>
+                  <button type="button" class="btn btn--danger btn--sm" (click)="eliminar(podcast)">Eliminar</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <app-paginador
+        [page]="page()"
+        [count]="total()"
+        [pageSize]="pageSize"
+        (cambiar)="cambiarPagina($event)"
+      />
+    }
   }
 </section>

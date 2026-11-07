@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
@@ -29,6 +29,15 @@ export class PodcastService {
 
   obtener(id: number): Observable<Podcast> {
     return this.http.get<Podcast>(`${this.base}/${id}/`);
+  }
+
+  /** Server-side paginated list used by the administrative table. */
+  listarPagina(page = 1, search = ''): Observable<Paginated<Podcast>> {
+    let params = new HttpParams().set('page', page);
+    if (search) {
+      params = params.set('search', search);
+    }
+    return this.http.get<Paginated<Podcast>>(`${this.base}/`, { params });
   }
 
   crear(payload: PodcastPayload): Observable<Podcast> {

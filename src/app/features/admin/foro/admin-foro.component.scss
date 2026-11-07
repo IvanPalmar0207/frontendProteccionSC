@@ -1,3 +1,5 @@
 @use '../../../../styles/variables' as *;
 
 .tabla-wrap { overflow-x: auto; }
+
+.field input { min-width: 260px; }

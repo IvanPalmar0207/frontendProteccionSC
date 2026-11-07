@@ -8,7 +8,11 @@
   </header>
 
   @if (cargando()) {
-    <p class="muted">Cargando conversaciones…</p>
+    <div class="stack">
+      @for (item of [1, 2, 3]; track item) {
+        <div class="card"><div class="skeleton skeleton--titulo"></div><div class="skeleton skeleton--texto"></div></div>
+      }
+    </div>
   } @else if (conversaciones().length === 0) {
     <app-empty-state
       titulo="Sin conversaciones"

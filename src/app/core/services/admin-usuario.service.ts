@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
@@ -23,6 +23,15 @@ export class AdminUsuarioService {
     return this.http
       .get<Paginated<Usuario>>(`${this.base}/`)
       .pipe(map((pagina) => pagina.results));
+  }
+
+  /** Server-side paginated list used by the administrative table. */
+  listarPagina(page = 1, search = ''): Observable<Paginated<Usuario>> {
+    let params = new HttpParams().set('page', page);
+    if (search) {
+      params = params.set('search', search);
+    }
+    return this.http.get<Paginated<Usuario>>(`${this.base}/`, { params });
   }
 
   actualizar(id: number, payload: AdminUsuarioPayload): Observable<Usuario> {

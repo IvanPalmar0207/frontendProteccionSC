@@ -1,11 +1,27 @@
-<section class="container stack">
-  <header class="stack stack--sm">
-    <h1>Gestión de usuarios</h1>
-    <p class="muted">Administrá roles y estado de las cuentas de la plataforma.</p>
+<section class="container stack seccion">
+  <header class="row row--between row--wrap">
+    <div class="stack stack--sm">
+      <h1>Gestión de usuarios</h1>
+      <p class="muted">Administrá roles y estado de las cuentas de la plataforma.</p>
+    </div>
+    <div class="field">
+      <label class="sr-only" for="buscar">Buscar usuario</label>
+      <input
+        id="buscar"
+        type="search"
+        placeholder="Buscar por correo o nombre…"
+        [ngModel]="busqueda"
+        (ngModelChange)="onBuscar($event)"
+      />
+    </div>
   </header>
 
   @if (cargando()) {
-    <p class="muted">Cargando usuarios…</p>
+    <div class="tabla-wrap">
+      <div class="skeleton skeleton--media"></div>
+    </div>
+  } @else if (usuarios().length === 0) {
+    <p class="muted">No hay usuarios que coincidan con la búsqueda.</p>
   } @else {
     <div class="tabla-wrap">
       <table class="table">
@@ -45,5 +61,12 @@
         </tbody>
       </table>
     </div>
+
+    <app-paginador
+      [page]="page()"
+      [count]="total()"
+      [pageSize]="pageSize"
+      (cambiar)="cambiarPagina($event)"
+    />
   }
 </section>

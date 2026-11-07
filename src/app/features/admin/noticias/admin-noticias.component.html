@@ -67,41 +67,66 @@
   @if (cargando()) {
     <p class="muted">Cargando noticias…</p>
   } @else {
-    <div class="tabla-wrap">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Título</th>
-            <th>Categoría</th>
-            <th>Estado</th>
-            <th>Publicada</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (noticia of noticias(); track noticia.id) {
-            <tr>
-              <td>
-                <strong>{{ noticia.titulo }}</strong>
-                @if (noticia.destacada) {
-                  <span class="badge badge--soft">Destacada</span>
-                }
-              </td>
-              <td>{{ noticia.categoria_etiqueta }}</td>
-              <td>
-                <span [class]="noticia.publicado ? 'badge badge--ok' : 'badge'">
-                  {{ noticia.publicado ? 'Publicada' : 'Borrador' }}
-                </span>
-              </td>
-              <td>{{ noticia.fecha_publicacion | date: 'short' }}</td>
-              <td class="row">
-                <button type="button" class="btn btn--ghost btn--sm" (click)="editar(noticia)">Editar</button>
-                <button type="button" class="btn btn--danger btn--sm" (click)="eliminar(noticia)">Eliminar</button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+    <div class="row row--between row--wrap">
+      <h2>Noticias publicadas</h2>
+      <div class="field">
+        <label class="sr-only" for="buscar">Buscar noticia</label>
+        <input
+          id="buscar"
+          type="search"
+          placeholder="Buscar por título o contenido…"
+          [ngModel]="busqueda"
+          (ngModelChange)="onBuscar($event)"
+        />
+      </div>
     </div>
+
+    @if (noticias().length === 0) {
+      <p class="muted">No hay noticias que coincidan con la búsqueda.</p>
+    } @else {
+      <div class="tabla-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Categoría</th>
+              <th>Estado</th>
+              <th>Publicada</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (noticia of noticias(); track noticia.id) {
+              <tr>
+                <td>
+                  <strong>{{ noticia.titulo }}</strong>
+                  @if (noticia.destacada) {
+                    <span class="badge badge--soft">Destacada</span>
+                  }
+                </td>
+                <td>{{ noticia.categoria_etiqueta }}</td>
+                <td>
+                  <span [class]="noticia.publicado ? 'badge badge--ok' : 'badge'">
+                    {{ noticia.publicado ? 'Publicada' : 'Borrador' }}
+                  </span>
+                </td>
+                <td>{{ noticia.fecha_publicacion | date: 'short' }}</td>
+                <td class="row">
+                  <button type="button" class="btn btn--ghost btn--sm" (click)="editar(noticia)">Editar</button>
+                  <button type="button" class="btn btn--danger btn--sm" (click)="eliminar(noticia)">Eliminar</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <app-paginador
+        [page]="page()"
+        [count]="total()"
+        [pageSize]="pageSize"
+        (cambiar)="cambiarPagina($event)"
+      />
+    }
   }
 </section>

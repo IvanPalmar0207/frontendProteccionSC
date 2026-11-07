@@ -1,0 +1,28 @@
+@if (count > 0) {
+  <nav class="paginador" aria-label="Paginación">
+    <span class="muted paginador__info">
+      Mostrando {{ desde }}–{{ hasta }} de {{ count }}
+    </span>
+    <div class="paginador__controles">
+      <button
+        type="button"
+        class="btn btn--ghost btn--sm"
+        [disabled]="page <= 1"
+        (click)="ir(page - 1)"
+        aria-label="Página anterior"
+      >
+        ← Anterior
+      </button>
+      <span class="paginador__pagina">Página {{ page }} de {{ totalPaginas }}</span>
+      <button
+        type="button"
+        class="btn btn--ghost btn--sm"
+        [disabled]="page >= totalPaginas"
+        (click)="ir(page + 1)"
+        aria-label="Página siguiente"
+      >
+        Siguiente →
+      </button>
+    </div>
+  </nav>
+}

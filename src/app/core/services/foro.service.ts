@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
@@ -23,6 +23,15 @@ export class ForoService {
 
   obtener(id: number): Observable<PublicacionForo> {
     return this.http.get<PublicacionForo>(`${this.base}/${id}/`);
+  }
+
+  /** Server-side paginated list used by the administrative table. */
+  listarPagina(page = 1, search = ''): Observable<Paginated<PublicacionForo>> {
+    let params = new HttpParams().set('page', page);
+    if (search) {
+      params = params.set('search', search);
+    }
+    return this.http.get<Paginated<PublicacionForo>>(`${this.base}/`, { params });
   }
 
   crear(payload: PublicacionPayload): Observable<PublicacionForo> {

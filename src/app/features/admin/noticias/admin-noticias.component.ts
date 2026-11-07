@@ -1,16 +1,18 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { CategoriaNoticia, Noticia } from '../../../core/models/api.models';
 import { NoticiaService } from '../../../core/services/noticia.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ImageUploaderComponent } from '../../../shared/components/image-uploader/image-uploader.component';
+import { PaginadorComponent } from '../../../shared/components/paginador/paginador.component';
 
 @Component({
   selector: 'app-admin-noticias',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, DatePipe, ImageUploaderComponent],
+  imports: [ReactiveFormsModule, FormsModule, DatePipe, ImageUploaderComponent, PaginadorComponent],
   templateUrl: './admin-noticias.component.html',
   styleUrl: './admin-noticias.component.scss',
 })
@@ -18,14 +20,20 @@ export class AdminNoticiasComponent implements OnInit {
   private readonly noticiaService = inject(NoticiaService);
   private readonly notificaciones = inject(NotificationService);
   private readonly fb = inject(FormBuilder);
+  private readonly busqueda$ = new Subject<string>();
 
   readonly cargando = signal(true);
   readonly guardando = signal(false);
   readonly noticias = signal<Noticia[]>([]);
+  readonly total = signal(0);
+  readonly page = signal(1);
+  readonly pageSize = 10;
   readonly editandoId = signal<number | null>(null);
   readonly imagenActual = signal<string | null>(null);
   /** undefined = untouched, null = cleared, File = replacement. */
   readonly imagenSeleccionada = signal<File | null | undefined>(undefined);
+
+  busqueda = '';
 
   readonly categorias: { valor: CategoriaNoticia; etiqueta: string }[] = [
     { valor: 'PREVENCION', etiqueta: 'Prevención' },
@@ -53,6 +61,22 @@ export class AdminNoticiasComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargar();
+    this.busqueda$
+      .pipe(debounceTime(350), distinctUntilChanged())
+      .subscribe(() => {
+        this.page.set(1);
+        this.cargar();
+      });
+  }
+
+  onBuscar(valor: string): void {
+    this.busqueda = valor;
+    this.busqueda$.next(valor);
+  }
+
+  cambiarPagina(pagina: number): void {
+    this.page.set(pagina);
+    this.cargar();
   }
 
   editar(noticia: Noticia): void {
@@ -67,6 +91,7 @@ export class AdminNoticiasComponent implements OnInit {
       destacada: noticia.destacada,
       publicado: noticia.publicado,
     });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   cancelar(): void {
@@ -126,9 +151,10 @@ export class AdminNoticiasComponent implements OnInit {
 
   private cargar(): void {
     this.cargando.set(true);
-    this.noticiaService.listar().subscribe({
-      next: (lista) => {
-        this.noticias.set(lista);
+    this.noticiaService.listarPagina(this.page(), this.busqueda).subscribe({
+      next: (pagina) => {
+        this.noticias.set(pagina.results);
+        this.total.set(pagina.count);
         this.cargando.set(false);
       },
       error: () => this.cargando.set(false),

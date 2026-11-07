@@ -1,0 +1,20 @@
+@use '../../../../styles/variables' as *;
+
+.paginador {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $e-3;
+  flex-wrap: wrap;
+  margin-top: $e-4;
+
+  &__info { font-size: $fs-sm; }
+
+  &__controles {
+    display: flex;
+    align-items: center;
+    gap: $e-2;
+  }
+
+  &__pagina { font-size: $fs-sm; color: $texto-secundario; }
+}

@@ -1,16 +1,18 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { PlataformaPodcast, Podcast } from '../../../core/models/api.models';
 import { NotificationService } from '../../../core/services/notification.service';
 import { PodcastService } from '../../../core/services/podcast.service';
 import { ImageUploaderComponent } from '../../../shared/components/image-uploader/image-uploader.component';
+import { PaginadorComponent } from '../../../shared/components/paginador/paginador.component';
 
 @Component({
   selector: 'app-admin-podcasts',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, DatePipe, ImageUploaderComponent],
+  imports: [ReactiveFormsModule, FormsModule, DatePipe, ImageUploaderComponent, PaginadorComponent],
   templateUrl: './admin-podcasts.component.html',
   styleUrl: './admin-podcasts.component.scss',
 })
@@ -18,14 +20,20 @@ export class AdminPodcastsComponent implements OnInit {
   private readonly podcastService = inject(PodcastService);
   private readonly notificaciones = inject(NotificationService);
   private readonly fb = inject(FormBuilder);
+  private readonly busqueda$ = new Subject<string>();
 
   readonly cargando = signal(true);
   readonly guardando = signal(false);
   readonly podcasts = signal<Podcast[]>([]);
+  readonly total = signal(0);
+  readonly page = signal(1);
+  readonly pageSize = 10;
   readonly editandoId = signal<number | null>(null);
   readonly portadaActual = signal<string | null>(null);
   /** undefined = untouched, null = cleared, File = replacement. */
   readonly portadaSeleccionada = signal<File | null | undefined>(undefined);
+
+  busqueda = '';
 
   readonly plataformas: { valor: PlataformaPodcast; etiqueta: string }[] = [
     { valor: 'SPOTIFY', etiqueta: 'Spotify' },
@@ -51,6 +59,22 @@ export class AdminPodcastsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cargar();
+    this.busqueda$
+      .pipe(debounceTime(350), distinctUntilChanged())
+      .subscribe(() => {
+        this.page.set(1);
+        this.cargar();
+      });
+  }
+
+  onBuscar(valor: string): void {
+    this.busqueda = valor;
+    this.busqueda$.next(valor);
+  }
+
+  cambiarPagina(pagina: number): void {
+    this.page.set(pagina);
     this.cargar();
   }
 
@@ -125,9 +149,10 @@ export class AdminPodcastsComponent implements OnInit {
 
   private cargar(): void {
     this.cargando.set(true);
-    this.podcastService.listar().subscribe({
-      next: (lista) => {
-        this.podcasts.set(lista);
+    this.podcastService.listarPagina(this.page(), this.busqueda).subscribe({
+      next: (pagina) => {
+        this.podcasts.set(pagina.results);
+        this.total.set(pagina.count);
         this.cargando.set(false);
       },
       error: () => this.cargando.set(false),

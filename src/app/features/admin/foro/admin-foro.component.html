@@ -1,13 +1,25 @@
-<section class="container stack">
-  <header class="stack stack--sm">
-    <h1>Gestión del foro</h1>
-    <p class="muted">Moderá las publicaciones creadas por los usuarios de la plataforma.</p>
+<section class="container stack seccion">
+  <header class="row row--between row--wrap">
+    <div class="stack stack--sm">
+      <h1>Gestión del foro</h1>
+      <p class="muted">Moderá las publicaciones creadas por los usuarios de la plataforma.</p>
+    </div>
+    <div class="field">
+      <label class="sr-only" for="buscar">Buscar publicación</label>
+      <input
+        id="buscar"
+        type="search"
+        placeholder="Buscar por título o contenido…"
+        [ngModel]="busqueda"
+        (ngModelChange)="onBuscar($event)"
+      />
+    </div>
   </header>
 
   @if (cargando()) {
-    <p class="muted">Cargando publicaciones…</p>
+    <div class="skeleton skeleton--media"></div>
   } @else if (publicaciones().length === 0) {
-    <p class="muted">No hay publicaciones en el foro.</p>
+    <p class="muted">No hay publicaciones que coincidan con la búsqueda.</p>
   } @else {
     <div class="tabla-wrap">
       <table class="table">
@@ -37,5 +49,12 @@
         </tbody>
       </table>
     </div>
+
+    <app-paginador
+      [page]="page()"
+      [count]="total()"
+      [pageSize]="pageSize"
+      (cambiar)="cambiarPagina($event)"
+    />
   }
 </section>

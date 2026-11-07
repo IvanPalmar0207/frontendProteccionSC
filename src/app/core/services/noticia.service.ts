@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
@@ -30,6 +30,15 @@ export class NoticiaService {
 
   obtener(id: number): Observable<Noticia> {
     return this.http.get<Noticia>(`${this.base}/${id}/`);
+  }
+
+  /** Server-side paginated list used by the administrative table. */
+  listarPagina(page = 1, search = ''): Observable<Paginated<Noticia>> {
+    let params = new HttpParams().set('page', page);
+    if (search) {
+      params = params.set('search', search);
+    }
+    return this.http.get<Paginated<Noticia>>(`${this.base}/`, { params });
   }
 
   crear(payload: NoticiaPayload): Observable<Noticia> {

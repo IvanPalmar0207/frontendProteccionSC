@@ -26,7 +26,11 @@
   </form>
 
   @if (cargando()) {
-    <p class="muted">Cargando publicaciones…</p>
+    <div class="stack">
+      @for (item of [1, 2, 3]; track item) {
+        <div class="card"><div class="skeleton skeleton--titulo"></div><div class="skeleton skeleton--texto"></div></div>
+      }
+    </div>
   } @else if (publicaciones().length === 0) {
     <app-empty-state titulo="Foro vacío" mensaje="Sé la primera persona en publicar." />
   } @else {
