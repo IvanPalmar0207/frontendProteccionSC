@@ -86,7 +86,7 @@ export class RegisterComponent {
           this.enviando.set(false);
           this.creado.set(true);
           this.notificaciones.exito('Cuenta creada. Ya podés iniciar sesión.');
-          setTimeout(() => this.router.navigate(['/login']), 900);
+          setTimeout(() => this.router.navigate(['/login']), 1000);
         },
         error: () => this.enviando.set(false),
       });

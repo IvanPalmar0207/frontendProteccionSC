@@ -1,0 +1,66 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.footer {
+  margin-top: $e-8;
+  padding: $e-7 0 $e-4;
+  background: $superficie-solida;
+  border-top: 1px solid $borde-suave;
+
+  &__grid {
+    display: grid;
+    gap: $e-6;
+    grid-template-columns: 1.6fr 1fr 1fr 1.4fr;
+  }
+
+  &__marca p { max-width: 34ch; }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $e-2;
+    margin-bottom: $e-2;
+  }
+
+  &__logo-badge {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: $radio-sm;
+    background: $rojo;
+    color: $blanco;
+    font-size: $fs-xs;
+    font-weight: 700;
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    gap: $e-2;
+
+    h4 { margin: 0 0 $e-1; font-size: $fs-sm; text-transform: uppercase; letter-spacing: 0.05em; color: $texto-secundario; }
+    a { color: $carbon-suave; font-size: $fs-sm; }
+    a:hover { color: $rojo; }
+    p { font-size: $fs-sm; margin: 0; }
+  }
+
+  &__legal {
+    display: flex;
+    justify-content: space-between;
+    gap: $e-3;
+    flex-wrap: wrap;
+    margin-top: $e-6;
+    padding-top: $e-4;
+    border-top: 1px solid $borde-suave;
+    font-size: $fs-xs;
+  }
+}
+
+@include desde-tablet {
+  .footer__grid { grid-template-columns: 1fr 1fr; }
+}
+
+@include desde-mobile {
+  .footer__grid { grid-template-columns: 1fr; gap: $e-5; }
+}

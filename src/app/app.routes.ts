@@ -28,6 +28,22 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
   },
+  {
+    path: 'recuperar',
+    title: 'Recuperar contraseña · Protección Inmediata SC',
+    loadComponent: () =>
+      import('./features/auth/recuperacion/solicitar-recuperacion.component').then(
+        (m) => m.SolicitarRecuperacionComponent,
+      ),
+  },
+  {
+    path: 'restablecer',
+    title: 'Nueva contraseña · Protección Inmediata SC',
+    loadComponent: () =>
+      import('./features/auth/recuperacion/restablecer.component').then(
+        (m) => m.RestablecerComponent,
+      ),
+  },
 
   // Public informational content
   {

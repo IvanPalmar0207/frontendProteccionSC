@@ -5,12 +5,13 @@ import { filter } from 'rxjs';
 import { AuthService } from './core/services/auth.service';
 import { NavBarComponent } from './shared/components/nav-bar/nav-bar.component';
 import { SideNavComponent } from './shared/components/side-nav/side-nav.component';
+import { FooterComponent } from './shared/components/footer/footer.component';
 import { ToastHostComponent } from './shared/components/toast-host/toast-host.component';
 
 @Component({
   selector: 'app-root',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, NavBarComponent, SideNavComponent, ToastHostComponent],
+  imports: [RouterOutlet, NavBarComponent, SideNavComponent, FooterComponent, ToastHostComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

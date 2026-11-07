@@ -1,0 +1,66 @@
+<section class="recovery">
+  <div class="recovery__card card stack aparecer">
+    @switch (estado()) {
+      @case ('validando') {
+        <div class="skeleton skeleton--titulo"></div>
+        <div class="skeleton skeleton--texto"></div>
+        <p class="muted">Verificando el enlace…</p>
+      }
+
+      @case ('invalido') {
+        <span class="recovery__icono" aria-hidden="true">⛔</span>
+        <h1>Enlace inválido o expirado</h1>
+        <p class="muted">
+          El enlace de recuperación ya no es válido. Podés solicitar uno nuevo.
+        </p>
+        <a class="btn btn--primary btn--block" routerLink="/recuperar">Solicitar nuevo enlace</a>
+        <a class="recovery__volver muted" routerLink="/login">Volver al inicio de sesión</a>
+      }
+
+      @case ('listo') {
+        <span class="recovery__icono" aria-hidden="true">✅</span>
+        <h1>Contraseña actualizada</h1>
+        <p class="muted">
+          Ya podés iniciar sesión con tu nueva contraseña. Por seguridad, cerramos las sesiones
+          anteriores.
+        </p>
+        <a class="btn btn--primary btn--block" routerLink="/login">Ir a iniciar sesión</a>
+      }
+
+      @default {
+        <span class="recovery__icono" aria-hidden="true">🔐</span>
+        <h1>Nueva contraseña</h1>
+        <p class="muted">Elegí una contraseña segura de al menos 8 caracteres.</p>
+
+        <form class="stack" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+          <div class="field">
+            <label for="password">Nueva contraseña</label>
+            <input id="password" type="password" formControlName="password" autocomplete="new-password" />
+            @if (password.touched && password.hasError('required')) {
+              <span class="field__error">La contraseña es obligatoria.</span>
+            }
+            @if (password.touched && password.hasError('minlength')) {
+              <span class="field__error">Debe tener al menos 8 caracteres.</span>
+            }
+            @if (password.hasError('servidor')) {
+              <span class="field__error">
+                La contraseña no cumple las reglas de seguridad (evitá datos personales y
+                secuencias comunes).
+              </span>
+            }
+          </div>
+          <div class="field">
+            <label for="password_confirm">Confirmar contraseña</label>
+            <input id="password_confirm" type="password" formControlName="password_confirm" autocomplete="new-password" />
+            @if (form.touched && form.hasError('noCoinciden')) {
+              <span class="field__error">Las contraseñas no coinciden.</span>
+            }
+          </div>
+          <button type="submit" class="btn btn--primary btn--block" [disabled]="enviando()">
+            {{ enviando() ? 'Guardando…' : 'Restablecer contraseña' }}
+          </button>
+        </form>
+      }
+    }
+  </div>
+</section>

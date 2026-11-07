@@ -1,0 +1,41 @@
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__marca">
+      <div class="footer__logo">
+        <span class="footer__logo-badge">SC</span>
+        <strong>Protección Inmediata</strong>
+      </div>
+      <p class="muted">
+        Plataforma de denuncia, seguimiento y acompañamiento para situaciones de violencia
+        intrafamiliar, abuso y acoso.
+      </p>
+    </div>
+
+    <nav class="footer__col" aria-label="Recursos">
+      <h4>Recursos</h4>
+      <a routerLink="/noticias">Noticias</a>
+      <a routerLink="/podcasts">Pódcast</a>
+      <a routerLink="/foro">Foro</a>
+    </nav>
+
+    <nav class="footer__col" aria-label="Cuenta">
+      <h4>Tu cuenta</h4>
+      <a routerLink="/login">Iniciar sesión</a>
+      <a routerLink="/register">Crear cuenta</a>
+      <a routerLink="/recuperar">Recuperar contraseña</a>
+    </nav>
+
+    <div class="footer__col">
+      <h4>Privacidad</h4>
+      <p class="muted">
+        Podés denunciar de forma anónima. Tu identidad no se muestra al profesional que
+        atiende el caso.
+      </p>
+    </div>
+  </div>
+
+  <div class="container footer__legal">
+    <span class="muted">© {{ anio }} Protección Inmediata SC. Proyecto académico.</span>
+    <span class="muted">Los datos de demostración son ficticios.</span>
+  </div>
+</footer>

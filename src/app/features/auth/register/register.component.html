@@ -1,73 +1,81 @@
 <section class="auth">
-  <form class="card auth__card" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-    <h1>Crear cuenta</h1>
-    <p class="muted">Registrate para denunciar, hacer seguimiento y recibir acompañamiento.</p>
-
-    @if (creado()) {
-      <div class="alert alert--ok">Cuenta creada correctamente. Redirigiendo al inicio de sesión…</div>
-    }
-
-    <div class="field">
-      <label for="nombre_completo">Nombre completo</label>
-      <input id="nombre_completo" type="text" formControlName="nombre_completo" autocomplete="name" />
-      @if (nombre.touched && nombre.hasError('required')) {
-        <span class="field__error">El nombre completo es obligatorio.</span>
-      }
-      @if (nombre.touched && nombre.hasError('minlength')) {
-        <span class="field__error">Ingresá al menos 3 caracteres.</span>
-      }
+  <div class="auth__panel">
+    <div class="auth__aside">
+      <a class="auth__marca" routerLink="/">
+        <span class="auth__logo">SC</span>
+        <strong>Protección Inmediata</strong>
+      </a>
+      <h2>Creá tu cuenta en un minuto</h2>
+      <p>Con tu cuenta podés denunciar, hacer seguimiento y hablar con un profesional.</p>
+      <ul class="auth__lista">
+        <li><span aria-hidden="true">🔒</span> Podés denunciar de forma anónima</li>
+        <li><span aria-hidden="true">💬</span> Chat privado con acompañamiento</li>
+        <li><span aria-hidden="true">📈</span> Seguimiento de tu caso</li>
+      </ul>
+      <img src="/illustrations/comunidad.svg" alt="Ilustración de una comunidad que se acompaña" />
     </div>
 
-    <div class="field">
-      <label for="email">Correo electrónico</label>
-      <input id="email" type="email" formControlName="email" autocomplete="email" />
-      @if (email.touched && email.hasError('required')) {
-        <span class="field__error">El correo electrónico es obligatorio.</span>
-      }
-      @if (email.touched && email.hasError('email')) {
-        <span class="field__error">Ingresá un correo electrónico válido.</span>
-      }
-    </div>
+    <form class="auth__form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <h1>Crear cuenta</h1>
 
-    <div class="field">
-      <label for="telefono">Teléfono (opcional)</label>
-      <input id="telefono" type="tel" formControlName="telefono" autocomplete="tel" />
-      @if (telefono.touched && telefono.hasError('pattern')) {
-        <span class="field__error">Ingresá un teléfono válido.</span>
+      @if (creado()) {
+        <div class="alert alert--ok">Cuenta creada correctamente. Redirigiendo…</div>
       }
-    </div>
 
-    <div class="field">
-      <label for="password">Contraseña</label>
-      <input id="password" type="password" formControlName="password" autocomplete="new-password" />
-      <span class="field__hint">Mínimo 8 caracteres.</span>
-      @if (password.touched && password.hasError('required')) {
-        <span class="field__error">La contraseña es obligatoria.</span>
-      }
-      @if (password.touched && password.hasError('minlength')) {
-        <span class="field__error">La contraseña debe tener al menos 8 caracteres.</span>
-      }
-    </div>
+      <div class="field">
+        <label for="nombre_completo">Nombre completo</label>
+        <input id="nombre_completo" type="text" formControlName="nombre_completo" autocomplete="name" />
+        @if (nombre.touched && nombre.hasError('required')) {
+          <span class="field__error">El nombre completo es obligatorio.</span>
+        }
+        @if (nombre.touched && nombre.hasError('minlength')) {
+          <span class="field__error">Ingresá al menos 3 caracteres.</span>
+        }
+      </div>
 
-    <div class="field">
-      <label for="password_confirm">Confirmar contraseña</label>
-      <input
-        id="password_confirm"
-        type="password"
-        formControlName="password_confirm"
-        autocomplete="new-password"
-      />
-      @if (form.touched && form.hasError('noCoinciden')) {
-        <span class="field__error">Las contraseñas no coinciden.</span>
-      }
-    </div>
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" formControlName="email" autocomplete="email" />
+        @if (email.touched && email.hasError('required')) {
+          <span class="field__error">El correo electrónico es obligatorio.</span>
+        }
+        @if (email.touched && email.hasError('email')) {
+          <span class="field__error">Ingresá un correo electrónico válido.</span>
+        }
+      </div>
 
-    <button type="submit" class="btn btn--primary btn--block" [disabled]="enviando()">
-      {{ enviando() ? 'Creando cuenta…' : 'Crear cuenta' }}
-    </button>
+      <div class="field">
+        <label for="telefono">Teléfono (opcional)</label>
+        <input id="telefono" type="tel" formControlName="telefono" autocomplete="tel" />
+        @if (telefono.touched && telefono.hasError('pattern')) {
+          <span class="field__error">Ingresá un teléfono válido.</span>
+        }
+      </div>
 
-    <p class="auth__alt muted">
-      ¿Ya tenés cuenta? <a routerLink="/login">Iniciá sesión</a>
-    </p>
-  </form>
+      <div class="grid grid--2">
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <input id="password" type="password" formControlName="password" autocomplete="new-password" />
+          <span class="field__hint">Mínimo 8 caracteres.</span>
+          @if (password.touched && password.hasError('minlength')) {
+            <span class="field__error">Al menos 8 caracteres.</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="password_confirm">Confirmar contraseña</label>
+          <input id="password_confirm" type="password" formControlName="password_confirm" autocomplete="new-password" />
+          @if (form.touched && form.hasError('noCoinciden')) {
+            <span class="field__error">Las contraseñas no coinciden.</span>
+          }
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn--primary btn--block" [disabled]="enviando()">
+        {{ enviando() ? 'Creando cuenta…' : 'Crear cuenta' }}
+      </button>
+
+      <p class="auth__pie muted">¿Ya tenés cuenta? <a routerLink="/login">Iniciá sesión</a></p>
+    </form>
+  </div>
 </section>

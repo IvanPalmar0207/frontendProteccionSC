@@ -19,6 +19,7 @@ export class LoginComponent {
   private readonly notificaciones = inject(NotificationService);
 
   readonly enviando = signal(false);
+  readonly verPassword = signal(false);
 
   readonly form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -28,7 +29,6 @@ export class LoginComponent {
   get email() {
     return this.form.controls.email;
   }
-
   get password() {
     return this.form.controls.password;
   }

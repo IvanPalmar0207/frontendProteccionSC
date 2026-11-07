@@ -1,74 +1,145 @@
 <section class="hero">
-  <div class="hero__content">
-    <span class="badge badge--soft">Atención y acompañamiento</span>
-    <h1 class="hero__title">Denunciá de forma segura. No estás sola, no estás solo.</h1>
-    <p class="hero__lead">
-      Protección Inmediata SC te permite reportar situaciones de violencia intrafamiliar,
-      abuso o acoso —de forma pública o anónima— y hacer seguimiento a tu caso con
-      acompañamiento profesional.
-    </p>
-    <div class="hero__actions">
-      <a class="btn btn--primary" routerLink="/register">Crear cuenta</a>
-      <a class="btn btn--ghost" routerLink="/login">Ya tengo cuenta</a>
+  <div class="container hero__grid">
+    <div class="hero__contenido aparecer">
+      <span class="badge badge--info">Atención y acompañamiento</span>
+      <h1 class="hero__titulo">
+        Denunciá con seguridad. <span>No estás sola, no estás solo.</span>
+      </h1>
+      <p class="hero__lead">
+        Protección Inmediata SC te permite reportar situaciones de violencia intrafamiliar,
+        abuso o acoso —de forma pública o anónima— y hacer seguimiento con acompañamiento
+        profesional.
+      </p>
+      <div class="hero__acciones">
+        <a class="btn btn--primary btn--lg" routerLink="/register">Crear cuenta</a>
+        <a class="btn btn--ghost btn--lg" routerLink="/login">Ya tengo cuenta</a>
+      </div>
+      <ul class="hero__sellos">
+        <li><span aria-hidden="true">🔒</span> Anonimato protegido</li>
+        <li><span aria-hidden="true">🕒</span> Seguimiento permanente</li>
+        <li><span aria-hidden="true">🤝</span> Acompañamiento profesional</li>
+      </ul>
     </div>
-    <p class="hero__note muted">
-      Podés denunciar de manera anónima: tu identidad no se muestra al profesional que
-      atiende el caso.
-    </p>
-  </div>
-  <div class="hero__aside" aria-hidden="true">
-    <div class="hero__card">
-      <span class="hero__card-icon">🔒</span>
-      <h3>Anonimato protegido</h3>
-      <p class="muted">La relación con tu cuenta es interna. El profesional sólo ve la modalidad.</p>
-    </div>
-    <div class="hero__card">
-      <span class="hero__card-icon">💬</span>
-      <h3>Chat en tiempo real</h3>
-      <p class="muted">Comunicación directa y privada con el profesional asignado.</p>
-    </div>
-    <div class="hero__card">
-      <span class="hero__card-icon">📚</span>
-      <h3>Recursos</h3>
-      <p class="muted">Noticias, pódcast y foro para informarte y acompañarte.</p>
+
+    <div class="hero__ilustracion aparecer">
+      <img
+        src="/illustrations/acompanamiento.svg"
+        alt="Dos personas conversando en un espacio de calma y confianza"
+      />
     </div>
   </div>
 </section>
 
-<section class="container info">
-  <h2>¿Cómo funciona?</h2>
-  <div class="grid">
-    <article class="card card--hover">
-      <h3>1. Creá tu cuenta</h3>
-      <p class="muted">Registrate con tu correo y accedé a todas las funcionalidades.</p>
+<section class="container seccion" aria-labelledby="beneficios-titulo">
+  <header class="seccion__encabezado">
+    <h2 id="beneficios-titulo">Pensada para acompañarte de verdad</h2>
+    <p class="muted">Cada decisión de diseño prioriza tu seguridad y tu tranquilidad.</p>
+  </header>
+  <div class="grid aparecer-lista">
+    @for (beneficio of beneficios; track beneficio.titulo) {
+      <article class="card card--hover">
+        <span class="card__icono" aria-hidden="true">{{ beneficio.icono }}</span>
+        <h3>{{ beneficio.titulo }}</h3>
+        <p class="muted">{{ beneficio.texto }}</p>
+      </article>
+    }
+  </div>
+</section>
+
+<section class="proceso" aria-labelledby="proceso-titulo">
+  <div class="container">
+    <header class="seccion__encabezado">
+      <h2 id="proceso-titulo">Cómo funciona</h2>
+      <p class="muted">Cuatro pasos simples, sin trámites complicados.</p>
+    </header>
+    <ol class="proceso__lista">
+      @for (paso of pasos; track paso.numero) {
+        <li class="proceso__paso">
+          <span class="proceso__numero">{{ paso.numero }}</span>
+          <h3>{{ paso.titulo }}</h3>
+          <p class="muted">{{ paso.texto }}</p>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<section class="container seccion" aria-labelledby="privacidad-titulo">
+  <div class="privacidad">
+    <div class="privacidad__texto">
+      <span class="badge badge--soft">Privacidad</span>
+      <h2 id="privacidad-titulo">Tu identidad, protegida por defecto</h2>
+      <p>
+        Cuando elegís una denuncia anónima, la relación con tu cuenta se mantiene de forma
+        interna para que puedas hacer seguimiento. El profesional que atiende el caso
+        <strong>no</strong> accede a tu nombre, correo, teléfono ni documento.
+      </p>
+      <p class="muted">
+        Las restricciones se aplican en el servidor, no sólo en la pantalla. El chat privado
+        tampoco es accesible para el rol administrador.
+      </p>
+      <a class="btn btn--soft" routerLink="/noticias">Conocer más</a>
+    </div>
+    <div class="privacidad__imagen">
+      <img src="/illustrations/privacidad.svg" alt="Escudo que representa privacidad y confidencialidad" />
+    </div>
+  </div>
+</section>
+
+@if (destacadas().length) {
+  <section class="container seccion" aria-labelledby="noticias-titulo">
+    <header class="seccion__encabezado seccion__encabezado--fila">
+      <div>
+        <h2 id="noticias-titulo">Noticias y recursos destacados</h2>
+        <p class="muted">Información para entender y prevenir.</p>
+      </div>
+      <a class="btn btn--ghost btn--sm" routerLink="/noticias">Ver todas</a>
+    </header>
+    <div class="grid grid--wide aparecer-lista">
+      @for (noticia of destacadas(); track noticia.id) {
+        <article class="card card--hover noticia-mini">
+          @if (noticia.imagen) {
+            <img class="noticia-mini__imagen" [src]="noticia.imagen" [alt]="'Portada de ' + noticia.titulo" loading="lazy" />
+          }
+          <div class="noticia-mini__cuerpo">
+            <span class="badge badge--info">{{ noticia.categoria_etiqueta }}</span>
+            <h3>{{ noticia.titulo }}</h3>
+            <p class="muted">{{ noticia.resumen }}</p>
+            <div class="row row--between">
+              <span class="muted">{{ noticia.fecha_publicacion | date: 'longDate' }}</span>
+              <a class="btn btn--soft btn--sm" [routerLink]="['/noticias', noticia.id]">Leer</a>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+}
+
+<section class="container seccion" aria-labelledby="recursos-titulo">
+  <div class="recursos">
+    <article class="card card--acento">
+      <img src="/illustrations/recursos.svg" alt="Ilustración de recursos informativos" class="recursos__imagen" />
+      <h3>Pódcast</h3>
+      <p class="muted">Episodios de acompañamiento y prevención en tu plataforma favorita.</p>
+      <a class="btn btn--primary btn--sm" routerLink="/podcasts">Escuchar</a>
     </article>
-    <article class="card card--hover">
-      <h3>2. Registrá tu denuncia</h3>
-      <p class="muted">Elegí modalidad pública o anónima y describí los hechos.</p>
-    </article>
-    <article class="card card--hover">
-      <h3>3. Seguí tu caso</h3>
-      <p class="muted">Consultá el estado, las actualizaciones y conversá con un profesional.</p>
+    <article class="card card--acento">
+      <img src="/illustrations/comunidad.svg" alt="Ilustración de una comunidad que se acompaña" class="recursos__imagen" />
+      <h3>Foro</h3>
+      <p class="muted">Un espacio seguro para compartir experiencias y acompañarse.</p>
+      <a class="btn btn--primary btn--sm" routerLink="/foro">Participar</a>
     </article>
   </div>
 </section>
 
-<section class="container info">
-  <h2>Información de la plataforma</h2>
-  <div class="grid grid--wide">
-    <article class="card">
-      <h3>Rutas de atención</h3>
-      <p class="muted">
-        Ante una emergencia inmediata comunicate con la línea local de emergencias.
-        La plataforma complementa la atención con seguimiento y acompañamiento.
-      </p>
-    </article>
-    <article class="card">
-      <h3>Contenido educativo</h3>
-      <p class="muted">
-        Noticias, pódcast y foro reúnen información de prevención y espacios de intercambio.
-      </p>
-      <a class="btn btn--soft" routerLink="/noticias">Ver noticias</a>
-    </article>
+<section class="cta-final">
+  <div class="container cta-final__contenido">
+    <h2>Dar el primer paso no tiene por qué ser difícil</h2>
+    <p>Creá tu cuenta y contá lo que está pasando. El resto lo hacemos juntos.</p>
+    <div class="row">
+      <a class="btn btn--primary btn--lg" routerLink="/register">Empezar ahora</a>
+      <a class="btn btn--ghost btn--lg" routerLink="/login">Ingresar</a>
+    </div>
   </div>
 </section>

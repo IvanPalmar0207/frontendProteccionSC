@@ -1,24 +1,98 @@
 @use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
 
 .auth {
   display: grid;
   place-items: center;
   padding: $e-6 $e-4;
-  min-height: 70vh;
+  min-height: calc(100vh - 61px);
 
-  &__card {
-    width: min(440px, 100%);
+  &__panel {
+    @include glass(18px, 0.9);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: min(960px, 100%);
+    border-radius: $radio-xl;
+    box-shadow: $sombra-lg;
+    overflow: hidden;
+  }
+
+  &__aside {
+    display: flex;
+    flex-direction: column;
+    gap: $e-3;
+    padding: $e-7 $e-6;
+    background: linear-gradient(160deg, $fondo-calido, $rosa-claro);
+
+    h2 { margin: $e-3 0 0; }
+    p { color: $carbon-suave; }
+    img { margin-top: auto; width: 100%; max-width: 320px; }
+  }
+
+  &__marca {
+    display: flex;
+    align-items: center;
+    gap: $e-2;
+    color: $carbon;
+    text-decoration: none;
+  }
+
+  &__logo {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: $radio-sm;
+    background: $rojo;
+    color: $blanco;
+    font-size: $fs-xs;
+    font-weight: 700;
+  }
+
+  &__form {
     display: flex;
     flex-direction: column;
     gap: $e-4;
+    padding: $e-7 $e-6;
+    background: $blanco;
 
     h1 { margin-bottom: 0; }
-    p { margin: 0; }
+    > p { margin-top: -$e-2; }
   }
 
-  &__alt {
+  &__enlaces {
+    display: flex;
+    flex-direction: column;
+    gap: $e-2;
+    font-size: $fs-sm;
     text-align: center;
-    font-size: 0.9rem;
-    margin-top: $e-2;
   }
+}
+
+.input-grupo {
+  position: relative;
+  display: flex;
+
+  input { width: 100%; }
+
+  &__toggle {
+    position: absolute;
+    right: $e-2;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    padding: $e-1;
+    border-radius: $radio-xs;
+  }
+}
+
+@include desde-tablet {
+  .auth__panel { grid-template-columns: 1fr; }
+  .auth__aside { padding: $e-5; }
+  .auth__aside img { display: none; }
+  .auth__form { padding: $e-5; }
 }
