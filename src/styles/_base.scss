@@ -281,7 +281,8 @@ small { font-size: $fs-xs; }
     background: $rosa-claro;
     color: $carbon;
 
-    &:hover:not(:disabled) { background: $rojo-suave; color: $blanco; }
+    // Dark text kept on hover: white on coral (#ff8f8f) only reached 2.2:1.
+    &:hover:not(:disabled) { background: $rojo-suave; color: $carbon; }
   }
 
   &--ghost {
@@ -367,7 +368,7 @@ legend { font-weight: 650; padding: 0 $e-2; }
 
   &--danger { background: $rojo; color: $blanco; }
   &--soft { background: $rosa-claro; color: $carbon; }
-  &--warn { background: $rojo-suave; color: $blanco; }
+  &--warn { background: $rojo-suave; color: $carbon; }
   &--ok { background: $blanco; color: $verde; border: 1px solid rgba(47, 143, 91, 0.35); }
   &--info { background: $rojo-tinte; color: $rojo-oscuro; border: 1px solid $rosa-claro; }
 }

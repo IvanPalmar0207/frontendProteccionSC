@@ -142,10 +142,14 @@
     cursor: pointer;
     transition: background $dur $ease, color $dur $ease;
 
-    &:hover { background: $rojo-tinte; color: $rojo; }
+    &:hover { background: $rosa-claro; color: $carbon; }
   }
 
-  &__menu-salir { color: $rojo; }
+  &__menu-salir {
+    color: $rojo-oscuro;
+
+    &:hover { background: $rojo-tinte; color: $rojo-oscuro; }
+  }
 
   &__menu-etiqueta {
     padding: $e-1 $e-3;
