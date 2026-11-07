@@ -1,30 +1,37 @@
-<section class="container stack">
-  <header class="stack stack--sm">
-    <h1>Panel administrativo</h1>
-    <p class="muted">Gestión de usuarios y contenidos de Protección Inmediata SC.</p>
+<section class="container stack seccion">
+  <header class="dashboard-hero aparecer">
+    <div>
+      <span class="badge badge--info">Administración</span>
+      <h1>Panel administrativo</h1>
+      <p class="muted">Gestión de usuarios y contenidos de Protección Inmediata SC.</p>
+    </div>
   </header>
 
-  <div class="grid">
+  <div class="grid aparecer-lista">
     <a class="card card--hover stat" routerLink="/admin/usuarios">
+      <span class="stat__icono" aria-hidden="true">👥</span>
       <span class="stat__value">{{ totales().usuarios }}</span>
       <span class="stat__label">Usuarios registrados</span>
     </a>
     <a class="card card--hover stat" routerLink="/admin/noticias">
+      <span class="stat__icono" aria-hidden="true">📰</span>
       <span class="stat__value">{{ totales().noticias }}</span>
       <span class="stat__label">Noticias</span>
     </a>
     <a class="card card--hover stat" routerLink="/admin/podcasts">
+      <span class="stat__icono" aria-hidden="true">🎧</span>
       <span class="stat__value">{{ totales().podcasts }}</span>
       <span class="stat__label">Pódcast</span>
     </a>
     <a class="card card--hover stat" routerLink="/admin/foro">
+      <span class="stat__icono" aria-hidden="true">💬</span>
       <span class="stat__value">{{ totales().foro }}</span>
       <span class="stat__label">Publicaciones del foro</span>
     </a>
   </div>
 
-  <div class="alert alert--ok">
-    Recordá que el administrador no accede al contenido de los chats privados ni a los
-    datos de identidad de las denuncias anónimas.
+  <div class="alert alert--info">
+    <strong>Privacidad por diseño:</strong> el administrador no accede al contenido de los
+    chats privados ni a los datos de identidad de las denuncias anónimas.
   </div>
 </section>

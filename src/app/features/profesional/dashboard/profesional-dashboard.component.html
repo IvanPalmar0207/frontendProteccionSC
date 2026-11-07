@@ -1,38 +1,47 @@
-<section class="container stack">
-  <header class="stack stack--sm">
-    <h1>Panel profesional</h1>
-    <p class="muted">Bienvenido/a, {{ usuario()?.nombre_completo }}. Resumen de casos en atención.</p>
+<section class="container stack seccion">
+  <header class="dashboard-hero aparecer">
+    <div>
+      <span class="badge badge--info">Atención</span>
+      <h1>Panel profesional</h1>
+      <p class="muted">Bienvenido/a, {{ usuario()?.nombre_completo }}. Resumen de casos en atención.</p>
+    </div>
+    <div class="row row--wrap">
+      <a class="btn btn--primary" routerLink="/profesional/denuncias">Ver todos los casos</a>
+      <a class="btn btn--ghost" routerLink="/chat">Conversaciones</a>
+    </div>
   </header>
 
-  <div class="grid">
-    <article class="card stat">
-      <span class="stat__value">{{ resumen().total }}</span>
-      <span class="stat__label">Casos registrados</span>
-    </article>
-    <article class="card stat">
-      <span class="stat__value">{{ resumen().pendientes }}</span>
-      <span class="stat__label">Pendientes</span>
-    </article>
-    <article class="card stat">
-      <span class="stat__value">{{ resumen().enProceso }}</span>
-      <span class="stat__label">En proceso</span>
-    </article>
-    <article class="card stat">
-      <span class="stat__value">{{ resumen().finalizadas }}</span>
-      <span class="stat__label">Finalizadas</span>
-    </article>
-    <article class="card stat">
-      <span class="stat__value">{{ resumen().anonimas }}</span>
-      <span class="stat__label">Anónimas</span>
-    </article>
-  </div>
-
-  <div class="row row--wrap">
-    <a class="btn btn--primary" routerLink="/profesional/denuncias">Ver todos los casos</a>
-    <a class="btn btn--ghost" routerLink="/chat">Historial de conversaciones</a>
-  </div>
-
   @if (cargando()) {
-    <p class="muted">Cargando…</p>
+    <div class="grid">
+      @for (item of [1, 2, 3, 4, 5]; track item) {
+        <article class="card">
+          <div class="skeleton skeleton--titulo"></div>
+          <div class="skeleton skeleton--texto"></div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="grid aparecer-lista">
+      <article class="card stat">
+        <span class="stat__value">{{ resumen().total }}</span>
+        <span class="stat__label">Casos registrados</span>
+      </article>
+      <article class="card stat stat--pendiente">
+        <span class="stat__value">{{ resumen().pendientes }}</span>
+        <span class="stat__label">Pendientes</span>
+      </article>
+      <article class="card stat stat--proceso">
+        <span class="stat__value">{{ resumen().enProceso }}</span>
+        <span class="stat__label">En proceso</span>
+      </article>
+      <article class="card stat stat--finalizada">
+        <span class="stat__value">{{ resumen().finalizadas }}</span>
+        <span class="stat__label">Finalizadas</span>
+      </article>
+      <article class="card stat stat--anonimas">
+        <span class="stat__value">{{ resumen().anonimas }}</span>
+        <span class="stat__label">Anónimas</span>
+      </article>
+    </div>
   }
 </section>

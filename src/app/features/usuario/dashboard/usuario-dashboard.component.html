@@ -1,33 +1,45 @@
-<section class="container stack">
-  <header class="stack stack--sm">
-    <h1>Hola, {{ usuario()?.nombre_completo }}</h1>
-    <p class="muted">Este es tu espacio para hacer seguimiento a tus solicitudes.</p>
+<section class="container stack seccion">
+  <header class="dashboard-hero aparecer">
+    <div>
+      <span class="badge badge--info">Mi espacio</span>
+      <h1>Hola, {{ usuario()?.nombre_completo?.split(' ')?.[0] }}</h1>
+      <p class="muted">Este es tu espacio para hacer seguimiento a tus solicitudes.</p>
+    </div>
+    <div class="row row--wrap">
+      <a class="btn btn--primary" routerLink="/usuario/denuncias/nueva">Registrar denuncia</a>
+      <a class="btn btn--ghost" routerLink="/chat">Ir al chat</a>
+    </div>
   </header>
 
-  <div class="grid">
-    <article class="card stat">
-      <span class="stat__value">{{ resumen().total }}</span>
-      <span class="stat__label">Denuncias registradas</span>
-    </article>
-    <article class="card stat">
-      <span class="stat__value">{{ resumen().pendientes }}</span>
-      <span class="stat__label">Pendientes</span>
-    </article>
-    <article class="card stat">
-      <span class="stat__value">{{ resumen().enProceso }}</span>
-      <span class="stat__label">En proceso</span>
-    </article>
-    <article class="card stat">
-      <span class="stat__value">{{ resumen().finalizadas }}</span>
-      <span class="stat__label">Finalizadas</span>
-    </article>
-  </div>
-
-  <div class="row row--wrap">
-    <a class="btn btn--primary" routerLink="/usuario/denuncias/nueva">Registrar denuncia</a>
-    <a class="btn btn--ghost" routerLink="/usuario/denuncias">Ver mis denuncias</a>
-    <a class="btn btn--ghost" routerLink="/chat">Ir al chat</a>
-  </div>
+  @if (cargando()) {
+    <div class="grid">
+      @for (item of [1, 2, 3, 4]; track item) {
+        <article class="card">
+          <div class="skeleton skeleton--titulo"></div>
+          <div class="skeleton skeleton--texto"></div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="grid aparecer-lista">
+      <article class="card stat">
+        <span class="stat__value">{{ resumen().total }}</span>
+        <span class="stat__label">Denuncias registradas</span>
+      </article>
+      <article class="card stat stat--pendiente">
+        <span class="stat__value">{{ resumen().pendientes }}</span>
+        <span class="stat__label">Pendientes</span>
+      </article>
+      <article class="card stat stat--proceso">
+        <span class="stat__value">{{ resumen().enProceso }}</span>
+        <span class="stat__label">En proceso</span>
+      </article>
+      <article class="card stat stat--finalizada">
+        <span class="stat__value">{{ resumen().finalizadas }}</span>
+        <span class="stat__label">Finalizadas</span>
+      </article>
+    </div>
+  }
 
   <section class="card stack">
     <div class="row row--between">
@@ -90,4 +102,23 @@
       </ul>
     }
   </section>
+
+  @if (recomendadas().length) {
+    <section class="stack">
+      <div class="row row--between">
+        <h2>Recursos recomendados</h2>
+        <a class="btn btn--ghost btn--sm" routerLink="/noticias">Ver todos</a>
+      </div>
+      <div class="grid grid--wide">
+        @for (noticia of recomendadas(); track noticia.id) {
+          <article class="card card--hover stack stack--sm">
+            <span class="badge badge--info">{{ noticia.categoria_etiqueta }}</span>
+            <h3>{{ noticia.titulo }}</h3>
+            <p class="muted">{{ noticia.resumen }}</p>
+            <a class="btn btn--soft btn--sm" [routerLink]="['/noticias', noticia.id]">Leer</a>
+          </article>
+        }
+      </div>
+    </section>
+  }
 </section>

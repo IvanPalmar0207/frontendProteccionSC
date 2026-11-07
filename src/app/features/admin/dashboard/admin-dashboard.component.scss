@@ -1,11 +1,24 @@
 @use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.dashboard-hero {
+  @include glass;
+  padding: $e-5;
+  border-radius: $radio-lg;
+  box-shadow: $sombra-sm;
+
+  h1 { margin: 0; }
+  p { margin: $e-1 0 0; }
+}
 
 .stat {
   display: flex;
   flex-direction: column;
   gap: $e-1;
-  color: $texto;
+  color: $carbon;
+  text-decoration: none;
 
-  &__value { font-size: 2rem; font-weight: 700; color: $rojo; }
-  &__label { color: $texto-secundario; font-size: 0.9rem; }
+  &__icono { font-size: 1.5rem; }
+  &__value { font-size: 2.1rem; font-weight: 700; color: $rojo; line-height: 1; }
+  &__label { color: $texto-secundario; font-size: $fs-sm; }
 }

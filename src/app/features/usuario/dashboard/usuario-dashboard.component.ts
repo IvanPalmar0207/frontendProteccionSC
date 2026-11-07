@@ -2,9 +2,10 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { Denuncia, Notificacion } from '../../../core/models/api.models';
+import { Denuncia, Noticia, Notificacion } from '../../../core/models/api.models';
 import { AuthService } from '../../../core/services/auth.service';
 import { DenunciaService } from '../../../core/services/denuncia.service';
+import { NoticiaService } from '../../../core/services/noticia.service';
 import { NotificacionService } from '../../../core/services/notificacion.service';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { EstadoPipe } from '../../../shared/pipes/labels.pipe';
@@ -20,11 +21,13 @@ export class UsuarioDashboardComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly denunciasService = inject(DenunciaService);
   private readonly notificacionesService = inject(NotificacionService);
+  private readonly noticiasService = inject(NoticiaService);
 
   readonly usuario = this.auth.usuarioActual;
   readonly cargando = signal(true);
   readonly denuncias = signal<Denuncia[]>([]);
   readonly notificaciones = signal<Notificacion[]>([]);
+  readonly recomendadas = signal<Noticia[]>([]);
 
   readonly resumen = computed(() => {
     const lista = this.denuncias();
@@ -52,6 +55,10 @@ export class UsuarioDashboardComponent implements OnInit {
     this.notificacionesService.listar().subscribe({
       next: (lista) => this.notificaciones.set(lista),
       error: () => this.notificaciones.set([]),
+    });
+    this.noticiasService.listar().subscribe({
+      next: (lista) => this.recomendadas.set(lista.slice(0, 3)),
+      error: () => this.recomendadas.set([]),
     });
   }
 

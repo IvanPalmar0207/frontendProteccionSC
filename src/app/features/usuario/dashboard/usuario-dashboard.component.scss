@@ -1,12 +1,33 @@
 @use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.dashboard-hero {
+  @include glass;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $e-4;
+  flex-wrap: wrap;
+  padding: $e-5;
+  border-radius: $radio-lg;
+  box-shadow: $sombra-sm;
+
+  h1 { margin: 0; }
+  p { margin: $e-1 0 0; }
+}
 
 .stat {
   display: flex;
   flex-direction: column;
   gap: $e-1;
+  border-top: 3px solid $rojo;
 
-  &__value { font-size: 2rem; font-weight: 700; color: $rojo; }
-  &__label { color: $texto-secundario; font-size: 0.9rem; }
+  &--pendiente { border-top-color: $rojo-oscuro; }
+  &--proceso { border-top-color: $amarillo; }
+  &--finalizada { border-top-color: $verde; }
+
+  &__value { font-size: 2.1rem; font-weight: 700; color: $carbon; line-height: 1; }
+  &__label { color: $texto-secundario; font-size: $fs-sm; }
 }
 
 .notif {
@@ -23,12 +44,13 @@
     justify-content: space-between;
     gap: $e-3;
     padding: $e-3;
-    border: 1px solid $gris;
+    border: 1px solid $borde-suave;
     border-radius: $radio-sm;
     background: $blanco;
+    transition: border-color $dur $ease, background $dur $ease;
 
-    &--nueva { border-left: 4px solid $rojo; }
-    p { margin: 0; font-size: 0.9rem; }
+    &--nueva { border-left: 4px solid $rojo; background: $rojo-tinte; }
+    p { margin: 0; font-size: $fs-sm; }
   }
 }
 
@@ -46,14 +68,17 @@
     justify-content: space-between;
     gap: $e-3;
     padding: $e-3;
-    border: 1px solid $gris;
+    border: 1px solid $borde-suave;
     border-radius: $radio-sm;
+    transition: border-color $dur $ease, background $dur $ease;
+
+    &:hover { border-color: $rosa-claro; background: $fondo-calido; }
 
     a {
       display: flex;
       align-items: center;
       gap: $e-2;
-      color: $texto;
+      color: $carbon;
     }
   }
 }
