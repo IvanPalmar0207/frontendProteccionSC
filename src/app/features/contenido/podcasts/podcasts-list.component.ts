@@ -1,13 +1,14 @@
+import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 
-import { Podcast } from '../../../core/models/api.models';
+import { PlataformaPodcast, Podcast } from '../../../core/models/api.models';
 import { PodcastService } from '../../../core/services/podcast.service';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-podcasts-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [EmptyStateComponent],
+  imports: [DatePipe, EmptyStateComponent],
   templateUrl: './podcasts-list.component.html',
   styleUrl: './podcasts-list.component.scss',
 })
@@ -27,12 +28,21 @@ export class PodcastsListComponent implements OnInit {
     });
   }
 
-  duracion(segundos: number | null): string {
-    if (!segundos) {
-      return 'Duración no indicada';
+  iconoPlataforma(plataforma: PlataformaPodcast): string {
+    switch (plataforma) {
+      case 'SPOTIFY':
+        return '🎧';
+      case 'YOUTUBE':
+        return '▶️';
+      case 'APPLE_PODCASTS':
+        return '🍎';
+      default:
+        return '🔗';
     }
-    const minutos = Math.floor(segundos / 60);
-    const resto = segundos % 60;
-    return `${minutos}:${resto.toString().padStart(2, '0')}`;
+  }
+
+  /** Opens the externally hosted episode safely in a new tab. */
+  escuchar(podcast: Podcast): void {
+    window.open(podcast.enlace, '_blank', 'noopener,noreferrer');
   }
 }

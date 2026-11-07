@@ -1,3 +1,45 @@
 @use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
 
-:host { display: block; }
+.filtros { gap: $e-2; }
+
+.noticia {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+
+  &--destacada { border-color: $rojo-suave; box-shadow: $sombra-sm; }
+
+  &__imagen {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+
+    &--vacia {
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, $fondo-calido, $rosa-claro);
+      font-size: 2.4rem;
+    }
+  }
+
+  &__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: $e-2;
+    padding: $e-4;
+    flex: 1 1 auto;
+  }
+
+  &__meta { display: flex; gap: $e-2; flex-wrap: wrap; }
+
+  .card__body {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+    flex: 1 1 auto;
+  }
+}

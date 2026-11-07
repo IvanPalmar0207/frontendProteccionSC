@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="comunidadTitle">
+  <title id="comunidadTitle">Ilustración original: red de personas que se acompañan</title>
+  <circle cx="160" cy="120" r="106" fill="#fff2f2"/>
+  <g stroke="#ffcaca" stroke-width="3" fill="none">
+    <path d="M160 120L70 70M160 120l92-46M160 120l-96 62M160 120l96 60"/>
+  </g>
+  <g>
+    <circle cx="160" cy="120" r="34" fill="#ff5657"/>
+    <circle cx="160" cy="112" r="11" fill="#ffffff"/>
+    <path d="M141 140h38v-3a19 19 0 0 0-38 0z" fill="#ffffff"/>
+  </g>
+  <g fill="#ff8f8f">
+    <circle cx="70" cy="70" r="22"/>
+    <circle cx="252" cy="74" r="22"/>
+    <circle cx="64" cy="182" r="22"/>
+    <circle cx="256" cy="180" r="22"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="70" cy="65" r="7"/><rect x="60" y="76" width="20" height="9" rx="4"/>
+    <circle cx="252" cy="69" r="7"/><rect x="242" y="80" width="20" height="9" rx="4"/>
+    <circle cx="64" cy="177" r="7"/><rect x="54" y="188" width="20" height="9" rx="4"/>
+    <circle cx="256" cy="175" r="7"/><rect x="246" y="186" width="20" height="9" rx="4"/>
+  </g>
+</svg>

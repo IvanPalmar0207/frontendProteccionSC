@@ -1,13 +1,42 @@
 @use '../../../../styles/variables' as *;
 
-.resumen {
-  font-size: 1.05rem;
-  color: $texto-secundario;
-  border-left: 3px solid $rojo-suave;
-  padding-left: $e-3;
+.articulo {
+  padding: 0;
+  overflow: hidden;
+  max-width: 900px;
+  margin-inline: auto;
+
+  &__imagen {
+    width: 100%;
+    max-height: 380px;
+    object-fit: cover;
+  }
+
+  &__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: $e-3;
+    padding: $e-6;
+  }
+
+  &__titulo { margin: 0; }
+
+  &__resumen {
+    font-size: $fs-lg;
+    color: $texto-secundario;
+    border-left: 4px solid $rojo-suave;
+    padding-left: $e-4;
+    margin: 0;
+  }
+
+  &__contenido {
+    white-space: pre-line;
+    max-width: 70ch;
+    color: $carbon-suave;
+    line-height: 1.75;
+  }
 }
 
-.contenido {
-  white-space: pre-line;
-  max-width: 70ch;
+@media (max-width: $bp-mobile) {
+  .articulo__cuerpo { padding: $e-4; }
 }

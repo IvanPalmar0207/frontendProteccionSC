@@ -56,6 +56,31 @@ export class AuthService {
     );
   }
 
+  solicitarRecuperacion(email: string): Observable<{ detail: string }> {
+    return this.http.post<{ detail: string }>(
+      `${environment.apiUrl}/auth/password-reset/`,
+      { email },
+    );
+  }
+
+  validarTokenRecuperacion(token: string): Observable<{ valido: boolean }> {
+    return this.http.get<{ valido: boolean }>(
+      `${environment.apiUrl}/auth/password-reset/validate/`,
+      { params: { token } },
+    );
+  }
+
+  confirmarRecuperacion(
+    token: string,
+    password: string,
+    password_confirm: string,
+  ): Observable<{ detail: string }> {
+    return this.http.post<{ detail: string }>(
+      `${environment.apiUrl}/auth/password-reset/confirm/`,
+      { token, password, password_confirm },
+    );
+  }
+
   cargarSesion(): void {
     if (!this.tokens.accessToken || this.usuario() !== null) {
       return;

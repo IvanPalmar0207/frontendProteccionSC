@@ -1,16 +1,24 @@
-// Global stylesheet. Design tokens live in `styles/variables`, base rules and
-// reusable UI primitives in `styles/base`.
+// Global stylesheet. The self-hosted Inter family is registered in angular.json;
+// design tokens live in `styles/variables` and generated utilities in `styles/base`.
 @use 'styles/base';
 @use 'styles/variables' as *;
 
 :root {
   --pi-rojo: #{$rojo};
+  --pi-rojo-oscuro: #{$rojo-oscuro};
   --pi-blanco: #{$blanco};
   --pi-gris: #{$gris};
   --pi-rojo-suave: #{$rojo-suave};
   --pi-rosa-claro: #{$rosa-claro};
   --pi-texto: #{$texto};
   --pi-texto-secundario: #{$texto-secundario};
+  --pi-fondo: #{$fondo};
+  --pi-borde: #{$borde};
   --pi-radio: #{$radio};
+  --pi-radio-lg: #{$radio-lg};
   --pi-sombra: #{$sombra};
+  --pi-sombra-lg: #{$sombra-lg};
+  --pi-dur: #{$dur};
+  --pi-ease: #{$ease};
+  --pi-contenedor: 1180px;
 }

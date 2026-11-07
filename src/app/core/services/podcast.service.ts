@@ -3,14 +3,17 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { Paginated, Podcast } from '../models/api.models';
+import { Paginated, PlataformaPodcast, Podcast } from '../models/api.models';
 
 export interface PodcastPayload {
   titulo: string;
   descripcion?: string;
-  audio_url?: string;
-  duracion_segundos?: number | null;
+  programa?: string;
+  plataforma: PlataformaPodcast;
+  enlace: string;
   publicado: boolean;
+  /** `undefined` leaves the cover untouched, `null` clears it, a File replaces it. */
+  portada?: File | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -29,14 +32,29 @@ export class PodcastService {
   }
 
   crear(payload: PodcastPayload): Observable<Podcast> {
-    return this.http.post<Podcast>(`${this.base}/`, payload);
+    return this.http.post<Podcast>(`${this.base}/`, this.aFormData(payload));
   }
 
   actualizar(id: number, payload: Partial<PodcastPayload>): Observable<Podcast> {
-    return this.http.patch<Podcast>(`${this.base}/${id}/`, payload);
+    if (payload.portada === null) {
+      return this.http.patch<Podcast>(`${this.base}/${id}/`, { portada: null });
+    }
+    return this.http.patch<Podcast>(`${this.base}/${id}/`, this.aFormData(payload));
   }
 
   eliminar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.base}/${id}/`);
+  }
+
+  private aFormData(payload: Partial<PodcastPayload>): FormData {
+    const form = new FormData();
+    if (payload.titulo !== undefined) form.append('titulo', payload.titulo);
+    if (payload.descripcion !== undefined) form.append('descripcion', payload.descripcion);
+    if (payload.programa !== undefined) form.append('programa', payload.programa);
+    if (payload.plataforma !== undefined) form.append('plataforma', payload.plataforma);
+    if (payload.enlace !== undefined) form.append('enlace', payload.enlace);
+    if (payload.publicado !== undefined) form.append('publicado', String(payload.publicado));
+    if (payload.portada instanceof File) form.append('portada', payload.portada);
+    return form;
   }
 }

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 560" role="img" aria-labelledby="heroTitle">
+  <title id="heroTitle">Ilustración original: dos personas conversando en un espacio de calma</title>
+  <defs>
+    <linearGradient id="heroFondo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffcaca"/>
+      <stop offset="1" stop-color="#ff8f8f"/>
+    </linearGradient>
+    <linearGradient id="heroCard" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#fff2f2"/>
+    </linearGradient>
+  </defs>
+  <rect x="18" y="18" width="684" height="524" rx="48" fill="url(#heroFondo)"/>
+  <circle cx="560" cy="150" r="86" fill="#ffffff" opacity="0.45"/>
+  <circle cx="150" cy="120" r="54" fill="#ff5657" opacity="0.18"/>
+  <path d="M0 470c120-58 250-58 360-18s240 44 360-10v118H0z" fill="#ffffff" opacity="0.5"/>
+  <g transform="translate(120,168)">
+    <rect x="0" y="0" width="230" height="150" rx="28" fill="url(#heroCard)"/>
+    <rect x="26" y="34" width="120" height="14" rx="7" fill="#d9d9d8"/>
+    <rect x="26" y="62" width="176" height="14" rx="7" fill="#ffcaca"/>
+    <rect x="26" y="90" width="150" height="14" rx="7" fill="#d9d9d8"/>
+    <path d="M28 150l-10 34 40-34z" fill="#ffffff"/>
+  </g>
+  <g transform="translate(300,286)">
+    <circle cx="52" cy="46" r="40" fill="#ff5657"/>
+    <path d="M52 30a16 16 0 0 1 16 16v12a16 16 0 0 1-32 0V46a16 16 0 0 1 16-16z" fill="#ffffff"/>
+    <path d="M12 104h80v-6a40 40 0 0 0-80 0z" fill="#ffffff"/>
+  </g>
+  <g transform="translate(452,196)">
+    <circle cx="46" cy="42" r="34" fill="#ff8f8f"/>
+    <path d="M46 28a13 13 0 0 1 13 13v10a13 13 0 0 1-26 0V41a13 13 0 0 1 13-13z" fill="#ffffff"/>
+    <path d="M12 92h68v-5a34 34 0 0 0-68 0z" fill="#ffffff"/>
+  </g>
+  <g transform="translate(448,336)">
+    <rect x="0" y="0" width="176" height="104" rx="24" fill="url(#heroCard)"/>
+    <circle cx="40" cy="42" r="16" fill="#ffcaca"/>
+    <rect x="66" y="32" width="86" height="12" rx="6" fill="#d9d9d8"/>
+    <rect x="66" y="56" width="60" height="12" rx="6" fill="#ffcaca"/>
+  </g>
+</svg>

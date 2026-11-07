@@ -1,6 +1,7 @@
 // ---------------------------------------------------------------------------
 // Design tokens — Protección Inmediata SC
-// The palette is mandatory and limited to these five colors as the visual base.
+// The palette is mandatory and limited to the five brand colors as the base.
+// Derived tones are used only for states, shadows and contrast.
 // ---------------------------------------------------------------------------
 
 // Paleta obligatoria
@@ -10,23 +11,36 @@ $gris: #d9d9d8; // bordes, texto secundario, separadores
 $rojo-suave: #ff8f8f; // fondos suaves y detalles
 $rosa-claro: #ffcaca; // fondos suaves y decorativos
 
-// Derivados neutros para legibilidad (no introducen una paleta nueva)
-$texto: #2c2c2b;
-$texto-secundario: #6f6f6e;
-$superficie: rgba(255, 255, 255, 0.86);
+// Derivados (estados, profundidad, contraste) — no reemplazan la identidad
+$rojo-oscuro: #e23f40;
+$rojo-tinte: #fff2f2;
+$carbon: #2b2929; // texto principal
+$carbon-suave: #55514f;
+$texto: $carbon; // alias conservado
+$texto-secundario: #7a7573;
+$borde: $gris;
+$borde-suave: #ecebea;
+$fondo: #fdf8f7;
+$fondo-calido: #fff6f4;
+$superficie: rgba(255, 255, 255, 0.82);
 $superficie-solida: #ffffff;
-$fondo: #fff7f7;
+$verde: #2f8f5b;
+$amarillo: #c98a1a;
 
 // Radios
-$radio-sm: 8px;
-$radio: 14px;
-$radio-lg: 22px;
+$radio-xs: 6px;
+$radio-sm: 10px;
+$radio: 16px;
+$radio-lg: 24px;
+$radio-xl: 32px;
 $radio-pill: 999px;
 
-// Sombras discretas
-$sombra-sm: 0 1px 2px rgba(44, 44, 43, 0.06);
-$sombra: 0 8px 24px rgba(44, 44, 43, 0.08);
-$sombra-fuerte: 0 16px 40px rgba(44, 44, 43, 0.1);
+// Elevación (sombras suaves y profundas)
+$sombra-xs: 0 1px 2px rgba(43, 41, 41, 0.05);
+$sombra-sm: 0 2px 8px rgba(43, 41, 41, 0.06);
+$sombra: 0 12px 32px rgba(43, 41, 41, 0.09);
+$sombra-lg: 0 24px 60px rgba(43, 41, 41, 0.12);
+$sombra-roja: 0 14px 34px rgba(255, 86, 87, 0.28);
 
 // Espaciado
 $e-1: 0.25rem;
@@ -36,13 +50,32 @@ $e-4: 1rem;
 $e-5: 1.5rem;
 $e-6: 2rem;
 $e-7: 3rem;
+$e-8: 4.5rem;
 
 // Tipografía
-$fuente: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+$fuente: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+$fuente-titulo: 'Inter', 'Segoe UI', system-ui, sans-serif;
+
+$fs-xs: 0.78rem;
+$fs-sm: 0.875rem;
+$fs-base: 1rem;
+$fs-lg: 1.125rem;
+$fs-xl: 1.35rem;
+$fs-2xl: 1.7rem;
+$fs-3xl: 2.2rem;
+$fs-4xl: 3rem;
+
+$lh-tight: 1.2;
+$lh-base: 1.6;
 
 // Breakpoints
 $bp-mobile: 640px;
 $bp-tablet: 900px;
+$bp-desktop: 1200px;
 
-// Transiciones
-$transicion: 160ms ease;
+// Movimiento
+$dur-rapida: 140ms;
+$dur: 220ms;
+$dur-lenta: 380ms;
+$ease: cubic-bezier(0.22, 1, 0.36, 1);
+$transicion: $dur $ease; // alias conservado

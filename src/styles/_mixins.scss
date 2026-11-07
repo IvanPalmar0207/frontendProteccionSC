@@ -1,0 +1,64 @@
+@use 'variables' as *;
+
+// Superficie glassmorphism moderada, reutilizable.
+@mixin glass($blur: 14px, $alpha: 0.82) {
+  background: rgba(255, 255, 255, $alpha);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid $borde;
+}
+
+// Elevación en hover con desplazamiento discreto.
+@mixin elevacion-hover {
+  transition: transform $dur $ease, box-shadow $dur $ease, border-color $dur $ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $sombra;
+    border-color: $rosa-claro;
+  }
+}
+
+// Foco visible consistente para navegación por teclado.
+@mixin foco {
+  outline: 3px solid rgba(255, 86, 87, 0.35);
+  outline-offset: 2px;
+}
+
+// Entrada discreta reutilizable.
+@mixin aparecer($desplazamiento: 12px) {
+  animation: aparecer $dur-lenta $ease both;
+
+  @at-root {
+    @keyframes aparecer {
+      from {
+        opacity: 0;
+        transform: translateY($desplazamiento);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
+@mixin desde-tablet {
+  @media (max-width: $bp-tablet) {
+    @content;
+  }
+}
+
+@mixin desde-mobile {
+  @media (max-width: $bp-mobile) {
+    @content;
+  }
+}
+
+// Respeta la preferencia de movimiento reducido.
+@mixin movimiento-seguro {
+  @media (prefers-reduced-motion: reduce) {
+    animation: none !important;
+    transition: none !important;
+  }
+}

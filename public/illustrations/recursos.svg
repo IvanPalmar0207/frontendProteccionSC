@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="recursosTitle">
+  <title id="recursosTitle">Ilustración original: recursos informativos y acompañamiento profesional</title>
+  <rect x="16" y="16" width="288" height="208" rx="36" fill="#fff2f2"/>
+  <rect x="54" y="60" width="212" height="128" rx="20" fill="#ffffff" stroke="#ffcaca" stroke-width="2"/>
+  <rect x="76" y="86" width="80" height="80" rx="14" fill="#ff8f8f"/>
+  <path d="M96 116l14 14 26-30" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="172" y="92" width="72" height="12" rx="6" fill="#d9d9d8"/>
+  <rect x="172" y="118" width="56" height="12" rx="6" fill="#ffcaca"/>
+  <rect x="172" y="144" width="66" height="12" rx="6" fill="#d9d9d8"/>
+  <circle cx="248" cy="52" r="24" fill="#ff5657"/>
+  <path d="M248 40v24M236 52h24" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+</svg>

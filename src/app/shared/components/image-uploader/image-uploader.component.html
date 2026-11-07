@@ -1,0 +1,36 @@
+<div class="uploader">
+  <span class="uploader__label">{{ etiqueta }}</span>
+
+  @if (urlMostrada) {
+    <figure class="uploader__preview">
+      <img [src]="urlMostrada" [alt]="'Vista previa de ' + etiqueta" />
+    </figure>
+    <div class="row row--wrap">
+      <label class="btn btn--ghost btn--sm">
+        Reemplazar
+        <input type="file" accept="image/png,image/jpeg,image/webp" (change)="onSeleccion($event)" hidden />
+      </label>
+      <button type="button" class="btn btn--danger btn--sm" (click)="quitar()">Quitar</button>
+    </div>
+  } @else {
+    <label
+      class="uploader__drop"
+      [class.is-arrastrando]="arrastrando()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave()"
+      (drop)="onDrop($event)"
+    >
+      <span class="uploader__icon" aria-hidden="true">🖼️</span>
+      <strong>Arrastrá una imagen o hacé clic para elegirla</strong>
+      <span class="muted">JPG, PNG o WEBP · hasta {{ maxMb }} MB</span>
+      <input type="file" accept="image/png,image/jpeg,image/webp" (change)="onSeleccion($event)" hidden />
+    </label>
+  }
+
+  @if (nombreArchivo()) {
+    <span class="muted uploader__nombre">{{ nombreArchivo() }}</span>
+  }
+  @if (error()) {
+    <span class="field__error">{{ error() }}</span>
+  }
+</div>

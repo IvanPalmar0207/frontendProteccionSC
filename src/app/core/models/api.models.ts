@@ -119,25 +119,39 @@ export interface Mensaje {
   creado_en: string;
 }
 
+export type CategoriaNoticia =
+  | 'PREVENCION'
+  | 'ACOMPANAMIENTO'
+  | 'DERECHOS'
+  | 'COMUNIDAD'
+  | 'INSTITUCIONAL';
+
 export interface Noticia {
   id: number;
   titulo: string;
   resumen: string;
   contenido: string;
+  categoria: CategoriaNoticia;
+  categoria_etiqueta: string;
   imagen: string | null;
+  destacada: boolean;
   autor_nombre: string;
   publicado: boolean;
   fecha_publicacion: string;
 }
 
+export type PlataformaPodcast = 'SPOTIFY' | 'YOUTUBE' | 'APPLE_PODCASTS' | 'OTRA';
+
 export interface Podcast {
   id: number;
   titulo: string;
   descripcion: string;
-  audio: string | null;
-  audio_url: string;
-  url_audio: string;
-  duracion_segundos: number | null;
+  programa: string;
+  plataforma: PlataformaPodcast;
+  plataforma_etiqueta: string;
+  /** Validated HTTPS link to the externally hosted episode. */
+  enlace: string;
+  portada: string | null;
   autor_nombre: string;
   publicado: boolean;
   fecha_publicacion: string;

@@ -1,0 +1,56 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: $e-4;
+  background: rgba(43, 41, 41, 0.45);
+  backdrop-filter: blur(3px);
+  animation: aparecer $dur $ease both;
+
+  &__dialog {
+    width: min(640px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: $superficie-solida;
+    border: 1px solid $borde;
+    border-radius: $radio-lg;
+    box-shadow: $sombra-lg;
+    animation: aparecer $dur $ease both;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $e-3;
+    padding: $e-4 $e-5;
+    border-bottom: 1px solid $borde-suave;
+
+    h2 { margin: 0; font-size: $fs-xl; }
+  }
+
+  &__close {
+    border: none;
+    background: transparent;
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    color: $texto-secundario;
+    border-radius: $radio-sm;
+    padding: 0 $e-2;
+
+    &:hover { color: $rojo; }
+  }
+
+  &__body { padding: $e-5; }
+}
+
+@include desde-mobile {
+  .modal__dialog { border-radius: $radio; }
+  .modal__body { padding: $e-4; }
+}

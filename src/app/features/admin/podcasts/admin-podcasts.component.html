@@ -1,39 +1,73 @@
 <section class="container stack">
   <header class="stack stack--sm">
     <h1>Gestión de pódcast</h1>
-    <p class="muted">Registrá episodios y asociá el archivo o recurso de audio.</p>
+    <p class="muted">
+      Cargá episodios pegando el enlace oficial de la plataforma. No se almacenan archivos
+      de audio: sólo un enlace HTTPS validado y una portada opcional.
+    </p>
   </header>
 
   <form class="card stack" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
-    <h2>{{ editandoId() ? 'Editar pódcast' : 'Nuevo pódcast' }}</h2>
-    <div class="field">
-      <label for="titulo">Título</label>
-      <input id="titulo" type="text" formControlName="titulo" />
-      @if (titulo.touched && titulo.hasError('required')) {
-        <span class="field__error">El título es obligatorio.</span>
-      }
-    </div>
-    <div class="field">
-      <label for="descripcion">Descripción</label>
-      <textarea id="descripcion" formControlName="descripcion"></textarea>
-    </div>
-    <div class="grid">
-      <div class="field">
-        <label for="audio_url">URL de audio</label>
-        <input id="audio_url" type="url" formControlName="audio_url" placeholder="https://…/episodio.mp3" />
+    <h2>{{ editandoId() ? 'Editar episodio' : 'Nuevo episodio' }}</h2>
+
+    <div class="grid grid--2">
+      <div class="stack">
+        <div class="field">
+          <label for="titulo">Título del episodio</label>
+          <input id="titulo" type="text" formControlName="titulo" />
+          @if (titulo.touched && titulo.hasError('required')) {
+            <span class="field__error">El título es obligatorio.</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="programa">Nombre del programa</label>
+          <input id="programa" type="text" formControlName="programa" placeholder="Voces que acompañan" />
+        </div>
+
+        <div class="field">
+          <label for="plataforma">Plataforma de origen</label>
+          <select id="plataforma" formControlName="plataforma">
+            @for (plataforma of plataformas; track plataforma.valor) {
+              <option [value]="plataforma.valor">{{ plataforma.etiqueta }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="enlace">URL del episodio (HTTPS)</label>
+          <input id="enlace" type="url" formControlName="enlace" placeholder="https://open.spotify.com/episode/…" />
+          @if (enlace.touched && enlace.hasError('required')) {
+            <span class="field__error">El enlace es obligatorio.</span>
+          }
+          @if (enlace.touched && enlace.hasError('pattern')) {
+            <span class="field__error">El enlace debe comenzar con https://</span>
+          }
+        </div>
+
+        <label class="check">
+          <input type="checkbox" formControlName="publicado" />
+          Publicado (visible para los usuarios)
+        </label>
       </div>
-      <div class="field">
-        <label for="duracion_segundos">Duración (segundos)</label>
-        <input id="duracion_segundos" type="number" formControlName="duracion_segundos" />
+
+      <div class="stack">
+        <div class="field">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" formControlName="descripcion"></textarea>
+        </div>
+
+        <app-image-uploader
+          etiqueta="Imagen de portada (opcional)"
+          [imagenUrl]="portadaActual()"
+          (imagenCambiada)="onPortadaCambiada($event)"
+        />
       </div>
     </div>
-    <label class="check">
-      <input type="checkbox" formControlName="publicado" />
-      Publicado (visible para los usuarios)
-    </label>
+
     <div class="row">
       <button type="submit" class="btn btn--primary" [disabled]="guardando()">
-        {{ editandoId() ? 'Guardar cambios' : 'Crear pódcast' }}
+        {{ editandoId() ? 'Guardar cambios' : 'Crear episodio' }}
       </button>
       @if (editandoId()) {
         <button type="button" class="btn btn--ghost" (click)="cancelar()">Cancelar</button>
@@ -42,28 +76,38 @@
   </form>
 
   @if (cargando()) {
-    <p class="muted">Cargando pódcast…</p>
+    <p class="muted">Cargando episodios…</p>
   } @else {
     <div class="tabla-wrap">
       <table class="table">
         <thead>
           <tr>
-            <th>Título</th>
-            <th>Audio</th>
+            <th>Episodio</th>
+            <th>Programa</th>
+            <th>Plataforma</th>
             <th>Estado</th>
+            <th>Publicado</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           @for (podcast of podcasts(); track podcast.id) {
             <tr>
-              <td>{{ podcast.titulo }}</td>
-              <td class="muted">{{ podcast.url_audio || 'Sin audio' }}</td>
+              <td>
+                <strong>{{ podcast.titulo }}</strong>
+                <br />
+                <a [href]="podcast.enlace" target="_blank" rel="noopener noreferrer" class="muted">
+                  Ver enlace ↗
+                </a>
+              </td>
+              <td>{{ podcast.programa || '—' }}</td>
+              <td>{{ podcast.plataforma_etiqueta }}</td>
               <td>
                 <span [class]="podcast.publicado ? 'badge badge--ok' : 'badge'">
                   {{ podcast.publicado ? 'Publicado' : 'Borrador' }}
                 </span>
               </td>
+              <td>{{ podcast.fecha_publicacion | date: 'short' }}</td>
               <td class="row">
                 <button type="button" class="btn btn--ghost btn--sm" (click)="editar(podcast)">Editar</button>
                 <button type="button" class="btn btn--danger btn--sm" (click)="eliminar(podcast)">Eliminar</button>

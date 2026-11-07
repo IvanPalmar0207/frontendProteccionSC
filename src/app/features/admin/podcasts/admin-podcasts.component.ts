@@ -2,14 +2,15 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { Podcast } from '../../../core/models/api.models';
+import { PlataformaPodcast, Podcast } from '../../../core/models/api.models';
 import { NotificationService } from '../../../core/services/notification.service';
 import { PodcastService } from '../../../core/services/podcast.service';
+import { ImageUploaderComponent } from '../../../shared/components/image-uploader/image-uploader.component';
 
 @Component({
   selector: 'app-admin-podcasts',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DatePipe, ImageUploaderComponent],
   templateUrl: './admin-podcasts.component.html',
   styleUrl: './admin-podcasts.component.scss',
 })
@@ -22,17 +23,31 @@ export class AdminPodcastsComponent implements OnInit {
   readonly guardando = signal(false);
   readonly podcasts = signal<Podcast[]>([]);
   readonly editandoId = signal<number | null>(null);
+  readonly portadaActual = signal<string | null>(null);
+  /** undefined = untouched, null = cleared, File = replacement. */
+  readonly portadaSeleccionada = signal<File | null | undefined>(undefined);
+
+  readonly plataformas: { valor: PlataformaPodcast; etiqueta: string }[] = [
+    { valor: 'SPOTIFY', etiqueta: 'Spotify' },
+    { valor: 'YOUTUBE', etiqueta: 'YouTube' },
+    { valor: 'APPLE_PODCASTS', etiqueta: 'Apple Podcasts' },
+    { valor: 'OTRA', etiqueta: 'Otra' },
+  ];
 
   readonly form = this.fb.nonNullable.group({
     titulo: ['', Validators.required],
     descripcion: [''],
-    audio_url: [''],
-    duracion_segundos: [null as number | null],
+    programa: [''],
+    plataforma: ['OTRA' as PlataformaPodcast, Validators.required],
+    enlace: ['', [Validators.required, Validators.pattern(/^https:\/\/.+/)]],
     publicado: [true],
   });
 
   get titulo() {
     return this.form.controls.titulo;
+  }
+  get enlace() {
+    return this.form.controls.enlace;
   }
 
   ngOnInit(): void {
@@ -41,24 +56,34 @@ export class AdminPodcastsComponent implements OnInit {
 
   editar(podcast: Podcast): void {
     this.editandoId.set(podcast.id);
+    this.portadaActual.set(podcast.portada);
+    this.portadaSeleccionada.set(undefined);
     this.form.patchValue({
       titulo: podcast.titulo,
       descripcion: podcast.descripcion,
-      audio_url: podcast.audio_url,
-      duracion_segundos: podcast.duracion_segundos,
+      programa: podcast.programa,
+      plataforma: podcast.plataforma,
+      enlace: podcast.enlace,
       publicado: podcast.publicado,
     });
   }
 
   cancelar(): void {
     this.editandoId.set(null);
+    this.portadaActual.set(null);
+    this.portadaSeleccionada.set(undefined);
     this.form.reset({
       titulo: '',
       descripcion: '',
-      audio_url: '',
-      duracion_segundos: null,
+      programa: '',
+      plataforma: 'OTRA',
+      enlace: '',
       publicado: true,
     });
+  }
+
+  onPortadaCambiada(archivo: File | null): void {
+    this.portadaSeleccionada.set(archivo);
   }
 
   guardar(): void {
@@ -67,7 +92,8 @@ export class AdminPodcastsComponent implements OnInit {
       return;
     }
     this.guardando.set(true);
-    const payload = this.form.getRawValue();
+    const datos = this.form.getRawValue();
+    const payload = { ...datos, portada: this.portadaSeleccionada() };
     const id = this.editandoId();
 
     const peticion$ = id
@@ -78,7 +104,7 @@ export class AdminPodcastsComponent implements OnInit {
       next: () => {
         this.guardando.set(false);
         this.cancelar();
-        this.notificaciones.exito(id ? 'Pódcast actualizado.' : 'Pódcast creado.');
+        this.notificaciones.exito(id ? 'Episodio actualizado.' : 'Episodio creado.');
         this.cargar();
       },
       error: () => this.guardando.set(false),
@@ -86,12 +112,12 @@ export class AdminPodcastsComponent implements OnInit {
   }
 
   eliminar(podcast: Podcast): void {
-    if (!confirm(`¿Eliminar el pódcast "${podcast.titulo}"?`)) {
+    if (!confirm(`¿Eliminar el episodio "${podcast.titulo}"?`)) {
       return;
     }
     this.podcastService.eliminar(podcast.id).subscribe({
       next: () => {
-        this.notificaciones.exito('Pódcast eliminado.');
+        this.notificaciones.exito('Episodio eliminado.');
         this.cargar();
       },
     });

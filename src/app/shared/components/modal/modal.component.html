@@ -1,0 +1,21 @@
+@if (abierto) {
+  <div class="modal" (click)="onBackdrop()" (keydown)="onEscape($event)" tabindex="-1">
+    <div
+      #contenedor
+      class="modal__dialog"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="titulo"
+      tabindex="-1"
+      (click)="$event.stopPropagation()"
+    >
+      <header class="modal__header">
+        <h2>{{ titulo }}</h2>
+        <button type="button" class="modal__close" (click)="cerrar.emit()" aria-label="Cerrar">×</button>
+      </header>
+      <div class="modal__body">
+        <ng-content />
+      </div>
+    </div>
+  </div>
+}

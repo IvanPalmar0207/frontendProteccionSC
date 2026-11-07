@@ -1,18 +1,32 @@
-<section class="container stack">
+<section class="container stack seccion">
   <a class="muted" routerLink="/noticias">← Volver a noticias</a>
 
   @if (cargando()) {
-    <p class="muted">Cargando noticia…</p>
+    <article class="card stack">
+      <div class="skeleton skeleton--media"></div>
+      <div class="skeleton skeleton--titulo"></div>
+      <div class="skeleton skeleton--texto"></div>
+      <div class="skeleton skeleton--texto"></div>
+    </article>
   } @else if (!noticia()) {
     <div class="alert alert--error">No se encontró la noticia solicitada.</div>
   } @else {
-    <article class="card stack">
-      <span class="muted">{{ noticia()!.fecha_publicacion | date: 'longDate' }} · {{ noticia()!.autor_nombre }}</span>
-      <h1>{{ noticia()!.titulo }}</h1>
-      @if (noticia()!.resumen) {
-        <p class="resumen">{{ noticia()!.resumen }}</p>
+    <article class="card articulo aparecer">
+      @if (noticia()!.imagen) {
+        <img class="articulo__imagen" [src]="noticia()!.imagen" [alt]="'Portada de ' + noticia()!.titulo" />
       }
-      <div class="contenido">{{ noticia()!.contenido }}</div>
+
+      <div class="articulo__cuerpo">
+        <div class="row row--wrap">
+          <span class="badge badge--info">{{ noticia()!.categoria_etiqueta }}</span>
+          <span class="muted">{{ noticia()!.fecha_publicacion | date: 'longDate' }} · {{ noticia()!.autor_nombre }}</span>
+        </div>
+        <h1 class="articulo__titulo">{{ noticia()!.titulo }}</h1>
+        @if (noticia()!.resumen) {
+          <p class="articulo__resumen">{{ noticia()!.resumen }}</p>
+        }
+        <div class="articulo__contenido">{{ noticia()!.contenido }}</div>
+      </div>
     </article>
   }
 </section>
