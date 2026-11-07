@@ -1,0 +1,82 @@
+@use '../../../styles/variables' as *;
+
+.chat {
+  &__ventana {
+    display: flex;
+    flex-direction: column;
+    gap: $e-3;
+    padding: $e-4;
+    min-height: 340px;
+    max-height: 55vh;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid $gris;
+    border-radius: $radio;
+  }
+
+  &__form {
+    display: flex;
+    gap: $e-3;
+    align-items: flex-end;
+  }
+}
+
+.mensaje {
+  display: flex;
+  justify-content: flex-start;
+
+  &--propio {
+    justify-content: flex-end;
+
+    .mensaje__burbuja {
+      background: $rojo;
+      color: $blanco;
+
+      .mensaje__autor,
+      .mensaje__hora { color: rgba(255, 255, 255, 0.85); }
+    }
+  }
+
+  &__burbuja {
+    max-width: min(520px, 78%);
+    padding: $e-3;
+    border-radius: $radio;
+    background: $blanco;
+    border: 1px solid $gris;
+
+    p { margin: $e-1 0; white-space: pre-line; }
+  }
+
+  &__autor {
+    font-size: 0.78rem;
+    font-weight: 650;
+    color: $texto-secundario;
+  }
+
+  &__hora {
+    font-size: 0.72rem;
+    color: $texto-secundario;
+  }
+}
+
+.conexion {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.2rem 0.7rem;
+  border-radius: $radio-pill;
+  border: 1px solid $gris;
+
+  &--conectado { color: #2e7d32; border-color: #2e7d32; }
+  &--conectando { color: $texto-secundario; }
+  &--desconectado { color: $rojo; border-color: $rojo; }
+}
+
+.field--grow { flex: 1 1 auto; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}

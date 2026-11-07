@@ -1,0 +1,23 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Noticias</h1>
+    <p class="muted">Información y recursos sobre prevención y atención.</p>
+  </header>
+
+  @if (cargando()) {
+    <p class="muted">Cargando noticias…</p>
+  } @else if (noticias().length === 0) {
+    <app-empty-state titulo="Sin noticias" mensaje="Todavía no hay noticias publicadas." />
+  } @else {
+    <div class="grid grid--wide">
+      @for (noticia of noticias(); track noticia.id) {
+        <article class="card card--hover stack stack--sm">
+          <span class="muted">{{ noticia.fecha_publicacion | date: 'longDate' }}</span>
+          <h2 class="card__title">{{ noticia.titulo }}</h2>
+          <p class="card__body">{{ (noticia.resumen || noticia.contenido) | slice: 0 : 140 }}…</p>
+          <a class="btn btn--soft btn--sm" [routerLink]="['/noticias', noticia.id]">Leer más</a>
+        </article>
+      }
+    </div>
+  }
+</section>

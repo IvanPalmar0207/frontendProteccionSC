@@ -1,0 +1,38 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Panel profesional</h1>
+    <p class="muted">Bienvenido/a, {{ usuario()?.nombre_completo }}. Resumen de casos en atención.</p>
+  </header>
+
+  <div class="grid">
+    <article class="card stat">
+      <span class="stat__value">{{ resumen().total }}</span>
+      <span class="stat__label">Casos registrados</span>
+    </article>
+    <article class="card stat">
+      <span class="stat__value">{{ resumen().pendientes }}</span>
+      <span class="stat__label">Pendientes</span>
+    </article>
+    <article class="card stat">
+      <span class="stat__value">{{ resumen().enProceso }}</span>
+      <span class="stat__label">En proceso</span>
+    </article>
+    <article class="card stat">
+      <span class="stat__value">{{ resumen().finalizadas }}</span>
+      <span class="stat__label">Finalizadas</span>
+    </article>
+    <article class="card stat">
+      <span class="stat__value">{{ resumen().anonimas }}</span>
+      <span class="stat__label">Anónimas</span>
+    </article>
+  </div>
+
+  <div class="row row--wrap">
+    <a class="btn btn--primary" routerLink="/profesional/denuncias">Ver todos los casos</a>
+    <a class="btn btn--ghost" routerLink="/chat">Historial de conversaciones</a>
+  </div>
+
+  @if (cargando()) {
+    <p class="muted">Cargando…</p>
+  }
+</section>

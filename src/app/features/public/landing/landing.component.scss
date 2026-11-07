@@ -1,0 +1,62 @@
+@use '../../../../styles/variables' as *;
+
+.hero {
+  display: grid;
+  gap: $e-6;
+  align-items: center;
+  padding: $e-7 $e-5;
+  background: linear-gradient(180deg, $fondo 0%, $blanco 100%);
+
+  &__content {
+    max-width: 640px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  &__title {
+    margin-top: $e-3;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+  }
+
+  &__lead {
+    color: $texto-secundario;
+    font-size: 1.05rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $e-3;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: $e-5 0 $e-3;
+  }
+
+  &__note { font-size: 0.9rem; }
+
+  &__aside {
+    display: grid;
+    gap: $e-3;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    max-width: 900px;
+    margin-inline: auto;
+  }
+
+  &__card {
+    background: $superficie;
+    border: 1px solid $gris;
+    border-radius: $radio;
+    padding: $e-4;
+    box-shadow: $sombra-sm;
+
+    h3 { font-size: 1rem; }
+    p { margin: 0; font-size: 0.9rem; }
+  }
+
+  &__card-icon { font-size: 1.5rem; }
+}
+
+.info {
+  padding: $e-6 0;
+
+  h2 { margin-bottom: $e-5; }
+}

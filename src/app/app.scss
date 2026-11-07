@@ -1,0 +1,21 @@
+@use '../styles/variables' as *;
+
+.shell {
+  display: flex;
+  align-items: stretch;
+  min-height: calc(100vh - 61px);
+
+  &__main {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: $e-5;
+  }
+}
+
+@media (max-width: $bp-tablet) {
+  .shell {
+    flex-direction: column;
+
+    &__main { padding: $e-4; }
+  }
+}

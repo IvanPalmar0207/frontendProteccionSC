@@ -1,0 +1,144 @@
+<section class="container stack">
+  <a class="muted" routerLink="/profesional/denuncias">← Volver a casos</a>
+
+  @if (cargando()) {
+    <p class="muted">Cargando caso…</p>
+  } @else if (!denuncia()) {
+    <div class="alert alert--error">No se encontró el caso solicitado.</div>
+  } @else {
+    <header class="row row--between row--wrap">
+      <div class="stack stack--sm">
+        <h1>Caso {{ denuncia()!.identificador }}</h1>
+        <div class="row row--wrap">
+          @if (denuncia()!.es_anonima) {
+            <span class="badge badge--soft">Denuncia anónima</span>
+          } @else {
+            <span class="badge badge--ok">Denuncia pública</span>
+          }
+          <span class="badge">{{ denuncia()!.estado | estado }}</span>
+          <span class="muted">{{ denuncia()!.creado_en | date: 'medium' }}</span>
+        </div>
+      </div>
+      <div class="row">
+        @if (!denuncia()!.profesional_asignado) {
+          <button type="button" class="btn btn--soft" (click)="asignarme()" [disabled]="procesando()">
+            Asignarme el caso
+          </button>
+        }
+        <button type="button" class="btn btn--primary" (click)="abrirChat()" [disabled]="procesando()">
+          Abrir chat
+        </button>
+      </div>
+    </header>
+
+    @if (denuncia()!.es_anonima) {
+      <div class="alert alert--ok">
+        Esta denuncia es anónima. Por protección de datos, la identidad del remitente no
+        está disponible: no se muestra nombre, correo, teléfono ni documento.
+      </div>
+    }
+
+    <article class="card stack">
+      <h2>Información del caso</h2>
+      <dl class="detalle">
+        <div>
+          <dt>Tipo de situación</dt>
+          <dd>{{ denuncia()!.tipo_situacion | tipoSituacion }}</dd>
+        </div>
+        <div>
+          <dt>Ubicación</dt>
+          <dd>{{ denuncia()!.ubicacion || 'No indicada' }}</dd>
+        </div>
+        <div>
+          <dt>Fecha de los hechos</dt>
+          <dd>{{ denuncia()!.fecha_hechos || 'No indicada' }}</dd>
+        </div>
+        <div>
+          <dt>Profesional asignado</dt>
+          <dd>{{ denuncia()!.profesional_asignado?.nombre_completo || 'Sin asignar' }}</dd>
+        </div>
+      </dl>
+      <div>
+        <dt class="muted">Descripción</dt>
+        <p>{{ denuncia()!.descripcion }}</p>
+      </div>
+    </article>
+
+    <article class="card stack">
+      <h2>Datos de contacto</h2>
+      @if (denuncia()!.es_anonima || !denuncia()!.solicitante) {
+        <p class="muted">No disponibles (denuncia anónima).</p>
+      } @else {
+        <dl class="detalle">
+          <div>
+            <dt>Nombre</dt>
+            <dd>{{ denuncia()!.solicitante?.nombre_completo }}</dd>
+          </div>
+          <div>
+            <dt>Correo</dt>
+            <dd>{{ denuncia()!.solicitante?.email }}</dd>
+          </div>
+          <div>
+            <dt>Teléfono</dt>
+            <dd>{{ denuncia()!.solicitante?.telefono || 'No indicado' }}</dd>
+          </div>
+          <div>
+            <dt>Documento</dt>
+            <dd>{{ denuncia()!.solicitante?.documento || 'No indicado' }}</dd>
+          </div>
+        </dl>
+      }
+    </article>
+
+    <article class="card stack">
+      <h2>Actualizar estado de atención</h2>
+      <form class="row row--wrap" [formGroup]="form" (ngSubmit)="cambiarEstado()">
+        <div class="field">
+          <label for="estado">Nuevo estado</label>
+          <select id="estado" formControlName="estado">
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="EN_PROCESO">En proceso</option>
+            <option value="FINALIZADA">Finalizada</option>
+          </select>
+        </div>
+        <div class="field field--grow">
+          <label for="observacion">Observación</label>
+          <input id="observacion" type="text" formControlName="observacion" />
+        </div>
+        <button type="submit" class="btn btn--primary" [disabled]="procesando()">
+          Guardar cambio
+        </button>
+      </form>
+    </article>
+
+    <article class="card stack">
+      <h2>Historial del caso</h2>
+      @if (denuncia()!.seguimientos.length === 0) {
+        <p class="muted">Todavía no hay actualizaciones.</p>
+      } @else {
+        <ol class="timeline">
+          @for (seguimiento of denuncia()!.seguimientos; track seguimiento.id) {
+            <li class="timeline__item">
+              <span class="timeline__dot" aria-hidden="true"></span>
+              <div>
+                <div class="row row--wrap">
+                  @if (seguimiento.estado_anterior) {
+                    <span class="badge">{{ seguimiento.estado_anterior | estado }}</span>
+                    <span aria-hidden="true">→</span>
+                  }
+                  <span class="badge badge--soft">{{ seguimiento.estado_nuevo | estado }}</span>
+                </div>
+                @if (seguimiento.observacion) {
+                  <p>{{ seguimiento.observacion }}</p>
+                }
+                <span class="muted">
+                  {{ seguimiento.autor_nombre }} · {{ seguimiento.creado_en | date: 'short' }}
+                </span>
+              </div>
+            </li>
+          }
+        </ol>
+      }
+    </article>
+  }
+</section>

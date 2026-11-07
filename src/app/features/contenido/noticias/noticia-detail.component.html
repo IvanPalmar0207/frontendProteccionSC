@@ -1,0 +1,18 @@
+<section class="container stack">
+  <a class="muted" routerLink="/noticias">← Volver a noticias</a>
+
+  @if (cargando()) {
+    <p class="muted">Cargando noticia…</p>
+  } @else if (!noticia()) {
+    <div class="alert alert--error">No se encontró la noticia solicitada.</div>
+  } @else {
+    <article class="card stack">
+      <span class="muted">{{ noticia()!.fecha_publicacion | date: 'longDate' }} · {{ noticia()!.autor_nombre }}</span>
+      <h1>{{ noticia()!.titulo }}</h1>
+      @if (noticia()!.resumen) {
+        <p class="resumen">{{ noticia()!.resumen }}</p>
+      }
+      <div class="contenido">{{ noticia()!.contenido }}</div>
+    </article>
+  }
+</section>

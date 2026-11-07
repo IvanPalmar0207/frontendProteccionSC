@@ -1,0 +1,48 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Conversaciones</h1>
+    <p class="muted">
+      Comunicación privada entre el usuario y el profesional asignado. El administrador no
+      tiene acceso a estos mensajes.
+    </p>
+  </header>
+
+  @if (cargando()) {
+    <p class="muted">Cargando conversaciones…</p>
+  } @else if (conversaciones().length === 0) {
+    <app-empty-state
+      titulo="Sin conversaciones"
+      mensaje="Abrí una conversación desde el detalle de una denuncia para hablar con un profesional."
+    />
+  } @else {
+    <ul class="conversaciones">
+      @for (conversacion of conversaciones(); track conversacion.id) {
+        <li class="card card--hover conversaciones__item">
+          <a [routerLink]="['/chat', conversacion.id]">
+            <div class="row row--between row--wrap">
+              <strong>Denuncia {{ conversacion.denuncia.identificador }}</strong>
+              <div class="row">
+                <span class="badge badge--soft">{{ conversacion.denuncia.modalidad | modalidad }}</span>
+                @if (conversacion.no_leidos > 0) {
+                  <span class="badge badge--danger">{{ conversacion.no_leidos }} sin leer</span>
+                }
+              </div>
+            </div>
+            @if (conversacion.ultimo_mensaje) {
+              <p class="muted">
+                {{ conversacion.ultimo_mensaje.remitente_nombre }}:
+                {{ conversacion.ultimo_mensaje.contenido }}
+              </p>
+            } @else {
+              <p class="muted">Sin mensajes todavía.</p>
+            }
+            <span class="muted">
+              Actualizada {{ conversacion.actualizado_en | date: 'short' }} ·
+              {{ conversacion.denuncia.estado | estado }}
+            </span>
+          </a>
+        </li>
+      }
+    </ul>
+  }
+</section>

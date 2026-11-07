@@ -1,0 +1,24 @@
+@use '../../../../styles/variables' as *;
+
+.auth {
+  display: grid;
+  place-items: center;
+  padding: $e-6 $e-4;
+  min-height: 70vh;
+
+  &__card {
+    width: min(440px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: $e-4;
+
+    h1 { margin-bottom: 0; }
+    p { margin: 0; }
+  }
+
+  &__alt {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: $e-2;
+  }
+}

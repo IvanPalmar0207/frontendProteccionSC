@@ -1,0 +1,66 @@
+<section class="container stack">
+  <a class="muted" routerLink="/foro">← Volver al foro</a>
+
+  @if (cargando()) {
+    <p class="muted">Cargando publicación…</p>
+  } @else if (!publicacion()) {
+    <div class="alert alert--error">No se encontró la publicación solicitada.</div>
+  } @else {
+    <article class="card stack">
+      <div class="row row--between row--wrap">
+        <h1>{{ publicacion()!.titulo }}</h1>
+        @if (esAutor(publicacion()!.autor_nombre)) {
+          <button type="button" class="btn btn--danger btn--sm" (click)="eliminarPublicacion()">
+            Eliminar publicación
+          </button>
+        }
+      </div>
+      <span class="muted">
+        {{ publicacion()!.autor_nombre }} · {{ publicacion()!.creado_en | date: 'medium' }}
+      </span>
+      <p class="contenido">{{ publicacion()!.contenido }}</p>
+    </article>
+
+    <article class="card stack">
+      <h2>Respuestas ({{ publicacion()!.respuestas_count }})</h2>
+
+      @if (publicacion()!.respuestas.length === 0) {
+        <p class="muted">Todavía no hay respuestas. Podés iniciar la conversación.</p>
+      } @else {
+        <ul class="respuestas">
+          @for (respuesta of publicacion()!.respuestas; track respuesta.id) {
+            <li class="respuestas__item">
+              <div class="row row--between row--wrap">
+                <strong>{{ respuesta.autor_nombre }}</strong>
+                <span class="muted">{{ respuesta.creado_en | date: 'short' }}</span>
+              </div>
+              <p>{{ respuesta.contenido }}</p>
+              @if (esAutor(respuesta.autor_nombre)) {
+                <button
+                  type="button"
+                  class="btn btn--ghost btn--sm"
+                  (click)="eliminarRespuesta(respuesta.id)"
+                >
+                  Eliminar
+                </button>
+              }
+            </li>
+          }
+        </ul>
+      }
+
+      <form class="stack" [formGroup]="form" (ngSubmit)="responder()" novalidate>
+        <div class="field">
+          <label for="contenido">Tu respuesta</label>
+          <textarea id="contenido" formControlName="contenido"></textarea>
+          @if (contenido.touched && contenido.hasError('required')) {
+            <span class="field__error">La respuesta no puede estar vacía.</span>
+          }
+        </div>
+        <div class="row">
+          <button type="submit" class="btn btn--primary" [disabled]="publicando()">Responder</button>
+        </div>
+      </form>
+    </article>
+  }
+</section>

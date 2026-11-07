@@ -1,0 +1,49 @@
+<section class="container stack">
+  <header class="row row--between row--wrap">
+    <div class="stack stack--sm">
+      <h1>Mis denuncias</h1>
+      <p class="muted">Consultá el estado y el seguimiento de cada solicitud.</p>
+    </div>
+    <a class="btn btn--primary" routerLink="/usuario/denuncias/nueva">Registrar denuncia</a>
+  </header>
+
+  @if (cargando()) {
+    <p class="muted">Cargando denuncias…</p>
+  } @else if (denuncias().length === 0) {
+    <app-empty-state
+      titulo="Sin denuncias registradas"
+      mensaje="Cuando registres una denuncia vas a poder seguirla desde acá."
+    />
+  } @else {
+    <div class="tabla-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Identificador</th>
+            <th>Modalidad</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (denuncia of denuncias(); track denuncia.id) {
+            <tr>
+              <td><strong>{{ denuncia.identificador }}</strong></td>
+              <td>{{ denuncia.modalidad | modalidad }}</td>
+              <td>{{ denuncia.tipo_situacion | tipoSituacion }}</td>
+              <td><span [class]="claseEstado(denuncia.estado)">{{ denuncia.estado | estado }}</span></td>
+              <td>{{ denuncia.creado_en | date: 'short' }}</td>
+              <td>
+                <a class="btn btn--ghost btn--sm" [routerLink]="['/usuario/denuncias', denuncia.id]">
+                  Ver detalle
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

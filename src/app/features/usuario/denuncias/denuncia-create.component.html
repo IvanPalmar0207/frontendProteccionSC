@@ -1,0 +1,77 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Registrar denuncia</h1>
+    <p class="muted">
+      Podés elegir registrarla de forma pública o anónima. En ambos casos queda asociada
+      a tu cuenta para que puedas hacer seguimiento.
+    </p>
+  </header>
+
+  <form class="card stack" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <fieldset class="modalidad">
+      <legend>Modalidad de la denuncia</legend>
+      <div class="modalidad__opciones">
+        <button
+          type="button"
+          class="modalidad__opcion"
+          [class.is-selected]="modalidad.value === 'PUBLICA'"
+          (click)="seleccionarModalidad('PUBLICA')"
+        >
+          <strong>Pública</strong>
+          <span class="muted">El profesional autorizado puede ver tus datos de contacto.</span>
+        </button>
+        <button
+          type="button"
+          class="modalidad__opcion"
+          [class.is-selected]="modalidad.value === 'ANONIMA'"
+          (click)="seleccionarModalidad('ANONIMA')"
+        >
+          <strong>Anónima</strong>
+          <span class="muted">El profesional ve la modalidad, pero no tu identidad.</span>
+        </button>
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <label for="tipo_situacion">Tipo de situación</label>
+      <select id="tipo_situacion" formControlName="tipo_situacion">
+        @for (tipo of tipos; track tipo.valor) {
+          <option [value]="tipo.valor">{{ tipo.etiqueta }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="descripcion">Descripción de los hechos</label>
+      <textarea
+        id="descripcion"
+        formControlName="descripcion"
+        placeholder="Describí lo sucedido con el mayor detalle posible."
+      ></textarea>
+      @if (descripcion.touched && descripcion.hasError('required')) {
+        <span class="field__error">La descripción es obligatoria.</span>
+      }
+      @if (descripcion.touched && descripcion.hasError('minlength')) {
+        <span class="field__error">La descripción debe tener al menos 10 caracteres.</span>
+      }
+    </div>
+
+    <div class="grid">
+      <div class="field">
+        <label for="ubicacion">Ubicación (opcional)</label>
+        <input id="ubicacion" type="text" formControlName="ubicacion" />
+      </div>
+      <div class="field">
+        <label for="fecha_hechos">Fecha de los hechos (opcional)</label>
+        <input id="fecha_hechos" type="date" formControlName="fecha_hechos" />
+      </div>
+    </div>
+
+    <div class="row">
+      <button type="submit" class="btn btn--primary" [disabled]="enviando()">
+        {{ enviando() ? 'Registrando…' : 'Registrar denuncia' }}
+      </button>
+      <a class="btn btn--ghost" routerLink="/usuario/denuncias">Cancelar</a>
+    </div>
+  </form>
+</section>

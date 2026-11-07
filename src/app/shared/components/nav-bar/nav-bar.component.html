@@ -1,0 +1,42 @@
+<header class="nav-bar">
+  <a class="nav-bar__brand" routerLink="/">
+    <span class="nav-bar__logo" aria-hidden="true">SC</span>
+    <span class="nav-bar__name">Protección Inmediata</span>
+  </a>
+
+  <nav class="nav-bar__links" aria-label="Navegación principal">
+    @if (!autenticado()) {
+      <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+      <a routerLink="/noticias" routerLinkActive="is-active">Noticias</a>
+      <a routerLink="/podcasts" routerLinkActive="is-active">Pódcast</a>
+      <a class="btn btn--ghost btn--sm" routerLink="/login">Ingresar</a>
+      <a class="btn btn--primary btn--sm" routerLink="/register">Crear cuenta</a>
+    } @else {
+      <a routerLink="/noticias" routerLinkActive="is-active">Noticias</a>
+      <a routerLink="/podcasts" routerLinkActive="is-active">Pódcast</a>
+      <a routerLink="/foro" routerLinkActive="is-active">Foro</a>
+      <a routerLink="/chat" routerLinkActive="is-active">Chat</a>
+
+      <button
+        type="button"
+        class="nav-bar__bell"
+        (click)="irANotificaciones()"
+        [attr.aria-label]="'Notificaciones: ' + noLeidas() + ' sin leer'"
+      >
+        <span aria-hidden="true">🔔</span>
+        @if (noLeidas() > 0) {
+          <span class="nav-bar__badge">{{ noLeidas() }}</span>
+        }
+      </button>
+
+      <div class="nav-bar__user">
+        <span class="nav-bar__user-name">{{ usuario()?.nombre_completo }}</span>
+        <span class="badge badge--soft">{{ usuario()?.role | rol }}</span>
+      </div>
+
+      <button type="button" class="btn btn--ghost btn--sm" (click)="cerrarSesion()">
+        Salir
+      </button>
+    }
+  </nav>
+</header>

@@ -1,0 +1,7 @@
+@use '../../../../styles/variables' as *;
+
+:host { display: block; }
+
+form {
+  max-width: 760px;
+}

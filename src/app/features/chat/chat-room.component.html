@@ -1,0 +1,56 @@
+<section class="container stack chat">
+  <a class="muted" routerLink="/chat">← Volver a conversaciones</a>
+
+  @if (cargando()) {
+    <p class="muted">Cargando conversación…</p>
+  } @else if (!conversacion()) {
+    <div class="alert alert--error">No se encontró la conversación o no tenés acceso a ella.</div>
+  } @else {
+    <header class="row row--between row--wrap">
+      <div class="stack stack--sm">
+        <h1>Denuncia {{ conversacion()!.denuncia.identificador }}</h1>
+        <div class="row row--wrap">
+          <span class="badge badge--soft">{{ conversacion()!.denuncia.modalidad | modalidad }}</span>
+          <span class="badge">{{ conversacion()!.denuncia.estado | estado }}</span>
+        </div>
+      </div>
+      <span class="conexion" [class]="'conexion--' + estadoConexion()">
+        @switch (estadoConexion()) {
+          @case ('conectado') { En línea }
+          @case ('conectando') { Conectando… }
+          @default { Desconectado }
+        }
+      </span>
+    </header>
+
+    <div class="chat__ventana" role="log" aria-live="polite">
+      @if (mensajes().length === 0) {
+        <p class="muted text-center">Todavía no hay mensajes. Escribí el primero.</p>
+      } @else {
+        @for (mensaje of mensajes(); track mensaje.id) {
+          <div class="mensaje" [class.mensaje--propio]="esPropio(mensaje)">
+            <div class="mensaje__burbuja">
+              <span class="mensaje__autor">{{ mensaje.remitente.nombre_completo }}</span>
+              <p>{{ mensaje.contenido }}</p>
+              <span class="mensaje__hora">{{ mensaje.creado_en | date: 'short' }}</span>
+            </div>
+          </div>
+        }
+      }
+    </div>
+
+    <form class="chat__form" [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+      <div class="field field--grow">
+        <label class="sr-only" for="contenido">Mensaje</label>
+        <input
+          id="contenido"
+          type="text"
+          formControlName="contenido"
+          placeholder="Escribí un mensaje…"
+          autocomplete="off"
+        />
+      </div>
+      <button type="submit" class="btn btn--primary" [disabled]="enviando()">Enviar</button>
+    </form>
+  }
+</section>

@@ -1,0 +1,269 @@
+@use 'variables' as *;
+
+// ---------------------------------------------------------------------------
+// Reset + base
+// ---------------------------------------------------------------------------
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: $fuente;
+  color: $texto;
+  background: $fondo;
+  line-height: 1.55;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 $e-3;
+  line-height: 1.25;
+  font-weight: 650;
+  color: $texto;
+}
+
+h1 { font-size: clamp(1.6rem, 2.4vw, 2.2rem); }
+h2 { font-size: clamp(1.3rem, 1.8vw, 1.7rem); }
+h3 { font-size: 1.15rem; }
+
+p { margin: 0 0 $e-4; }
+
+a {
+  color: $rojo;
+  text-decoration: none;
+  transition: color $transicion;
+
+  &:hover { color: $rojo-suave; }
+}
+
+img { max-width: 100%; display: block; }
+
+:focus-visible {
+  outline: 3px solid $rojo-suave;
+  outline-offset: 2px;
+  border-radius: $radio-sm;
+}
+
+// ---------------------------------------------------------------------------
+// Layout
+// ---------------------------------------------------------------------------
+.container {
+  width: min(1180px, 100% - 2 * $e-4);
+  margin-inline: auto;
+}
+
+.stack { display: flex; flex-direction: column; gap: $e-4; }
+.stack--sm { gap: $e-2; }
+.row { display: flex; align-items: center; gap: $e-3; }
+.row--between { justify-content: space-between; }
+.row--wrap { flex-wrap: wrap; }
+.grid {
+  display: grid;
+  gap: $e-4;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+.grid--wide { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.spacer { flex: 1 1 auto; }
+
+// ---------------------------------------------------------------------------
+// Cards (glassmorphism moderado)
+// ---------------------------------------------------------------------------
+.card {
+  background: $superficie;
+  backdrop-filter: blur(10px);
+  border: 1px solid $gris;
+  border-radius: $radio;
+  box-shadow: $sombra-sm;
+  padding: $e-5;
+  transition: box-shadow $transicion, transform $transicion;
+
+  &--hover:hover {
+    box-shadow: $sombra;
+    transform: translateY(-2px);
+  }
+
+  &__title { margin-bottom: $e-2; }
+  &__meta { color: $texto-secundario; font-size: 0.85rem; }
+  &__body { color: $texto-secundario; }
+}
+
+// ---------------------------------------------------------------------------
+// Buttons
+// ---------------------------------------------------------------------------
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $e-2;
+  padding: 0.6rem 1.1rem;
+  border-radius: $radio-pill;
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background $transicion, color $transicion, border-color $transicion,
+    transform $transicion, box-shadow $transicion;
+
+  &:active { transform: translateY(1px); }
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  &--primary {
+    background: $rojo;
+    color: $blanco;
+    box-shadow: $sombra-sm;
+
+    &:hover:not(:disabled) { background: #f53d3e; box-shadow: $sombra; }
+  }
+
+  &--soft {
+    background: $rosa-claro;
+    color: $texto;
+
+    &:hover:not(:disabled) { background: $rojo-suave; color: $blanco; }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $texto;
+    border-color: $gris;
+
+    &:hover:not(:disabled) { border-color: $rojo; color: $rojo; }
+  }
+
+  &--danger {
+    background: transparent;
+    color: $rojo;
+    border-color: $rojo;
+
+    &:hover:not(:disabled) { background: $rojo; color: $blanco; }
+  }
+
+  &--sm { padding: 0.35rem 0.8rem; font-size: 0.85rem; }
+  &--block { width: 100%; }
+}
+
+// ---------------------------------------------------------------------------
+// Forms
+// ---------------------------------------------------------------------------
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $e-1;
+
+  label { font-weight: 600; font-size: 0.9rem; }
+
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: $texto;
+    background: $blanco;
+    border: 1px solid $gris;
+    border-radius: $radio-sm;
+    padding: 0.6rem 0.75rem;
+    transition: border-color $transicion, box-shadow $transicion;
+
+    &:focus {
+      border-color: $rojo;
+      box-shadow: 0 0 0 3px rgba(255, 86, 87, 0.15);
+      outline: none;
+    }
+  }
+
+  textarea { min-height: 130px; resize: vertical; }
+
+  &__error {
+    color: $rojo;
+    font-size: 0.82rem;
+  }
+
+  &__hint { color: $texto-secundario; font-size: 0.82rem; }
+}
+
+// ---------------------------------------------------------------------------
+// Badges
+// ---------------------------------------------------------------------------
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.7rem;
+  border-radius: $radio-pill;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: $gris;
+  color: $texto;
+
+  &--danger { background: $rojo; color: $blanco; }
+  &--soft { background: $rosa-claro; color: $texto; }
+  &--warn { background: $rojo-suave; color: $blanco; }
+  &--ok { background: $blanco; color: $texto; border: 1px solid $gris; }
+}
+
+// ---------------------------------------------------------------------------
+// Table
+// ---------------------------------------------------------------------------
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: $superficie-solida;
+  border: 1px solid $gris;
+  border-radius: $radio;
+  overflow: hidden;
+
+  th,
+  td {
+    text-align: left;
+    padding: $e-3 $e-4;
+    border-bottom: 1px solid $gris;
+    font-size: 0.92rem;
+  }
+
+  th {
+    background: $fondo;
+    font-weight: 650;
+  }
+
+  tr:last-child td { border-bottom: none; }
+}
+
+// ---------------------------------------------------------------------------
+// Feedback
+// ---------------------------------------------------------------------------
+.alert {
+  padding: $e-3 $e-4;
+  border-radius: $radio-sm;
+  border: 1px solid $gris;
+  background: $blanco;
+
+  &--error { border-color: $rojo; color: $rojo; background: rgba(255, 86, 87, 0.06); }
+  &--ok { border-color: $rojo-suave; color: $texto; background: rgba(255, 143, 143, 0.12); }
+}
+
+.muted { color: $texto-secundario; }
+.text-center { text-align: center; }
+.mt-4 { margin-top: $e-4; }
+.mt-5 { margin-top: $e-5; }
+
+// ---------------------------------------------------------------------------
+// Responsive
+// ---------------------------------------------------------------------------
+@media (max-width: $bp-mobile) {
+  .card { padding: $e-4; }
+  .grid { grid-template-columns: 1fr; }
+}

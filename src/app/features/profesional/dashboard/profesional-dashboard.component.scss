@@ -1,0 +1,10 @@
+@use '../../../../styles/variables' as *;
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: $e-1;
+
+  &__value { font-size: 2rem; font-weight: 700; color: $rojo; }
+  &__label { color: $texto-secundario; font-size: 0.9rem; }
+}

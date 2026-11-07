@@ -1,0 +1,74 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Casos de atención</h1>
+    <p class="muted">Consultá los casos disponibles o asignados y actualizá su estado.</p>
+  </header>
+
+  <form class="card row row--wrap" [formGroup]="filtros">
+    <div class="field">
+      <label for="estado">Estado</label>
+      <select id="estado" formControlName="estado">
+        <option value="">Todos</option>
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="EN_PROCESO">En proceso</option>
+        <option value="FINALIZADA">Finalizada</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="modalidad">Modalidad</label>
+      <select id="modalidad" formControlName="modalidad">
+        <option value="">Todas</option>
+        <option value="PUBLICA">Pública</option>
+        <option value="ANONIMA">Anónima</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Asignación</label>
+      <label class="check">
+        <input type="checkbox" formControlName="mis_denuncias" />
+        Sólo mis casos
+      </label>
+    </div>
+  </form>
+
+  @if (cargando()) {
+    <p class="muted">Cargando casos…</p>
+  } @else if (denuncias().length === 0) {
+    <app-empty-state titulo="Sin casos" mensaje="No hay denuncias que coincidan con los filtros." />
+  } @else {
+    <div class="tabla-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Identificador</th>
+            <th>Fecha</th>
+            <th>Modalidad</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (denuncia of denuncias(); track denuncia.id) {
+            <tr>
+              <td><strong>{{ denuncia.identificador }}</strong></td>
+              <td>{{ denuncia.creado_en | date: 'short' }}</td>
+              <td>
+                <span [class]="denuncia.es_anonima ? 'badge badge--soft' : 'badge badge--ok'">
+                  {{ denuncia.modalidad | modalidad }}
+                </span>
+              </td>
+              <td>{{ denuncia.tipo_situacion | tipoSituacion }}</td>
+              <td><span [class]="claseEstado(denuncia.estado)">{{ denuncia.estado | estado }}</span></td>
+              <td>
+                <a class="btn btn--ghost btn--sm" [routerLink]="['/profesional/denuncias', denuncia.id]">
+                  Atender
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

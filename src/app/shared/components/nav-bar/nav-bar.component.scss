@@ -1,0 +1,105 @@
+@use '../../../../styles/variables' as *;
+
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $e-4;
+  padding: $e-3 $e-5;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid $gris;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: $e-2;
+    font-weight: 700;
+    color: $texto;
+  }
+
+  &__logo {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: $radio-sm;
+    background: $rojo;
+    color: $blanco;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+
+  &__name { white-space: nowrap; }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: $e-4;
+    flex-wrap: wrap;
+    font-size: 0.92rem;
+
+    a {
+      color: $texto;
+      padding: $e-1 0;
+      border-bottom: 2px solid transparent;
+
+      &.is-active {
+        color: $rojo;
+        border-bottom-color: $rojo;
+      }
+    }
+  }
+
+  &__bell {
+    position: relative;
+    border: 1px solid $gris;
+    background: $blanco;
+    border-radius: $radio-pill;
+    padding: 0.35rem 0.6rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  &__badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: $radio-pill;
+    background: $rojo;
+    color: $blanco;
+    font-size: 0.68rem;
+    display: grid;
+    place-items: center;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: $e-2;
+  }
+
+  &__user-name {
+    font-weight: 600;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: $bp-tablet) {
+  .nav-bar {
+    padding: $e-2 $e-3;
+
+    &__name { display: none; }
+    &__links { gap: $e-3; }
+    &__user-name { display: none; }
+  }
+}

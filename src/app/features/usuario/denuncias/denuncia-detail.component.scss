@@ -1,0 +1,38 @@
+@use '../../../../styles/variables' as *;
+
+.detalle {
+  display: grid;
+  gap: $e-3;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin: 0;
+
+  dt { font-size: 0.82rem; color: $texto-secundario; }
+  dd { margin: 0; font-weight: 600; }
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 $e-4;
+  border-left: 2px solid $gris;
+  display: flex;
+  flex-direction: column;
+  gap: $e-4;
+
+  &__item {
+    position: relative;
+
+    p { margin: $e-1 0; }
+  }
+
+  &__dot {
+    position: absolute;
+    left: calc(-1 * #{$e-4} - 6px);
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: $rojo;
+    border: 2px solid $blanco;
+  }
+}

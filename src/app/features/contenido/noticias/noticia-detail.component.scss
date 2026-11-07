@@ -1,0 +1,13 @@
+@use '../../../../styles/variables' as *;
+
+.resumen {
+  font-size: 1.05rem;
+  color: $texto-secundario;
+  border-left: 3px solid $rojo-suave;
+  padding-left: $e-3;
+}
+
+.contenido {
+  white-space: pre-line;
+  max-width: 70ch;
+}

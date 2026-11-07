@@ -1,0 +1,15 @@
+<nav class="side-nav" aria-label="Navegación del panel">
+  <ul>
+    @for (item of items(); track item.ruta) {
+      <li>
+        <a
+          [routerLink]="item.ruta"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: item.ruta.split('/').length <= 2 }"
+        >
+          {{ item.etiqueta }}
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

@@ -1,0 +1,10 @@
+@if (mensajes().length) {
+  <div class="toasts" role="status" aria-live="polite">
+    @for (mensaje of mensajes(); track mensaje; let i = $index) {
+      <div class="toast" [class]="'toast--' + mensaje.tipo">
+        <span>{{ mensaje.texto }}</span>
+        <button type="button" class="toast__close" (click)="cerrar(i)" aria-label="Cerrar">×</button>
+      </div>
+    }
+  </div>
+}

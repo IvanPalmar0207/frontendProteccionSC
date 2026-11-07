@@ -1,0 +1,19 @@
+@use '../../../styles/variables' as *;
+
+.conversaciones {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $e-3;
+
+  &__item a {
+    display: flex;
+    flex-direction: column;
+    gap: $e-2;
+    color: $texto;
+  }
+
+  p { margin: 0; }
+}

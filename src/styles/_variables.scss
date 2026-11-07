@@ -1,0 +1,48 @@
+// ---------------------------------------------------------------------------
+// Design tokens — Protección Inmediata SC
+// The palette is mandatory and limited to these five colors as the visual base.
+// ---------------------------------------------------------------------------
+
+// Paleta obligatoria
+$rojo: #ff5657; // principal: botones, acciones importantes, indicadores
+$blanco: #ffffff; // predomina en superficies y fondos
+$gris: #d9d9d8; // bordes, texto secundario, separadores
+$rojo-suave: #ff8f8f; // fondos suaves y detalles
+$rosa-claro: #ffcaca; // fondos suaves y decorativos
+
+// Derivados neutros para legibilidad (no introducen una paleta nueva)
+$texto: #2c2c2b;
+$texto-secundario: #6f6f6e;
+$superficie: rgba(255, 255, 255, 0.86);
+$superficie-solida: #ffffff;
+$fondo: #fff7f7;
+
+// Radios
+$radio-sm: 8px;
+$radio: 14px;
+$radio-lg: 22px;
+$radio-pill: 999px;
+
+// Sombras discretas
+$sombra-sm: 0 1px 2px rgba(44, 44, 43, 0.06);
+$sombra: 0 8px 24px rgba(44, 44, 43, 0.08);
+$sombra-fuerte: 0 16px 40px rgba(44, 44, 43, 0.1);
+
+// Espaciado
+$e-1: 0.25rem;
+$e-2: 0.5rem;
+$e-3: 0.75rem;
+$e-4: 1rem;
+$e-5: 1.5rem;
+$e-6: 2rem;
+$e-7: 3rem;
+
+// Tipografía
+$fuente: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+
+// Breakpoints
+$bp-mobile: 640px;
+$bp-tablet: 900px;
+
+// Transiciones
+$transicion: 160ms ease;

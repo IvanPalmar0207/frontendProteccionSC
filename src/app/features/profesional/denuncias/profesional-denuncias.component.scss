@@ -1,0 +1,16 @@
+@use '../../../../styles/variables' as *;
+
+form {
+  align-items: flex-end;
+  gap: $e-3;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: $e-2;
+  font-weight: 500;
+  padding: 0.6rem 0;
+}
+
+.tabla-wrap { overflow-x: auto; }

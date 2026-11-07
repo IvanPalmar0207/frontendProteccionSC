@@ -1,0 +1,27 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Pódcast</h1>
+    <p class="muted">Episodios educativos y de acompañamiento.</p>
+  </header>
+
+  @if (cargando()) {
+    <p class="muted">Cargando pódcast…</p>
+  } @else if (podcasts().length === 0) {
+    <app-empty-state titulo="Sin pódcast" mensaje="Todavía no hay episodios disponibles." />
+  } @else {
+    <div class="grid grid--wide">
+      @for (podcast of podcasts(); track podcast.id) {
+        <article class="card stack stack--sm">
+          <h2 class="card__title">{{ podcast.titulo }}</h2>
+          <p class="card__body">{{ podcast.descripcion }}</p>
+          <span class="muted">{{ duracion(podcast.duracion_segundos) }}</span>
+          @if (podcast.url_audio) {
+            <audio controls preload="none" [src]="podcast.url_audio"></audio>
+          } @else {
+            <span class="muted">Audio no disponible.</span>
+          }
+        </article>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,47 @@
+@use '../../../../styles/variables' as *;
+
+.side-nav {
+  width: 230px;
+  flex: 0 0 auto;
+  padding: $e-4;
+  border-right: 1px solid $gris;
+  background: rgba(255, 255, 255, 0.7);
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $e-1;
+  }
+
+  a {
+    display: block;
+    padding: $e-2 $e-3;
+    border-radius: $radio-sm;
+    color: $texto;
+    font-weight: 550;
+    transition: background $transicion, color $transicion;
+
+    &:hover { background: $rosa-claro; color: $texto; }
+
+    &.is-active {
+      background: $rojo;
+      color: $blanco;
+    }
+  }
+}
+
+@media (max-width: $bp-tablet) {
+  .side-nav {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid $gris;
+
+    ul {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+}

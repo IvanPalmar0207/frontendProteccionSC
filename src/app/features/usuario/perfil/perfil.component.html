@@ -1,0 +1,54 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Mi perfil</h1>
+    <p class="muted">Actualizá tus datos personales. El correo electrónico no se puede modificar.</p>
+  </header>
+
+  @if (cargando()) {
+    <p class="muted">Cargando perfil…</p>
+  } @else {
+    <form class="card stack" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" [value]="email()" disabled />
+        <span class="field__hint">El correo identifica tu cuenta y no puede cambiarse.</span>
+      </div>
+
+      <div class="field">
+        <label for="nombre_completo">Nombre completo</label>
+        <input id="nombre_completo" type="text" formControlName="nombre_completo" />
+        @if (nombre.touched && nombre.hasError('required')) {
+          <span class="field__error">El nombre completo es obligatorio.</span>
+        }
+        @if (nombre.touched && nombre.hasError('minlength')) {
+          <span class="field__error">Ingresá al menos 3 caracteres.</span>
+        }
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" type="tel" formControlName="telefono" />
+        </div>
+        <div class="field">
+          <label for="documento">Documento</label>
+          <input id="documento" type="text" formControlName="documento" />
+        </div>
+        <div class="field">
+          <label for="fecha_nacimiento">Fecha de nacimiento</label>
+          <input id="fecha_nacimiento" type="date" formControlName="fecha_nacimiento" />
+        </div>
+        <div class="field">
+          <label for="direccion">Dirección</label>
+          <input id="direccion" type="text" formControlName="direccion" />
+        </div>
+      </div>
+
+      <div class="row">
+        <button type="submit" class="btn btn--primary" [disabled]="guardando()">
+          {{ guardando() ? 'Guardando…' : 'Guardar cambios' }}
+        </button>
+      </div>
+    </form>
+  }
+</section>

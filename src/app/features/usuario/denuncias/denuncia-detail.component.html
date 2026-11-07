@@ -1,0 +1,79 @@
+<section class="container stack">
+  <a class="muted" routerLink="/usuario/denuncias">← Volver a mis denuncias</a>
+
+  @if (cargando()) {
+    <p class="muted">Cargando denuncia…</p>
+  } @else if (!denuncia()) {
+    <div class="alert alert--error">No se encontró la denuncia solicitada.</div>
+  } @else {
+    <header class="row row--between row--wrap">
+      <div class="stack stack--sm">
+        <h1>Denuncia {{ denuncia()!.identificador }}</h1>
+        <div class="row row--wrap">
+          <span class="badge badge--soft">{{ denuncia()!.modalidad | modalidad }}</span>
+          <span class="badge badge--ok">{{ denuncia()!.estado | estado }}</span>
+          <span class="muted">{{ denuncia()!.creado_en | date: 'medium' }}</span>
+        </div>
+      </div>
+      <button type="button" class="btn btn--primary" (click)="abrirChat()" [disabled]="abriendoChat()">
+        {{ abriendoChat() ? 'Abriendo chat…' : 'Hablar con un profesional' }}
+      </button>
+    </header>
+
+    <article class="card stack">
+      <h2>Detalle</h2>
+      <dl class="detalle">
+        <div>
+          <dt>Tipo de situación</dt>
+          <dd>{{ denuncia()!.tipo_situacion | tipoSituacion }}</dd>
+        </div>
+        <div>
+          <dt>Ubicación</dt>
+          <dd>{{ denuncia()!.ubicacion || 'No indicada' }}</dd>
+        </div>
+        <div>
+          <dt>Fecha de los hechos</dt>
+          <dd>{{ denuncia()!.fecha_hechos || 'No indicada' }}</dd>
+        </div>
+        <div>
+          <dt>Profesional asignado</dt>
+          <dd>{{ denuncia()!.profesional_asignado?.nombre_completo || 'Aún sin asignar' }}</dd>
+        </div>
+      </dl>
+      <div>
+        <dt class="muted">Descripción</dt>
+        <p>{{ denuncia()!.descripcion }}</p>
+      </div>
+    </article>
+
+    <article class="card stack">
+      <h2>Seguimiento del proceso</h2>
+      @if (denuncia()!.seguimientos.length === 0) {
+        <p class="muted">Todavía no hay actualizaciones registradas.</p>
+      } @else {
+        <ol class="timeline">
+          @for (seguimiento of denuncia()!.seguimientos; track seguimiento.id) {
+            <li class="timeline__item">
+              <span class="timeline__dot" aria-hidden="true"></span>
+              <div>
+                <div class="row row--wrap">
+                  @if (seguimiento.estado_anterior) {
+                    <span class="badge">{{ seguimiento.estado_anterior | estado }}</span>
+                    <span aria-hidden="true">→</span>
+                  }
+                  <span class="badge badge--soft">{{ seguimiento.estado_nuevo | estado }}</span>
+                </div>
+                @if (seguimiento.observacion) {
+                  <p>{{ seguimiento.observacion }}</p>
+                }
+                <span class="muted">
+                  {{ seguimiento.autor_nombre }} · {{ seguimiento.creado_en | date: 'short' }}
+                </span>
+              </div>
+            </li>
+          }
+        </ol>
+      }
+    </article>
+  }
+</section>

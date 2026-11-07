@@ -1,0 +1,11 @@
+@use '../../../../styles/variables' as *;
+
+form { max-width: 820px; }
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: $e-2;
+}
+
+.tabla-wrap { overflow-x: auto; }

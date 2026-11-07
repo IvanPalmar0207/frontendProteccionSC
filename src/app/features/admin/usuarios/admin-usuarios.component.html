@@ -1,0 +1,49 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Gestión de usuarios</h1>
+    <p class="muted">Administrá roles y estado de las cuentas de la plataforma.</p>
+  </header>
+
+  @if (cargando()) {
+    <p class="muted">Cargando usuarios…</p>
+  } @else {
+    <div class="tabla-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Correo</th>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (usuario of usuarios(); track usuario.id) {
+            <tr>
+              <td>{{ usuario.email }}</td>
+              <td>{{ usuario.nombre_completo }}</td>
+              <td>
+                <select [value]="usuario.role" (change)="cambiarRol(usuario, $event)">
+                  @for (rol of roles; track rol) {
+                    <option [value]="rol">{{ rol | rol }}</option>
+                  }
+                </select>
+              </td>
+              <td>
+                <span [class]="usuario.is_active ? 'badge badge--ok' : 'badge'">
+                  {{ usuario.is_active ? 'Activa' : 'Inactiva' }}
+                </span>
+              </td>
+              <td>
+                <button type="button" class="btn btn--ghost btn--sm" (click)="cambiarEstado(usuario)">
+                  {{ usuario.is_active ? 'Desactivar' : 'Activar' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

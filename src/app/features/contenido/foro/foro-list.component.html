@@ -1,0 +1,48 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Foro</h1>
+    <p class="muted">Espacio de intercambio y acompañamiento entre la comunidad.</p>
+  </header>
+
+  <form class="card stack" [formGroup]="form" (ngSubmit)="publicar()" novalidate>
+    <h2>Nueva publicación</h2>
+    <div class="field">
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" formControlName="titulo" />
+      @if (titulo.touched && titulo.hasError('required')) {
+        <span class="field__error">El título es obligatorio.</span>
+      }
+    </div>
+    <div class="field">
+      <label for="contenido">Contenido</label>
+      <textarea id="contenido" formControlName="contenido"></textarea>
+      @if (contenido.touched && contenido.hasError('required')) {
+        <span class="field__error">El contenido es obligatorio.</span>
+      }
+    </div>
+    <div class="row">
+      <button type="submit" class="btn btn--primary" [disabled]="guardando()">Publicar</button>
+    </div>
+  </form>
+
+  @if (cargando()) {
+    <p class="muted">Cargando publicaciones…</p>
+  } @else if (publicaciones().length === 0) {
+    <app-empty-state titulo="Foro vacío" mensaje="Sé la primera persona en publicar." />
+  } @else {
+    <ul class="hilos">
+      @for (publicacion of publicaciones(); track publicacion.id) {
+        <li class="card card--hover hilos__item">
+          <a [routerLink]="['/foro', publicacion.id]">
+            <h3>{{ publicacion.titulo }}</h3>
+            <p class="muted">{{ publicacion.contenido | slice: 0 : 120 }}</p>
+          </a>
+          <div class="row row--between">
+            <span class="muted">{{ publicacion.autor_nombre }} · {{ publicacion.creado_en | date: 'short' }}</span>
+            <span class="badge badge--soft">{{ publicacion.respuestas_count }} respuestas</span>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</section>

@@ -1,0 +1,12 @@
+<app-nav-bar />
+
+<div class="shell" [class.shell--with-nav]="mostrarSideNav()">
+  @if (mostrarSideNav()) {
+    <app-side-nav />
+  }
+  <main class="shell__main">
+    <router-outlet />
+  </main>
+</div>
+
+<app-toast-host />

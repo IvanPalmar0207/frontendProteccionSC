@@ -1,0 +1,93 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Hola, {{ usuario()?.nombre_completo }}</h1>
+    <p class="muted">Este es tu espacio para hacer seguimiento a tus solicitudes.</p>
+  </header>
+
+  <div class="grid">
+    <article class="card stat">
+      <span class="stat__value">{{ resumen().total }}</span>
+      <span class="stat__label">Denuncias registradas</span>
+    </article>
+    <article class="card stat">
+      <span class="stat__value">{{ resumen().pendientes }}</span>
+      <span class="stat__label">Pendientes</span>
+    </article>
+    <article class="card stat">
+      <span class="stat__value">{{ resumen().enProceso }}</span>
+      <span class="stat__label">En proceso</span>
+    </article>
+    <article class="card stat">
+      <span class="stat__value">{{ resumen().finalizadas }}</span>
+      <span class="stat__label">Finalizadas</span>
+    </article>
+  </div>
+
+  <div class="row row--wrap">
+    <a class="btn btn--primary" routerLink="/usuario/denuncias/nueva">Registrar denuncia</a>
+    <a class="btn btn--ghost" routerLink="/usuario/denuncias">Ver mis denuncias</a>
+    <a class="btn btn--ghost" routerLink="/chat">Ir al chat</a>
+  </div>
+
+  <section class="card stack">
+    <div class="row row--between">
+      <h2>Notificaciones</h2>
+      @if (notificaciones().length) {
+        <button type="button" class="btn btn--ghost btn--sm" (click)="marcarTodas()">
+          Marcar todas como leídas
+        </button>
+      }
+    </div>
+
+    @if (notificaciones().length === 0) {
+      <app-empty-state titulo="Sin notificaciones" mensaje="Acá verás las novedades de tus denuncias." />
+    } @else {
+      <ul class="notif">
+        @for (notificacion of notificaciones(); track notificacion.id) {
+          <li class="notif__item" [class.notif__item--nueva]="!notificacion.leida">
+            <div>
+              <strong>{{ notificacion.titulo }}</strong>
+              @if (notificacion.mensaje) {
+                <p class="muted">{{ notificacion.mensaje }}</p>
+              }
+              <span class="muted">{{ notificacion.creado_en | date: 'short' }}</span>
+            </div>
+            @if (!notificacion.leida) {
+              <button type="button" class="btn btn--soft btn--sm" (click)="marcarLeida(notificacion)">
+                Marcar leída
+              </button>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  <section class="card stack">
+    <div class="row row--between">
+      <h2>Últimas denuncias</h2>
+      <a class="btn btn--ghost btn--sm" routerLink="/usuario/denuncias">Ver todas</a>
+    </div>
+
+    @if (cargando()) {
+      <p class="muted">Cargando…</p>
+    } @else if (denuncias().length === 0) {
+      <app-empty-state
+        titulo="Todavía no registraste denuncias"
+        mensaje="Podés registrar una denuncia pública o anónima cuando lo necesites."
+      />
+    } @else {
+      <ul class="lista">
+        @for (denuncia of denuncias().slice(0, 5); track denuncia.id) {
+          <li class="lista__item">
+            <a [routerLink]="['/usuario/denuncias', denuncia.id]">
+              <strong>{{ denuncia.identificador }}</strong>
+              <span class="badge badge--soft">{{ denuncia.estado | estado }}</span>
+            </a>
+            <span class="muted">{{ denuncia.creado_en | date: 'short' }}</span>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</section>

@@ -1,0 +1,41 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Gestión del foro</h1>
+    <p class="muted">Moderá las publicaciones creadas por los usuarios de la plataforma.</p>
+  </header>
+
+  @if (cargando()) {
+    <p class="muted">Cargando publicaciones…</p>
+  } @else if (publicaciones().length === 0) {
+    <p class="muted">No hay publicaciones en el foro.</p>
+  } @else {
+    <div class="tabla-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Respuestas</th>
+            <th>Fecha</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (publicacion of publicaciones(); track publicacion.id) {
+            <tr>
+              <td>{{ publicacion.titulo }}</td>
+              <td>{{ publicacion.autor_nombre }}</td>
+              <td>{{ publicacion.respuestas_count }}</td>
+              <td>{{ publicacion.creado_en | date: 'short' }}</td>
+              <td>
+                <button type="button" class="btn btn--danger btn--sm" (click)="eliminar(publicacion)">
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

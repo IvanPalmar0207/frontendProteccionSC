@@ -1,0 +1,74 @@
+<section class="container stack">
+  <header class="stack stack--sm">
+    <h1>Gestión de noticias</h1>
+    <p class="muted">Creá, editá y eliminá las noticias visibles para los usuarios.</p>
+  </header>
+
+  <form class="card stack" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+    <h2>{{ editandoId() ? 'Editar noticia' : 'Nueva noticia' }}</h2>
+    <div class="field">
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" formControlName="titulo" />
+      @if (titulo.touched && titulo.hasError('required')) {
+        <span class="field__error">El título es obligatorio.</span>
+      }
+    </div>
+    <div class="field">
+      <label for="resumen">Resumen</label>
+      <input id="resumen" type="text" formControlName="resumen" />
+    </div>
+    <div class="field">
+      <label for="contenido">Contenido</label>
+      <textarea id="contenido" formControlName="contenido"></textarea>
+      @if (contenido.touched && contenido.hasError('required')) {
+        <span class="field__error">El contenido es obligatorio.</span>
+      }
+    </div>
+    <label class="check">
+      <input type="checkbox" formControlName="publicado" />
+      Publicada (visible para los usuarios)
+    </label>
+    <div class="row">
+      <button type="submit" class="btn btn--primary" [disabled]="guardando()">
+        {{ editandoId() ? 'Guardar cambios' : 'Crear noticia' }}
+      </button>
+      @if (editandoId()) {
+        <button type="button" class="btn btn--ghost" (click)="cancelar()">Cancelar</button>
+      }
+    </div>
+  </form>
+
+  @if (cargando()) {
+    <p class="muted">Cargando noticias…</p>
+  } @else {
+    <div class="tabla-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Estado</th>
+            <th>Publicada</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (noticia of noticias(); track noticia.id) {
+            <tr>
+              <td>{{ noticia.titulo }}</td>
+              <td>
+                <span [class]="noticia.publicado ? 'badge badge--ok' : 'badge'">
+                  {{ noticia.publicado ? 'Publicada' : 'Borrador' }}
+                </span>
+              </td>
+              <td>{{ noticia.fecha_publicacion | date: 'short' }}</td>
+              <td class="row">
+                <button type="button" class="btn btn--ghost btn--sm" (click)="editar(noticia)">Editar</button>
+                <button type="button" class="btn btn--danger btn--sm" (click)="eliminar(noticia)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

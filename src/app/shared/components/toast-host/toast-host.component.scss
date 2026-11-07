@@ -1,0 +1,42 @@
+@use '../../../../styles/variables' as *;
+
+.toasts {
+  position: fixed;
+  right: $e-4;
+  bottom: $e-4;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: $e-2;
+  max-width: min(360px, calc(100vw - 2 * $e-4));
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: $e-2;
+  padding: $e-3 $e-4;
+  border-radius: $radio-sm;
+  border: 1px solid $gris;
+  background: $blanco;
+  box-shadow: $sombra;
+  animation: toast-in 180ms ease;
+
+  &--exito { border-left: 4px solid $rojo-suave; }
+  &--error { border-left: 4px solid $rojo; }
+  &--info { border-left: 4px solid $gris; }
+
+  &__close {
+    border: none;
+    background: transparent;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    color: $texto-secundario;
+  }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

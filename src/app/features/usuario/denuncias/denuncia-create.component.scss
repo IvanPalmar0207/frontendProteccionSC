@@ -1,0 +1,44 @@
+@use '../../../../styles/variables' as *;
+
+form { max-width: 820px; }
+
+.modalidad {
+  border: 1px solid $gris;
+  border-radius: $radio;
+  padding: $e-4;
+  margin: 0;
+
+  legend {
+    font-weight: 650;
+    padding: 0 $e-2;
+  }
+
+  &__opciones {
+    display: grid;
+    gap: $e-3;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  &__opcion {
+    display: flex;
+    flex-direction: column;
+    gap: $e-1;
+    text-align: left;
+    padding: $e-3;
+    border: 1px solid $gris;
+    border-radius: $radio-sm;
+    background: $blanco;
+    cursor: pointer;
+    font: inherit;
+    transition: border-color $transicion, background $transicion;
+
+    .muted { font-size: 0.85rem; }
+
+    &:hover { border-color: $rojo-suave; }
+
+    &.is-selected {
+      border-color: $rojo;
+      background: rgba(255, 202, 202, 0.35);
+    }
+  }
+}
