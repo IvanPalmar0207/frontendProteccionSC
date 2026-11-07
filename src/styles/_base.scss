@@ -218,7 +218,9 @@ small { font-size: $fs-xs; }
   padding: $e-5;
   transition: box-shadow $dur $ease, transform $dur $ease, border-color $dur $ease;
 
-  &--hover { @include elevacion-hover; }
+  &--hover {
+    @include elevacion-hover(-3px);
+  }
   &--plana { box-shadow: none; }
   &--acento { border-color: $rosa-claro; background: linear-gradient(180deg, $blanco, $fondo-calido); }
 
@@ -266,7 +268,13 @@ small { font-size: $fs-xs; }
     color: $blanco;
     box-shadow: $sombra-xs;
 
-    &:hover:not(:disabled) { background: $rojo-oscuro; box-shadow: $sombra-roja; transform: translateY(-1px); }
+    &:hover:not(:disabled) { background: $rojo-oscuro; }
+    @media (hover: hover) and (pointer: fine) {
+      &:hover:not(:disabled) {
+        box-shadow: $sombra-roja;
+        transform: translateY(-1px);
+      }
+    }
   }
 
   &--soft {

@@ -8,14 +8,17 @@
   border: 1px solid $borde;
 }
 
-// Elevación en hover con desplazamiento discreto.
-@mixin elevacion-hover {
+// Elevación compartida. El desplazamiento solo se aplica en punteros finos
+// (ratón/trackpad) para no dejar estados hover pegados en pantallas táctiles.
+@mixin elevacion-hover($desplazamiento: -3px) {
   transition: transform $dur $ease, box-shadow $dur $ease, border-color $dur $ease;
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: $sombra;
-    border-color: $rosa-claro;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY($desplazamiento);
+      box-shadow: $sombra;
+      border-color: $rosa-claro;
+    }
   }
 }
 

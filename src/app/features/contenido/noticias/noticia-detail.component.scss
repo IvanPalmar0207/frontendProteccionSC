@@ -1,72 +1,227 @@
 @use '../../../../styles/variables' as *;
 @use '../../../../styles/mixins' as *;
 
-.volver {
-  display: inline-block;
-  margin-bottom: $e-4;
-  color: $texto-secundario;
-  font-size: $fs-sm;
-  text-decoration: none;
+// --- Barra de progreso de lectura ------------------------------------------
+.progreso {
+  position: fixed;
+  top: 68px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 30;
+  pointer-events: none;
 
-  &:hover { color: $rojo; }
+  &__barra {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, $rojo, $rojo-suave);
+    transition: width 120ms linear;
+  }
 }
 
-.articulo {
-  max-width: 820px;
-  margin-inline: auto;
+// --- Migas / volver ---------------------------------------------------------
+.migas {
+  display: flex;
+  align-items: center;
+  gap: $e-2;
+  padding: $e-5 0 $e-4;
+  font-size: $fs-sm;
+  color: $texto-secundario;
 
-  &__portada {
-    margin: 0 0 $e-6;
-    border-radius: $radio-lg;
+  a { color: $texto-secundario; text-decoration: none; }
+  a:hover { color: $rojo; }
+
+  &__actual {
+    color: $carbon;
     overflow: hidden;
-    box-shadow: $sombra;
-
-    img { width: 100%; max-height: 460px; object-fit: cover; }
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 60ch;
   }
+}
+
+// --- Artículo ---------------------------------------------------------------
+.articulo {
+  max-width: 780px;
+  margin-inline: auto;
 
   &__cabecera {
     display: flex;
     flex-direction: column;
     gap: $e-3;
     align-items: flex-start;
+    margin-bottom: $e-5;
+  }
 
-    h1 { margin: 0; letter-spacing: -0.02em; }
+  &__etiquetas {
+    display: flex;
+    align-items: center;
+    gap: $e-3;
+    flex-wrap: wrap;
+  }
+
+  &__titulo {
+    margin: 0;
+    font-size: clamp(1.9rem, 1.3rem + 2.6vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+  }
+
+  &__entradilla {
+    margin: 0;
+    font-size: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
+    color: $carbon-suave;
+    line-height: 1.6;
   }
 
   &__meta {
     display: flex;
     align-items: center;
     gap: $e-2;
+    flex-wrap: wrap;
     color: $texto-secundario;
     font-size: $fs-sm;
-    flex-wrap: wrap;
   }
 
-  &__entradilla {
-    font-size: $fs-lg;
-    color: $carbon-suave;
-    border-left: 4px solid $rojo-suave;
-    padding-left: $e-4;
-    margin: $e-5 0;
+  &__portada {
+    margin: 0 0 $e-6;
+    border-radius: $radio-lg;
+    overflow: hidden;
+    box-shadow: $sombra;
+    background: $fondo-calido;
+
+    img { width: 100%; max-height: 520px; object-fit: cover; display: block; }
+
+    &--vacia {
+      display: grid;
+      place-items: center;
+      min-height: 260px;
+      background: linear-gradient(135deg, $fondo-calido, $rosa-claro);
+
+      span {
+        font-size: $fs-sm;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: $rojo-oscuro;
+        font-weight: 700;
+      }
+    }
   }
 
   &__cuerpo {
-    white-space: pre-line;
     max-width: 70ch;
-    font-size: 1.05rem;
+    margin-inline: auto;
+    font-size: 1.075rem;
     line-height: 1.85;
     color: $carbon-suave;
+  }
 
-    // Comfortable reading rhythm between paragraphs.
-    p + p { margin-top: $e-4; }
+  &__parrafo {
+    margin: 0 0 $e-5;
+
+    &:first-of-type::first-letter {
+      float: left;
+      font-size: 3.2rem;
+      line-height: 0.85;
+      font-weight: 700;
+      padding: 0.15em 0.12em 0 0;
+      color: $rojo;
+    }
+  }
+
+  &__subtitulo {
+    margin: $e-6 0 $e-3;
+    font-size: 1.4rem;
+    color: $carbon;
+  }
+
+  &__lista {
+    margin: 0 0 $e-5;
+    padding-left: $e-5;
+    display: flex;
+    flex-direction: column;
+    gap: $e-2;
+
+    li::marker { color: $rojo; }
+  }
+
+  &__pie {
+    max-width: 70ch;
+    margin: $e-7 auto 0;
+    padding-top: $e-5;
+    border-top: 1px solid $borde-suave;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $e-4;
+  }
+
+  &__fin {
+    color: $rojo-suave;
+    letter-spacing: 0.5em;
+    font-size: 1.2rem;
   }
 
   &__acciones {
     display: flex;
     gap: $e-3;
     flex-wrap: wrap;
-    margin-top: $e-6;
-    padding-top: $e-4;
-    border-top: 1px solid $borde-suave;
+    justify-content: center;
   }
+}
+
+.lectura-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: $e-1;
+  font-size: $fs-sm;
+  color: $texto-secundario;
+}
+
+// --- Relacionadas -----------------------------------------------------------
+.relacionadas {
+  margin-top: $e-8;
+
+  h2 { margin-bottom: $e-4; }
+}
+
+.mini {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__imagen {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+
+    &--vacia {
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, $fondo-calido, $rosa-claro);
+      font-size: 2rem;
+    }
+  }
+
+  &__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: $e-2;
+    padding: $e-4;
+    flex: 1 1 auto;
+
+    h3, p { margin: 0; }
+    p { flex: 1 1 auto; }
+  }
+}
+
+@include desde-tablet {
+  .progreso { top: 61px; }
+  .migas__actual { max-width: 40vw; }
+}
+
+@include desde-mobile {
+  .articulo__portada img { max-height: 320px; }
+  .articulo__parrafo:first-of-type::first-letter { font-size: 2.6rem; }
 }

@@ -1,9 +1,17 @@
-<section class="contenido">
-  <div class="container seccion">
-    <a class="volver" routerLink="/noticias">← Volver a noticias</a>
+<section class="lectura">
+  <div class="progreso" aria-hidden="true">
+    <span class="progreso__barra" [style.width.%]="avance()"></span>
+  </div>
+
+  <div class="container">
+    <nav class="migas" aria-label="Ruta de navegación">
+      <a routerLink="/noticias">Noticias</a>
+      <span aria-hidden="true">/</span>
+      <span class="migas__actual">{{ noticia()?.titulo || 'Noticia' }}</span>
+    </nav>
 
     @if (cargando()) {
-      <article class="card stack">
+      <article class="skel-articulo">
         <div class="skeleton skeleton--media"></div>
         <div class="skeleton skeleton--titulo"></div>
         <div class="skeleton skeleton--texto"></div>
@@ -11,37 +19,93 @@
       </article>
     } @else if (!noticia()) {
       <div class="alert alert--error">No se encontró la noticia solicitada.</div>
+      <a class="btn btn--ghost mt-4" routerLink="/noticias">Volver a noticias</a>
     } @else {
-      <article class="articulo" appInView="up">
-        @if (noticia()!.imagen) {
-          <figure class="articulo__portada">
-            <img [src]="noticia()!.imagen" [alt]="'Portada de ' + noticia()!.titulo" />
-          </figure>
-        }
+      <article #articulo class="articulo">
+        <header class="articulo__cabecera" appInView="fade">
+          <div class="articulo__etiquetas">
+            <span class="badge badge--info">{{ noticia()!.categoria_etiqueta }}</span>
+            <span class="lectura-meta">
+              <span aria-hidden="true">⏱</span> {{ tiempoLectura() }} min de lectura
+            </span>
+          </div>
 
-        <div class="articulo__cabecera">
-          <span class="badge badge--info">{{ noticia()!.categoria_etiqueta }}</span>
-          <h1>{{ noticia()!.titulo }}</h1>
+          <h1 class="articulo__titulo">{{ noticia()!.titulo }}</h1>
+
+          @if (noticia()!.resumen) {
+            <p class="articulo__entradilla">{{ noticia()!.resumen }}</p>
+          }
+
           <div class="articulo__meta">
             <span>{{ noticia()!.fecha_publicacion | date: 'longDate' }}</span>
             <span aria-hidden="true">·</span>
             <span>{{ noticia()!.autor_nombre }}</span>
           </div>
-        </div>
+        </header>
 
-        @if (noticia()!.resumen) {
-          <p class="articulo__entradilla">{{ noticia()!.resumen }}</p>
+        @if (noticia()!.imagen) {
+          <figure class="articulo__portada" appInView="scale">
+            <img [src]="noticia()!.imagen" [alt]="'Imagen de portada de ' + noticia()!.titulo" />
+          </figure>
+        } @else {
+          <div class="articulo__portada articulo__portada--vacia" appInView="scale" aria-hidden="true">
+            <span>{{ noticia()!.categoria_etiqueta }}</span>
+          </div>
         }
 
-        <div class="articulo__cuerpo">{{ noticia()!.contenido }}</div>
+        <div class="articulo__cuerpo">
+          @for (bloque of bloques(); track $index) {
+            @switch (bloque.tipo) {
+              @case ('subtitulo') {
+                <h2 class="articulo__subtitulo">{{ bloque.texto }}</h2>
+              }
+              @case ('lista') {
+                <ul class="articulo__lista">
+                  @for (item of bloque.items; track $index) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              }
+              @default {
+                <p class="articulo__parrafo">{{ bloque.texto }}</p>
+              }
+            }
+          }
+        </div>
 
-        <footer class="articulo__acciones">
-          <button type="button" class="btn btn--soft btn--sm" (click)="compartir()">
-            <span aria-hidden="true">🔗</span> Compartir noticia
-          </button>
-          <a class="btn btn--ghost btn--sm" routerLink="/noticias">Ver más noticias</a>
+        <footer class="articulo__pie">
+          <span class="articulo__fin" aria-hidden="true">· · ·</span>
+          <div class="articulo__acciones">
+            <button type="button" class="btn btn--soft" (click)="compartir()">
+              <span aria-hidden="true">🔗</span> Compartir
+            </button>
+            <a class="btn btn--ghost" routerLink="/noticias">← Volver a noticias</a>
+          </div>
         </footer>
       </article>
+
+      @if (relacionadas().length) {
+        <section class="relacionadas" aria-labelledby="relacionadas-titulo">
+          <h2 id="relacionadas-titulo">Seguir leyendo</h2>
+          <div class="grid grid--wide">
+            @for (item of relacionadas(); track item.id; let i = $index) {
+              <article class="card card--hover mini" appInView="up" [retraso]="i * 70">
+                @if (item.imagen) {
+                  <img class="mini__imagen" [src]="item.imagen" [alt]="'Portada de ' + item.titulo" loading="lazy" />
+                } @else {
+                  <div class="mini__imagen mini__imagen--vacia" aria-hidden="true"><span>📰</span></div>
+                }
+                <div class="mini__cuerpo">
+                  <span class="badge badge--info">{{ item.categoria_etiqueta }}</span>
+                  <h3>{{ item.titulo }}</h3>
+                  <p class="muted">{{ item.resumen }}</p>
+                  <a class="btn btn--soft btn--sm" [routerLink]="['/noticias', item.id]">Leer</a>
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+      }
     }
   </div>
 </section>

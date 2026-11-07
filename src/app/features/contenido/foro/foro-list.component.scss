@@ -47,12 +47,14 @@
   box-shadow: $sombra-xs;
   transition: transform $dur $ease, box-shadow $dur $ease, border-color $dur $ease;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: $sombra;
-    border-color: $rosa-claro;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: $sombra;
+      border-color: $rosa-claro;
 
-    .hilo__leer { color: $rojo; }
+      .hilo__leer { color: $rojo; }
+    }
   }
 
   &__enlace {

@@ -167,7 +167,10 @@
     text-decoration: none;
     transition: border-color $dur $ease, transform $dur $ease;
 
-    &:hover { border-color: $rojo-suave; transform: translateY(-1px); }
+    &:hover { border-color: $rojo-suave; }
+    @media (hover: hover) and (pointer: fine) {
+      &:hover { transform: translateY(-1px); }
+    }
   }
 
   &__badge {
