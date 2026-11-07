@@ -118,6 +118,96 @@ small { font-size: $fs-xs; }
 
 .seccion { padding: $e-8 0; }
 
+// --- Encabezados de sección (compartidos por los módulos de contenido) ---
+.eyebrow {
+  display: inline-block;
+  font-size: $fs-xs;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $rojo;
+}
+
+.encabezado-seccion {
+  max-width: 66ch;
+  margin-bottom: $e-6;
+
+  h1,
+  h2 { margin: $e-1 0 $e-2; }
+  p { color: $carbon-suave; }
+}
+
+// Cabecera con fotografía para cada módulo de contenido.
+.hero-seccion {
+  position: relative;
+  overflow: hidden;
+  border-radius: $radio-xl;
+  min-height: clamp(220px, 30vw, 320px);
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  color: $blanco;
+  box-shadow: $sombra;
+
+  &__fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(115deg, rgba(43, 41, 41, 0.82), rgba(226, 63, 64, 0.55));
+  }
+
+  &__contenido {
+    position: relative;
+    z-index: 2;
+    max-width: 62ch;
+
+    h1 { color: $blanco; margin: $e-2 0 $e-2; }
+    p { color: rgba(255, 255, 255, 0.92); margin: 0; }
+    .eyebrow { color: $rosa-claro; }
+  }
+}
+
+// Buscador integrado.
+.buscador {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  input {
+    width: 100%;
+    font: inherit;
+    padding: 0.7rem 1rem 0.7rem 2.6rem;
+    border: 1px solid $borde;
+    border-radius: $radio-pill;
+    background: $blanco;
+    color: $texto;
+    transition: border-color $dur $ease, box-shadow $dur $ease;
+
+    &:focus {
+      border-color: $rojo;
+      box-shadow: 0 0 0 4px rgba(255, 86, 87, 0.14);
+      outline: none;
+    }
+  }
+
+  &__icono {
+    position: absolute;
+    left: 1rem;
+    color: $texto-secundario;
+    pointer-events: none;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Superficies
 // ---------------------------------------------------------------------------

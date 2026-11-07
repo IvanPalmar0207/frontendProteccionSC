@@ -1,63 +1,114 @@
-<section class="container stack seccion">
-  <header class="stack stack--sm">
-    <span class="badge badge--soft">Recursos</span>
-    <h1>Noticias y guías</h1>
-    <p class="muted">Información de prevención, derechos y acompañamiento actualizada por el equipo.</p>
-  </header>
+<section class="contenido">
+  <div class="container stack seccion">
+    <header class="hero-seccion" appInView="fade">
+      <img class="hero-seccion__fondo" src="/photos/noticias-hero.webp" alt="" aria-hidden="true" />
+      <div class="hero-seccion__contenido">
+        <span class="eyebrow">Portal editorial</span>
+        <h1>Noticias y guías</h1>
+        <p>
+          Información de prevención, derechos y acompañamiento, actualizada por el equipo de
+          Protección Inmediata SC.
+        </p>
+      </div>
+    </header>
 
-  <div class="filtros row row--wrap" role="group" aria-label="Filtrar por categoría">
-    @for (categoria of categorias; track categoria.valor) {
-      <button
-        type="button"
-        class="chip"
-        [attr.aria-pressed]="categoriaActiva() === categoria.valor"
-        (click)="filtrar(categoria.valor)"
-      >
-        {{ categoria.etiqueta }}
-      </button>
-    }
-  </div>
-
-  @if (cargando()) {
-    <div class="grid grid--wide">
-      @for (item of [1, 2, 3]; track item) {
-        <article class="card stack stack--sm">
-          <div class="skeleton skeleton--media"></div>
-          <div class="skeleton skeleton--titulo"></div>
-          <div class="skeleton skeleton--texto"></div>
-        </article>
-      }
+    <div class="barra-filtros">
+      <label class="buscador" for="buscar-noticias">
+        <span class="buscador__icono" aria-hidden="true">🔍</span>
+        <input
+          id="buscar-noticias"
+          type="search"
+          placeholder="Buscar noticias por título o contenido…"
+          [ngModel]="busqueda"
+          (ngModelChange)="onBuscar($event)"
+        />
+      </label>
+      <div class="chips" role="group" aria-label="Filtrar por categoría">
+        @for (categoria of categorias; track categoria.valor) {
+          <button
+            type="button"
+            class="chip"
+            [attr.aria-pressed]="categoriaActiva() === categoria.valor"
+            (click)="filtrar(categoria.valor)"
+          >
+            {{ categoria.etiqueta }}
+          </button>
+        }
+      </div>
     </div>
-  } @else if (noticias().length === 0) {
-    <app-empty-state titulo="Sin noticias" mensaje="No hay noticias para esta categoría." />
-  } @else {
-    <div class="grid grid--wide aparecer-lista">
-      @for (noticia of noticias(); track noticia.id; let i = $index) {
-        <article class="card card--hover noticia" [class.noticia--destacada]="noticia.destacada" appInView="up" [retraso]="i * 70">
-          @if (noticia.imagen) {
-            <img class="noticia__imagen" [src]="noticia.imagen" [alt]="'Portada de ' + noticia.titulo" loading="lazy" />
-          } @else {
-            <div class="noticia__imagen noticia__imagen--vacia" aria-hidden="true">
-              <span>📰</span>
-            </div>
-          }
 
-          <div class="noticia__cuerpo">
-            <div class="noticia__meta">
-              <span class="badge badge--info">{{ noticia.categoria_etiqueta }}</span>
-              @if (noticia.destacada) {
-                <span class="badge badge--soft">Destacada</span>
-              }
+    @if (cargando()) {
+      <div class="grid grid--wide">
+        @for (item of [1, 2, 3, 4]; track item) {
+          <article class="card stack stack--sm">
+            <div class="skeleton skeleton--media"></div>
+            <div class="skeleton skeleton--titulo"></div>
+            <div class="skeleton skeleton--texto"></div>
+          </article>
+        }
+      </div>
+    } @else if (noticias().length === 0) {
+      <app-empty-state
+        titulo="Sin resultados"
+        mensaje="No encontramos noticias con esos criterios. Probá con otra búsqueda o categoría."
+      />
+      <div class="text-center">
+        <button type="button" class="btn btn--ghost" (click)="limpiar()">Limpiar filtros</button>
+      </div>
+    } @else {
+      @if (destacada(); as principal) {
+        <article class="destacada" appInView="up">
+          <a class="destacada__media" [routerLink]="['/noticias', principal.id]">
+            @if (principal.imagen) {
+              <img [src]="principal.imagen" [alt]="'Portada de ' + principal.titulo" />
+            } @else {
+              <span class="destacada__placeholder" aria-hidden="true">📰</span>
+            }
+          </a>
+          <div class="destacada__cuerpo">
+            <div class="row row--wrap">
+              <span class="badge badge--soft">Destacada</span>
+              <span class="badge badge--info">{{ principal.categoria_etiqueta }}</span>
             </div>
-            <h2 class="card__title">{{ noticia.titulo }}</h2>
-            <p class="card__body">{{ noticia.resumen || noticia.contenido }}</p>
+            <h2>{{ principal.titulo }}</h2>
+            <p class="muted">{{ principal.resumen || principal.contenido }}</p>
             <div class="row row--between row--wrap">
-              <span class="muted">{{ noticia.fecha_publicacion | date: 'longDate' }}</span>
-              <a class="btn btn--soft btn--sm" [routerLink]="['/noticias', noticia.id]">Leer más</a>
+              <span class="muted">{{ principal.fecha_publicacion | date: 'longDate' }}</span>
+              <a class="btn btn--primary btn--sm" [routerLink]="['/noticias', principal.id]">Leer noticia</a>
             </div>
           </div>
         </article>
       }
-    </div>
-  }
+
+      @if (secundarias().length) {
+        <div class="grid grid--wide">
+          @for (noticia of secundarias(); track noticia.id; let i = $index) {
+            <article class="card card--hover noticia" appInView="up" [retraso]="i * 70">
+              @if (noticia.imagen) {
+                <img class="noticia__imagen" [src]="noticia.imagen" [alt]="'Portada de ' + noticia.titulo" loading="lazy" />
+              } @else {
+                <div class="noticia__imagen noticia__imagen--vacia" aria-hidden="true"><span>📰</span></div>
+              }
+              <div class="noticia__cuerpo">
+                <span class="badge badge--info">{{ noticia.categoria_etiqueta }}</span>
+                <h3 class="noticia__titulo">{{ noticia.titulo }}</h3>
+                <p class="muted noticia__resumen">{{ noticia.resumen || noticia.contenido }}</p>
+                <div class="row row--between row--wrap">
+                  <span class="muted">{{ noticia.fecha_publicacion | date: 'longDate' }}</span>
+                  <a class="btn btn--soft btn--sm" [routerLink]="['/noticias', noticia.id]">Leer</a>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      }
+
+      <app-paginador
+        [page]="page()"
+        [count]="total()"
+        [pageSize]="pageSize"
+        (cambiar)="cambiarPagina($event)"
+      />
+    }
+  </div>
 </section>

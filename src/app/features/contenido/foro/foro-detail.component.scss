@@ -1,21 +1,105 @@
 @use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
 
-.contenido { white-space: pre-line; }
+.volver {
+  display: inline-block;
+  margin-bottom: $e-4;
+  color: $texto-secundario;
+  font-size: $fs-sm;
+  text-decoration: none;
 
-.respuestas {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: $e-3;
+  &:hover { color: $rojo; }
+}
 
-  &__item {
-    border: 1px solid $gris;
-    border-radius: $radio-sm;
-    padding: $e-3;
-    background: $blanco;
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, $rosa-claro, $rojo-suave);
+  color: $blanco;
+  font-weight: 700;
+}
 
-    p { margin: $e-1 0; }
+.publicacion {
+  @include glass;
+  max-width: 820px;
+  border-radius: $radio-lg;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  box-shadow: $sombra-sm;
+
+  &__cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $e-3;
+    flex-wrap: wrap;
+    margin-bottom: $e-4;
+  }
+
+  &__autor {
+    display: flex;
+    align-items: center;
+    gap: $e-3;
+
+    strong { display: block; }
+    .muted { font-size: $fs-sm; }
+  }
+
+  &__titulo { margin: 0 0 $e-3; }
+
+  &__cuerpo {
+    white-space: pre-line;
+    line-height: 1.8;
+    color: $carbon-suave;
+    max-width: 70ch;
+    margin: 0;
   }
 }
+
+.respuestas {
+  max-width: 820px;
+  margin-top: $e-6;
+
+  h2 { margin-bottom: $e-3; }
+
+  &__lista {
+    list-style: none;
+    margin: 0 0 $e-5;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $e-3;
+  }
+}
+
+.respuesta {
+  display: flex;
+  gap: $e-3;
+  background: $superficie-solida;
+  border: 1px solid $borde-suave;
+  border-radius: $radio;
+  padding: $e-4;
+
+  &__cuerpo {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: $e-1;
+
+    p { margin: 0; white-space: pre-line; }
+  }
+
+  &__cabecera {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $e-3;
+    flex-wrap: wrap;
+    font-size: $fs-sm;
+  }
+}
+
+.responder { max-width: 820px; }

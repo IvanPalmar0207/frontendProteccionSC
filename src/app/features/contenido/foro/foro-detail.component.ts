@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
+import { InViewDirective } from '../../../core/animations/in-view.directive';
 import { PublicacionForo } from '../../../core/models/api.models';
 import { AuthService } from '../../../core/services/auth.service';
 import { ForoService } from '../../../core/services/foro.service';
@@ -11,12 +12,13 @@ import { NotificationService } from '../../../core/services/notification.service
 @Component({
   selector: 'app-foro-detail',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, ReactiveFormsModule, DatePipe],
+  imports: [RouterLink, ReactiveFormsModule, DatePipe, InViewDirective],
   templateUrl: './foro-detail.component.html',
   styleUrl: './foro-detail.component.scss',
 })
 export class ForoDetailComponent implements OnInit {
   private readonly ruta = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly foroService = inject(ForoService);
   private readonly notificaciones = inject(NotificationService);
   private readonly auth = inject(AuthService);
@@ -30,7 +32,7 @@ export class ForoDetailComponent implements OnInit {
   readonly usuario = this.auth.usuarioActual;
 
   readonly form = this.fb.nonNullable.group({
-    contenido: ['', Validators.required],
+    contenido: ['', [Validators.required, Validators.minLength(2)]],
   });
 
   get contenido() {
@@ -76,7 +78,10 @@ export class ForoDetailComponent implements OnInit {
       return;
     }
     this.foroService.eliminar(this.id).subscribe({
-      next: () => this.notificaciones.exito('Publicación eliminada.'),
+      next: () => {
+        this.notificaciones.exito('Publicación eliminada.');
+        this.router.navigate(['/foro']);
+      },
     });
   }
 

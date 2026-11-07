@@ -1,32 +1,47 @@
-<section class="container stack seccion">
-  <a class="muted" routerLink="/noticias">← Volver a noticias</a>
+<section class="contenido">
+  <div class="container seccion">
+    <a class="volver" routerLink="/noticias">← Volver a noticias</a>
 
-  @if (cargando()) {
-    <article class="card stack">
-      <div class="skeleton skeleton--media"></div>
-      <div class="skeleton skeleton--titulo"></div>
-      <div class="skeleton skeleton--texto"></div>
-      <div class="skeleton skeleton--texto"></div>
-    </article>
-  } @else if (!noticia()) {
-    <div class="alert alert--error">No se encontró la noticia solicitada.</div>
-  } @else {
-    <article class="card articulo aparecer">
-      @if (noticia()!.imagen) {
-        <img class="articulo__imagen" [src]="noticia()!.imagen" [alt]="'Portada de ' + noticia()!.titulo" />
-      }
-
-      <div class="articulo__cuerpo">
-        <div class="row row--wrap">
-          <span class="badge badge--info">{{ noticia()!.categoria_etiqueta }}</span>
-          <span class="muted">{{ noticia()!.fecha_publicacion | date: 'longDate' }} · {{ noticia()!.autor_nombre }}</span>
-        </div>
-        <h1 class="articulo__titulo">{{ noticia()!.titulo }}</h1>
-        @if (noticia()!.resumen) {
-          <p class="articulo__resumen">{{ noticia()!.resumen }}</p>
+    @if (cargando()) {
+      <article class="card stack">
+        <div class="skeleton skeleton--media"></div>
+        <div class="skeleton skeleton--titulo"></div>
+        <div class="skeleton skeleton--texto"></div>
+        <div class="skeleton skeleton--texto"></div>
+      </article>
+    } @else if (!noticia()) {
+      <div class="alert alert--error">No se encontró la noticia solicitada.</div>
+    } @else {
+      <article class="articulo" appInView="up">
+        @if (noticia()!.imagen) {
+          <figure class="articulo__portada">
+            <img [src]="noticia()!.imagen" [alt]="'Portada de ' + noticia()!.titulo" />
+          </figure>
         }
-        <div class="articulo__contenido">{{ noticia()!.contenido }}</div>
-      </div>
-    </article>
-  }
+
+        <div class="articulo__cabecera">
+          <span class="badge badge--info">{{ noticia()!.categoria_etiqueta }}</span>
+          <h1>{{ noticia()!.titulo }}</h1>
+          <div class="articulo__meta">
+            <span>{{ noticia()!.fecha_publicacion | date: 'longDate' }}</span>
+            <span aria-hidden="true">·</span>
+            <span>{{ noticia()!.autor_nombre }}</span>
+          </div>
+        </div>
+
+        @if (noticia()!.resumen) {
+          <p class="articulo__entradilla">{{ noticia()!.resumen }}</p>
+        }
+
+        <div class="articulo__cuerpo">{{ noticia()!.contenido }}</div>
+
+        <footer class="articulo__acciones">
+          <button type="button" class="btn btn--soft btn--sm" (click)="compartir()">
+            <span aria-hidden="true">🔗</span> Compartir noticia
+          </button>
+          <a class="btn btn--ghost btn--sm" routerLink="/noticias">Ver más noticias</a>
+        </footer>
+      </article>
+    }
+  </div>
 </section>

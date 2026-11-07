@@ -1,49 +1,130 @@
 @use '../../../../styles/variables' as *;
 @use '../../../../styles/mixins' as *;
 
-.podcast {
-  display: flex;
-  flex-direction: column;
-  gap: $e-2;
-  padding: 0;
+// --- Episodio destacado -----------------------------------------------------
+.destacado {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 0;
   overflow: hidden;
+  border-radius: $radio-lg;
+  background: $superficie-solida;
+  border: 1px solid $borde-suave;
+  box-shadow: $sombra-sm;
 
-  &__portada {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+  &__media {
+    position: relative;
 
-    &--vacia {
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, $rosa-claro, $rojo-suave);
-      font-size: 2.4rem;
-    }
+    img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; }
   }
 
-  &__meta {
+  &__placeholder {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    min-height: 320px;
+    font-size: 3rem;
+    background: linear-gradient(135deg, $fondo-calido, $rosa-claro);
+  }
+
+  &__play {
+    position: absolute;
+    right: $e-4;
+    bottom: $e-4;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: $rojo;
+    color: $blanco;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: $sombra-roja;
+    transition: transform $dur $ease, background $dur $ease;
+
+    &:hover { transform: scale(1.06); background: $rojo-oscuro; }
+  }
+
+  &__cuerpo {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: $e-2;
-    flex-wrap: wrap;
-    padding: 0 $e-4;
-    font-size: $fs-xs;
+    flex-direction: column;
+    gap: $e-3;
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    align-items: flex-start;
+
+    h2 { margin: 0; }
+    p { margin: 0; flex: 1 1 auto; }
   }
 
   &__programa {
-    padding: 0 $e-4;
     font-size: $fs-xs;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
+    color: $texto-secundario;
+  }
+}
+
+.titulo-lista { margin: $e-6 0 $e-3; }
+
+// --- Episodio de la lista ---------------------------------------------------
+.episodio {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+
+  &--invertido {
+    grid-template-columns: 1fr 260px;
+
+    .episodio__media { order: 2; }
+    .episodio__cuerpo { order: 1; }
   }
 
-  h2,
-  p { padding: 0 $e-4; margin: 0; }
-  p { flex: 1 1 auto; }
+  &__media {
+    img { width: 100%; height: 100%; min-height: 200px; object-fit: cover; }
+  }
 
-  &__accion {
-    margin: 0 $e-4 $e-4;
-    align-self: flex-start;
+  &__placeholder {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    min-height: 200px;
+    font-size: 2.4rem;
+    background: linear-gradient(135deg, $fondo-calido, $rosa-claro);
+  }
+
+  &__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: $e-2;
+    padding: $e-4 $e-5;
+    justify-content: center;
+
+    h3 { margin: 0; }
+    p { margin: 0; }
+  }
+
+  &__programa {
+    font-size: $fs-xs;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $texto-secundario;
+  }
+
+  a.btn { align-self: flex-start; margin-top: $e-1; }
+}
+
+@include desde-tablet {
+  .destacado { grid-template-columns: 1fr; }
+
+  .episodio,
+  .episodio--invertido {
+    grid-template-columns: 1fr;
+
+    .episodio__media { order: 0; }
+    .episodio__cuerpo { order: 0; }
+    .episodio__media img,
+    .episodio__placeholder { min-height: 180px; max-height: 220px; }
   }
 }

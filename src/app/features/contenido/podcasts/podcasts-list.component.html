@@ -1,64 +1,115 @@
-<section class="container stack seccion">
-  <header class="stack stack--sm">
-    <span class="badge badge--soft">Recursos</span>
-    <h1>Pódcast</h1>
-    <p class="muted">
-      Episodios alojados en su plataforma de origen. Abrimos el enlace oficial de forma
-      segura en una pestaña nueva.
-    </p>
-  </header>
+<section class="contenido">
+  <div class="container stack seccion">
+    <header class="hero-seccion" appInView="fade">
+      <img class="hero-seccion__fondo" src="/photos/podcasts-hero.webp" alt="" aria-hidden="true" />
+      <div class="hero-seccion__contenido">
+        <span class="eyebrow">Contenido en audio</span>
+        <h1>Pódcast</h1>
+        <p>
+          Episodios de acompañamiento y prevención alojados en su plataforma de origen. Abrimos
+          el enlace oficial de forma segura en una pestaña nueva.
+        </p>
+      </div>
+    </header>
 
-  @if (cargando()) {
-    <div class="grid grid--wide">
-      @for (item of [1, 2, 3]; track item) {
-        <article class="card stack stack--sm">
-          <div class="skeleton skeleton--media"></div>
-          <div class="skeleton skeleton--titulo"></div>
-          <div class="skeleton skeleton--texto"></div>
-        </article>
-      }
-    </div>
-  } @else if (podcasts().length === 0) {
-    <app-empty-state
-      titulo="Sin episodios"
-      mensaje="Todavía no hay pódcast publicados. Volvé pronto."
-    />
-  } @else {
-    <div class="grid grid--wide aparecer-lista">
-      @for (podcast of podcasts(); track podcast.id; let i = $index) {
-        <article class="card card--hover podcast" appInView="up" [retraso]="i * 70">
-          @if (podcast.portada) {
-            <img class="podcast__portada" [src]="podcast.portada" [alt]="'Portada de ' + podcast.titulo" loading="lazy" />
-          } @else {
-            <div class="podcast__portada podcast__portada--vacia" aria-hidden="true">
-              <span>{{ iconoPlataforma(podcast.plataforma) }}</span>
+    @if (cargando()) {
+      <div class="stack">
+        @for (item of [1, 2, 3]; track item) {
+          <article class="card episodio">
+            <div class="skeleton skeleton--media"></div>
+            <div class="stack stack--sm">
+              <div class="skeleton skeleton--titulo"></div>
+              <div class="skeleton skeleton--texto"></div>
             </div>
-          }
-
-          <div class="podcast__meta">
-            <span class="badge badge--info">
-              {{ iconoPlataforma(podcast.plataforma) }} {{ podcast.plataforma_etiqueta }}
-            </span>
-            <span class="muted">{{ podcast.fecha_publicacion | date: 'longDate' }}</span>
+          </article>
+        }
+      </div>
+    } @else if (podcasts().length === 0) {
+      <app-empty-state
+        titulo="Sin episodios"
+        mensaje="Todavía no hay pódcast publicados. Volvé pronto para escuchar nuevos episodios."
+      />
+    } @else {
+      @if (destacado(); as principal) {
+        <article class="destacado" appInView="up">
+          <div class="destacado__media">
+            @if (principal.portada) {
+              <img [src]="principal.portada" [alt]="'Portada de ' + principal.titulo" />
+            } @else {
+              <span class="destacado__placeholder" aria-hidden="true">
+                {{ iconoPlataforma(principal.plataforma) }}
+              </span>
+            }
+            <button type="button" class="destacado__play" (click)="escuchar(principal)" aria-label="Escuchar episodio destacado">
+              ▶
+            </button>
           </div>
-
-          @if (podcast.programa) {
-            <span class="podcast__programa muted">{{ podcast.programa }}</span>
-          }
-          <h2 class="card__title">{{ podcast.titulo }}</h2>
-          <p class="card__body">{{ podcast.descripcion }}</p>
-
-          <a
-            class="btn btn--primary btn--sm podcast__accion"
-            [href]="podcast.enlace"
-            target="_blank"
-            rel="noopener noreferrer"
-            (click)="escuchar(podcast)"
-          >
-            {{ iconoPlataforma(podcast.plataforma) }} Escuchar / ver episodio
-          </a>
+          <div class="destacado__cuerpo">
+            <span class="eyebrow">Episodio destacado</span>
+            @if (principal.programa) {
+              <span class="destacado__programa">{{ principal.programa }}</span>
+            }
+            <h2>{{ principal.titulo }}</h2>
+            <p class="muted">{{ principal.descripcion }}</p>
+            <div class="row row--wrap">
+              <span class="badge badge--info">
+                {{ iconoPlataforma(principal.plataforma) }} {{ principal.plataforma_etiqueta }}
+              </span>
+              <span class="muted">{{ principal.fecha_publicacion | date: 'longDate' }}</span>
+            </div>
+            <a
+              class="btn btn--primary"
+              [href]="principal.enlace"
+              target="_blank"
+              rel="noopener noreferrer"
+              (click)="escuchar(principal)"
+            >
+              Escuchar / ver episodio
+            </a>
+          </div>
         </article>
       }
-    </div>
-  }
+
+      @if (episodios().length) {
+        <h2 class="titulo-lista">Episodios recientes</h2>
+        <div class="stack">
+          @for (podcast of episodios(); track podcast.id; let i = $index) {
+            <article class="card card--hover episodio" [class.episodio--invertido]="i % 2 === 1" appInView="up" [retraso]="i * 60">
+              <div class="episodio__media">
+                @if (podcast.portada) {
+                  <img [src]="podcast.portada" [alt]="'Portada de ' + podcast.titulo" loading="lazy" />
+                } @else {
+                  <span class="episodio__placeholder" aria-hidden="true">
+                    {{ iconoPlataforma(podcast.plataforma) }}
+                  </span>
+                }
+              </div>
+              <div class="episodio__cuerpo">
+                <div class="row row--wrap">
+                  <span class="badge badge--info">
+                    {{ iconoPlataforma(podcast.plataforma) }} {{ podcast.plataforma_etiqueta }}
+                  </span>
+                  <span class="muted">{{ podcast.fecha_publicacion | date: 'longDate' }}</span>
+                </div>
+                @if (podcast.programa) {
+                  <span class="episodio__programa">{{ podcast.programa }}</span>
+                }
+                <h3>{{ podcast.titulo }}</h3>
+                <p class="muted">{{ podcast.descripcion }}</p>
+                <a
+                  class="btn btn--soft btn--sm"
+                  [href]="podcast.enlace"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  (click)="escuchar(podcast)"
+                >
+                  Escuchar episodio ↗
+                </a>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    }
+  </div>
 </section>

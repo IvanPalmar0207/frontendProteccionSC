@@ -1,52 +1,122 @@
-<section class="container stack">
-  <header class="stack stack--sm">
-    <h1>Foro</h1>
-    <p class="muted">Espacio de intercambio y acompañamiento entre la comunidad.</p>
-  </header>
+<section class="contenido">
+  <div class="container stack seccion">
+    <header class="hero-seccion" appInView="fade">
+      <img class="hero-seccion__fondo" src="/photos/foro-hero.webp" alt="" aria-hidden="true" />
+      <div class="hero-seccion__contenido">
+        <span class="eyebrow">Comunidad</span>
+        <h1>Foro de acompañamiento</h1>
+        <p>
+          Un espacio seguro y moderado para compartir experiencias, hacer preguntas y acompañarse
+          entre pares. Respetemos a quienes comparten.
+        </p>
+      </div>
+    </header>
 
-  <form class="card stack" [formGroup]="form" (ngSubmit)="publicar()" novalidate>
-    <h2>Nueva publicación</h2>
-    <div class="field">
-      <label for="titulo">Título</label>
-      <input id="titulo" type="text" formControlName="titulo" />
-      @if (titulo.touched && titulo.hasError('required')) {
-        <span class="field__error">El título es obligatorio.</span>
-      }
-    </div>
-    <div class="field">
-      <label for="contenido">Contenido</label>
-      <textarea id="contenido" formControlName="contenido"></textarea>
-      @if (contenido.touched && contenido.hasError('required')) {
-        <span class="field__error">El contenido es obligatorio.</span>
-      }
-    </div>
-    <div class="row">
-      <button type="submit" class="btn btn--primary" [disabled]="guardando()">Publicar</button>
-    </div>
-  </form>
+    <div class="barra">
+      <label class="buscador" for="buscar-foro">
+        <span class="buscador__icono" aria-hidden="true">🔍</span>
+        <input
+          id="buscar-foro"
+          type="search"
+          placeholder="Buscar publicaciones…"
+          [ngModel]="busqueda"
+          (ngModelChange)="onBuscar($event)"
+        />
+      </label>
 
-  @if (cargando()) {
-    <div class="stack">
-      @for (item of [1, 2, 3]; track item) {
-        <div class="card"><div class="skeleton skeleton--titulo"></div><div class="skeleton skeleton--texto"></div></div>
-      }
+      <div class="barra__acciones">
+        <label class="orden">
+          <span class="sr-only">Ordenar publicaciones</span>
+          <select [ngModel]="orden()" (ngModelChange)="cambiarOrden($event)">
+            <option value="recientes">Más recientes</option>
+            <option value="respondidas">Más respondidas</option>
+          </select>
+        </label>
+        <button type="button" class="btn btn--primary" (click)="alternarFormulario()">
+          {{ formularioAbierto() ? 'Cancelar' : 'Nueva publicación' }}
+        </button>
+      </div>
     </div>
-  } @else if (publicaciones().length === 0) {
-    <app-empty-state titulo="Foro vacío" mensaje="Sé la primera persona en publicar." />
-  } @else {
-    <ul class="hilos">
-      @for (publicacion of publicaciones(); track publicacion.id) {
-        <li class="card card--hover hilos__item">
-          <a [routerLink]="['/foro', publicacion.id]">
-            <h3>{{ publicacion.titulo }}</h3>
-            <p class="muted">{{ publicacion.contenido | slice: 0 : 120 }}</p>
-          </a>
-          <div class="row row--between">
-            <span class="muted">{{ publicacion.autor_nombre }} · {{ publicacion.creado_en | date: 'short' }}</span>
-            <span class="badge badge--soft">{{ publicacion.respuestas_count }} respuestas</span>
-          </div>
-        </li>
-      }
-    </ul>
-  }
+
+    @if (formularioAbierto()) {
+      <form
+        class="card stack formulario-publicacion aparecer"
+        [formGroup]="form"
+        (ngSubmit)="publicar()"
+        novalidate
+      >
+        <h2>Nueva publicación</h2>
+        <div class="field">
+          <label for="titulo">Título</label>
+          <input id="titulo" type="text" formControlName="titulo" placeholder="Resumí tu tema en una frase" />
+          @if (titulo.touched && titulo.hasError('required')) {
+            <span class="field__error">El título es obligatorio.</span>
+          }
+          @if (titulo.touched && titulo.hasError('minlength')) {
+            <span class="field__error">Ingresá al menos 5 caracteres.</span>
+          }
+        </div>
+        <div class="field">
+          <label for="contenido">Contenido</label>
+          <textarea id="contenido" formControlName="contenido" placeholder="Contá lo que necesites compartir."></textarea>
+          @if (contenido.touched && contenido.hasError('required')) {
+            <span class="field__error">El contenido es obligatorio.</span>
+          }
+          @if (contenido.touched && contenido.hasError('minlength')) {
+            <span class="field__error">Ingresá al menos 10 caracteres.</span>
+          }
+        </div>
+        <div class="row">
+          <button type="submit" class="btn btn--primary" [disabled]="guardando()">
+            {{ guardando() ? 'Publicando…' : 'Publicar' }}
+          </button>
+        </div>
+      </form>
+    }
+
+    @if (cargando()) {
+      <div class="stack">
+        @for (item of [1, 2, 3]; track item) {
+          <article class="card"><div class="skeleton skeleton--titulo"></div><div class="skeleton skeleton--texto"></div></article>
+        }
+      </div>
+    } @else if (lista().length === 0) {
+      <app-empty-state
+        titulo="Aún no hay publicaciones"
+        mensaje="Sé la primera persona en iniciar una conversación. Tu aporte puede ayudar a alguien más."
+      />
+    } @else {
+      <ul class="hilos">
+        @for (publicacion of lista(); track publicacion.id; let i = $index) {
+          <li class="hilo" appInView="up" [retraso]="i * 60">
+            <a class="hilo__enlace" [routerLink]="['/foro', publicacion.id]">
+              <div class="hilo__cabecera">
+                <span class="hilo__autor">
+                  <span class="hilo__avatar" aria-hidden="true">{{ publicacion.autor_nombre.charAt(0) }}</span>
+                  {{ publicacion.autor_nombre }}
+                </span>
+                <span class="muted">{{ publicacion.creado_en | date: 'mediumDate' }}</span>
+              </div>
+              <h3 class="hilo__titulo">{{ publicacion.titulo }}</h3>
+              <p class="hilo__extracto muted">{{ publicacion.contenido }}</p>
+              <div class="hilo__pie">
+                <span class="badge badge--soft">
+                  💬 {{ publicacion.respuestas_count }}
+                  {{ publicacion.respuestas_count === 1 ? 'respuesta' : 'respuestas' }}
+                </span>
+                <span class="hilo__leer">Leer y responder →</span>
+              </div>
+            </a>
+          </li>
+        }
+      </ul>
+
+      <app-paginador
+        [page]="page()"
+        [count]="total()"
+        [pageSize]="pageSize"
+        (cambiar)="cambiarPagina($event)"
+      />
+    }
+  </div>
 </section>

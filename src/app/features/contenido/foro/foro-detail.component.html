@@ -1,66 +1,89 @@
-<section class="container stack">
-  <a class="muted" routerLink="/foro">← Volver al foro</a>
+<section class="contenido">
+  <div class="container seccion">
+    <a class="volver" routerLink="/foro">← Volver al foro</a>
 
-  @if (cargando()) {
-    <p class="muted">Cargando publicación…</p>
-  } @else if (!publicacion()) {
-    <div class="alert alert--error">No se encontró la publicación solicitada.</div>
-  } @else {
-    <article class="card stack">
-      <div class="row row--between row--wrap">
-        <h1>{{ publicacion()!.titulo }}</h1>
-        @if (esAutor(publicacion()!.autor_nombre)) {
-          <button type="button" class="btn btn--danger btn--sm" (click)="eliminarPublicacion()">
-            Eliminar publicación
-          </button>
+    @if (cargando()) {
+      <article class="card stack">
+        <div class="skeleton skeleton--titulo"></div>
+        <div class="skeleton skeleton--texto"></div>
+        <div class="skeleton skeleton--texto"></div>
+      </article>
+    } @else if (!publicacion()) {
+      <div class="alert alert--error">No se encontró la publicación solicitada.</div>
+    } @else {
+      <article class="publicacion aparecer" appInView="up">
+        <header class="publicacion__cabecera">
+          <div class="publicacion__autor">
+            <span class="avatar" aria-hidden="true">{{ publicacion()!.autor_nombre.charAt(0) }}</span>
+            <div>
+              <strong>{{ publicacion()!.autor_nombre }}</strong>
+              <span class="muted">{{ publicacion()!.creado_en | date: 'medium' }}</span>
+            </div>
+          </div>
+          @if (esAutor(publicacion()!.autor_nombre)) {
+            <button type="button" class="btn btn--danger btn--sm" (click)="eliminarPublicacion()">
+              Eliminar
+            </button>
+          }
+        </header>
+
+        <h1 class="publicacion__titulo">{{ publicacion()!.titulo }}</h1>
+        <p class="publicacion__cuerpo">{{ publicacion()!.contenido }}</p>
+      </article>
+
+      <section class="respuestas" aria-labelledby="respuestas-titulo">
+        <h2 id="respuestas-titulo">
+          {{ publicacion()!.respuestas_count }}
+          {{ publicacion()!.respuestas_count === 1 ? 'respuesta' : 'respuestas' }}
+        </h2>
+
+        @if (publicacion()!.respuestas.length === 0) {
+          <p class="muted">Todavía no hay respuestas. Podés iniciar la conversación.</p>
+        } @else {
+          <ul class="respuestas__lista">
+            @for (respuesta of publicacion()!.respuestas; track respuesta.id; let i = $index) {
+              <li class="respuesta" appInView="up" [retraso]="i * 50">
+                <span class="avatar" aria-hidden="true">{{ respuesta.autor_nombre.charAt(0) }}</span>
+                <div class="respuesta__cuerpo">
+                  <div class="respuesta__cabecera">
+                    <strong>{{ respuesta.autor_nombre }}</strong>
+                    <span class="muted">{{ respuesta.creado_en | date: 'short' }}</span>
+                  </div>
+                  <p>{{ respuesta.contenido }}</p>
+                  @if (esAutor(respuesta.autor_nombre)) {
+                    <button
+                      type="button"
+                      class="btn btn--ghost btn--sm"
+                      (click)="eliminarRespuesta(respuesta.id)"
+                    >
+                      Eliminar
+                    </button>
+                  }
+                </div>
+              </li>
+            }
+          </ul>
         }
-      </div>
-      <span class="muted">
-        {{ publicacion()!.autor_nombre }} · {{ publicacion()!.creado_en | date: 'medium' }}
-      </span>
-      <p class="contenido">{{ publicacion()!.contenido }}</p>
-    </article>
 
-    <article class="card stack">
-      <h2>Respuestas ({{ publicacion()!.respuestas_count }})</h2>
-
-      @if (publicacion()!.respuestas.length === 0) {
-        <p class="muted">Todavía no hay respuestas. Podés iniciar la conversación.</p>
-      } @else {
-        <ul class="respuestas">
-          @for (respuesta of publicacion()!.respuestas; track respuesta.id) {
-            <li class="respuestas__item">
-              <div class="row row--between row--wrap">
-                <strong>{{ respuesta.autor_nombre }}</strong>
-                <span class="muted">{{ respuesta.creado_en | date: 'short' }}</span>
-              </div>
-              <p>{{ respuesta.contenido }}</p>
-              @if (esAutor(respuesta.autor_nombre)) {
-                <button
-                  type="button"
-                  class="btn btn--ghost btn--sm"
-                  (click)="eliminarRespuesta(respuesta.id)"
-                >
-                  Eliminar
-                </button>
-              }
-            </li>
-          }
-        </ul>
-      }
-
-      <form class="stack" [formGroup]="form" (ngSubmit)="responder()" novalidate>
-        <div class="field">
-          <label for="contenido">Tu respuesta</label>
-          <textarea id="contenido" formControlName="contenido"></textarea>
-          @if (contenido.touched && contenido.hasError('required')) {
-            <span class="field__error">La respuesta no puede estar vacía.</span>
-          }
-        </div>
-        <div class="row">
-          <button type="submit" class="btn btn--primary" [disabled]="publicando()">Responder</button>
-        </div>
-      </form>
-    </article>
-  }
+        <form class="card responder" [formGroup]="form" (ngSubmit)="responder()" novalidate>
+          <h3>Escribí una respuesta</h3>
+          <div class="field">
+            <label class="sr-only" for="contenido">Tu respuesta</label>
+            <textarea id="contenido" formControlName="contenido" placeholder="Compartí tu respuesta con respeto."></textarea>
+            @if (contenido.touched && contenido.hasError('required')) {
+              <span class="field__error">La respuesta no puede estar vacía.</span>
+            }
+            @if (contenido.touched && contenido.hasError('minlength')) {
+              <span class="field__error">Escribí al menos 2 caracteres.</span>
+            }
+          </div>
+          <div class="row">
+            <button type="submit" class="btn btn--primary" [disabled]="publicando()">
+              {{ publicando() ? 'Publicando…' : 'Responder' }}
+            </button>
+          </div>
+        </form>
+      </section>
+    }
+  </div>
 </section>

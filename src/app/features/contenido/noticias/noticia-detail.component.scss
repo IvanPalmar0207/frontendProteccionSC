@@ -1,42 +1,72 @@
 @use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.volver {
+  display: inline-block;
+  margin-bottom: $e-4;
+  color: $texto-secundario;
+  font-size: $fs-sm;
+  text-decoration: none;
+
+  &:hover { color: $rojo; }
+}
 
 .articulo {
-  padding: 0;
-  overflow: hidden;
-  max-width: 900px;
+  max-width: 820px;
   margin-inline: auto;
 
-  &__imagen {
-    width: 100%;
-    max-height: 380px;
-    object-fit: cover;
+  &__portada {
+    margin: 0 0 $e-6;
+    border-radius: $radio-lg;
+    overflow: hidden;
+    box-shadow: $sombra;
+
+    img { width: 100%; max-height: 460px; object-fit: cover; }
   }
 
-  &__cuerpo {
+  &__cabecera {
     display: flex;
     flex-direction: column;
     gap: $e-3;
-    padding: $e-6;
+    align-items: flex-start;
+
+    h1 { margin: 0; letter-spacing: -0.02em; }
   }
 
-  &__titulo { margin: 0; }
-
-  &__resumen {
-    font-size: $fs-lg;
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: $e-2;
     color: $texto-secundario;
+    font-size: $fs-sm;
+    flex-wrap: wrap;
+  }
+
+  &__entradilla {
+    font-size: $fs-lg;
+    color: $carbon-suave;
     border-left: 4px solid $rojo-suave;
     padding-left: $e-4;
-    margin: 0;
+    margin: $e-5 0;
   }
 
-  &__contenido {
+  &__cuerpo {
     white-space: pre-line;
     max-width: 70ch;
+    font-size: 1.05rem;
+    line-height: 1.85;
     color: $carbon-suave;
-    line-height: 1.75;
-  }
-}
 
-@media (max-width: $bp-mobile) {
-  .articulo__cuerpo { padding: $e-4; }
+    // Comfortable reading rhythm between paragraphs.
+    p + p { margin-top: $e-4; }
+  }
+
+  &__acciones {
+    display: flex;
+    gap: $e-3;
+    flex-wrap: wrap;
+    margin-top: $e-6;
+    padding-top: $e-4;
+    border-top: 1px solid $borde-suave;
+  }
 }

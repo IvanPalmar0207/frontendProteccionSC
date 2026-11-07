@@ -41,6 +41,22 @@ export class NoticiaService {
     return this.http.get<Paginated<Noticia>>(`${this.base}/`, { params });
   }
 
+  /** Public paginated list with optional category filter and search. */
+  listarPublico(opciones: {
+    page?: number;
+    search?: string;
+    categoria?: string;
+  } = {}): Observable<Paginated<Noticia>> {
+    let params = new HttpParams().set('page', opciones.page ?? 1);
+    if (opciones.search) {
+      params = params.set('search', opciones.search);
+    }
+    if (opciones.categoria) {
+      params = params.set('categoria', opciones.categoria);
+    }
+    return this.http.get<Paginated<Noticia>>(`${this.base}/`, { params });
+  }
+
   crear(payload: NoticiaPayload): Observable<Noticia> {
     return this.http.post<Noticia>(`${this.base}/`, this.aFormData(payload));
   }

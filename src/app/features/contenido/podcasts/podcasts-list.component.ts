@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 
-import { PlataformaPodcast, Podcast } from '../../../core/models/api.models';
 import { InViewDirective } from '../../../core/animations/in-view.directive';
+import { PlataformaPodcast, Podcast } from '../../../core/models/api.models';
 import { PodcastService } from '../../../core/services/podcast.service';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 
@@ -18,6 +18,9 @@ export class PodcastsListComponent implements OnInit {
 
   readonly cargando = signal(true);
   readonly podcasts = signal<Podcast[]>([]);
+
+  readonly destacado = computed<Podcast | null>(() => this.podcasts()[0] ?? null);
+  readonly episodios = computed(() => this.podcasts().slice(1));
 
   ngOnInit(): void {
     this.podcastService.listar().subscribe({
@@ -36,7 +39,7 @@ export class PodcastsListComponent implements OnInit {
       case 'YOUTUBE':
         return '▶️';
       case 'APPLE_PODCASTS':
-        return '🍎';
+        return '🎙️';
       default:
         return '🔗';
     }
