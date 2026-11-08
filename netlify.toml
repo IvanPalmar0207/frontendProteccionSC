@@ -1,0 +1,17 @@
+# Netlify configuration for the Angular SPA (Protección Inmediata SC).
+# The production API/WS URLs are injected at build time from the site's
+# environment variables (API_URL, WS_URL); the build fails if they are missing
+# or still point to localhost, so a localhost bundle can never be published.
+
+[build]
+  command = "node scripts/set-env.mjs && npm run build"
+  publish = "dist/proteccion-inmediata-sc/browser"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# SPA fallback: every route resolves to index.html so deep links and reloads work.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
