@@ -268,11 +268,10 @@ small { font-size: $fs-xs; }
     color: $blanco;
     box-shadow: $sombra-xs;
 
-    &:hover:not(:disabled) { background: $rojo-oscuro; }
+    &:hover:not(:disabled) { background: $rojo-oscuro; color: white;}
     @media (hover: hover) and (pointer: fine) {
       &:hover:not(:disabled) {
         box-shadow: $sombra-roja;
-        transform: translateY(-1px);
       }
     }
   }
@@ -350,6 +349,88 @@ small { font-size: $fs-xs; }
 
 fieldset { border: 1px solid $borde; border-radius: $radio; padding: $e-4; margin: 0; }
 legend { font-weight: 650; padding: 0 $e-2; }
+
+// ---------------------------------------------------------------------------
+// Selectores (global)
+// A single styled control keeps native <select> elements from looking out of
+// place next to the rest of the design system.
+// ---------------------------------------------------------------------------
+select,
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  font-size: $fs-sm;
+  font-weight: 500;
+  color: $texto;
+  background-color: $blanco;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237a7573' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  border: 1px solid $borde;
+  border-radius: $radio-sm;
+  padding: 0.55rem 2.2rem 0.55rem 0.8rem;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: border-color $dur $ease, box-shadow $dur $ease;
+
+  &:hover { border-color: $rojo-suave; }
+
+  &:focus-visible {
+    border-color: $rojo;
+    box-shadow: 0 0 0 4px rgba(255, 86, 87, 0.14);
+    outline: none;
+  }
+
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
+}
+
+.select--sm {
+  font-size: $fs-xs;
+  padding: 0.35rem 1.9rem 0.35rem 0.6rem;
+  background-position: right 0.55rem center;
+}
+
+// ---------------------------------------------------------------------------
+// Formularios centrados
+// Center the container over the usable area while keeping fields left-aligned.
+// ---------------------------------------------------------------------------
+.form-page {
+  width: min(100%, 680px);
+  margin-inline: auto;
+}
+
+.form-page--wide {
+  width: min(100%, 960px);
+}
+
+@include desde-mobile {
+  .form-page,
+  .form-page--wide { width: 100%; }
+}
+
+// ---------------------------------------------------------------------------
+// Campos inmutables
+// Read-only identity fields stay visible and copyable but clearly locked. The
+// dashed border and hint add a non-color signal for accessibility.
+// ---------------------------------------------------------------------------
+.field--inmutable {
+  input,
+  select,
+  textarea {
+    background: $fondo;
+    color: $texto-secundario;
+    border-style: dashed;
+    cursor: not-allowed;
+  }
+
+  label::after {
+    content: ' · solo lectura';
+    font-weight: 500;
+    color: $texto-secundario;
+    font-size: $fs-xs;
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Badges y chips

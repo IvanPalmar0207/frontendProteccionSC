@@ -26,6 +26,7 @@
 .publicacion {
   @include glass;
   max-width: 820px;
+  margin-inline: auto;
   border-radius: $radio-lg;
   padding: clamp(1.25rem, 3vw, 2.25rem);
   box-shadow: $sombra-sm;
@@ -61,6 +62,7 @@
 
 .respuestas {
   max-width: 820px;
+  margin-inline: auto;
   margin-top: $e-6;
 
   h2 { margin-bottom: $e-3; }
@@ -102,4 +104,7 @@
   }
 }
 
-.responder { max-width: 820px; }
+.responder {
+  max-width: 820px;
+  margin-inline: auto;
+}

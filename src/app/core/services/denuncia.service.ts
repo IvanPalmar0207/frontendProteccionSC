@@ -14,7 +14,18 @@ import {
 export interface FiltrosProfesional {
   estado?: EstadoDenuncia | '';
   modalidad?: Modalidad | '';
-  mis_denuncias?: boolean;
+}
+
+export interface FiltrosAdmin {
+  estado?: EstadoDenuncia | '';
+  /** `pendientes` = unassigned; `asignadas` = with a professional. */
+  asignacion?: 'pendientes' | 'asignadas' | '';
+}
+
+export interface ProfesionalResumen {
+  id: number;
+  nombre_completo: string;
+  casos_activos: number;
 }
 
 /** Result shape returned by the report creation endpoint. */
@@ -42,6 +53,7 @@ export class DenunciaService {
     return this.http.post<CreacionDenuncia>(`${this.base}/mis-denuncias/`, payload);
   }
 
+  /** Only the cases assigned to the authenticated professional (backend-guaranteed). */
   listarProfesional(filtros: FiltrosProfesional = {}): Observable<Denuncia[]> {
     let params = new HttpParams();
     if (filtros.estado) {
@@ -49,9 +61,6 @@ export class DenunciaService {
     }
     if (filtros.modalidad) {
       params = params.set('modalidad', filtros.modalidad);
-    }
-    if (filtros.mis_denuncias) {
-      params = params.set('mis_denuncias', 'true');
     }
     return this.http
       .get<Paginated<Denuncia>>(`${this.base}/profesional/`, { params })
@@ -62,8 +71,29 @@ export class DenunciaService {
     return this.http.get<Denuncia>(`${this.base}/profesional/${id}/`);
   }
 
-  asignarme(id: number): Observable<Denuncia> {
-    return this.http.post<Denuncia>(`${this.base}/profesional/${id}/asignarme/`, {});
+  // -- Administración de casos (asignación manual) --------------------------
+
+  listarAdmin(filtros: FiltrosAdmin = {}): Observable<Denuncia[]> {
+    let params = new HttpParams();
+    if (filtros.estado) {
+      params = params.set('estado', filtros.estado);
+    }
+    if (filtros.asignacion) {
+      params = params.set('asignacion', filtros.asignacion);
+    }
+    return this.http
+      .get<Paginated<Denuncia>>(`${this.base}/admin/`, { params })
+      .pipe(map((pagina) => pagina.results));
+  }
+
+  listarProfesionales(): Observable<ProfesionalResumen[]> {
+    return this.http.get<ProfesionalResumen[]>(`${this.base}/admin/profesionales/`);
+  }
+
+  asignar(id: number, profesionalId: number): Observable<Denuncia> {
+    return this.http.post<Denuncia>(`${this.base}/admin/${id}/asignar/`, {
+      profesional: profesionalId,
+    });
   }
 
   cambiarEstado(

@@ -1,14 +1,20 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { SoloDigitosDirective } from '../../../core/directives/solo-digitos.directive';
 import { AuthService } from '../../../core/services/auth.service';
+import {
+  edadMinimaValidator,
+  fechaMaximaNacimiento,
+} from '../../../core/validators/fecha-nacimiento';
+import { TELEFONO_PATTERN } from '../../../core/validators/telefono';
 import { NotificationService } from '../../../core/services/notification.service';
 import { PerfilService } from '../../../core/services/perfil.service';
 
 @Component({
   selector: 'app-perfil',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, SoloDigitosDirective],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss',
 })
@@ -21,27 +27,36 @@ export class PerfilComponent implements OnInit {
   readonly cargando = signal(true);
   readonly guardando = signal(false);
   readonly email = signal('');
+  /** Identity fields: shown but never editable (immutable per business rule). */
+  readonly documento = signal('');
+  /** Upper bound for the date picker: today minus the minimum age. */
+  readonly fechaMaxima = fechaMaximaNacimiento();
 
   readonly form = this.fb.nonNullable.group({
     nombre_completo: ['', [Validators.required, Validators.minLength(3)]],
-    telefono: [''],
-    documento: [''],
+    telefono: ['', [Validators.pattern(TELEFONO_PATTERN)]],
     direccion: [''],
-    fecha_nacimiento: [''],
+    fecha_nacimiento: ['', [edadMinimaValidator()]],
   });
 
   get nombre() {
     return this.form.controls.nombre_completo;
+  }
+  get telefono() {
+    return this.form.controls.telefono;
+  }
+  get fechaNacimiento() {
+    return this.form.controls.fecha_nacimiento;
   }
 
   ngOnInit(): void {
     this.perfilService.obtener().subscribe({
       next: (perfil) => {
         this.email.set(perfil.email);
+        this.documento.set(perfil.documento);
         this.form.patchValue({
           nombre_completo: perfil.nombre_completo,
           telefono: perfil.telefono,
-          documento: perfil.documento,
           direccion: perfil.direccion,
           fecha_nacimiento: perfil.fecha_nacimiento ?? '',
         });
@@ -62,7 +77,6 @@ export class PerfilComponent implements OnInit {
       .actualizar({
         nombre_completo: datos.nombre_completo,
         telefono: datos.telefono,
-        documento: datos.documento,
         direccion: datos.direccion,
         fecha_nacimiento: datos.fecha_nacimiento || null,
       })

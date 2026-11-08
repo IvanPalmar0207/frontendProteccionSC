@@ -33,10 +33,17 @@ export class NoticiaService {
   }
 
   /** Server-side paginated list used by the administrative table. */
-  listarPagina(page = 1, search = ''): Observable<Paginated<Noticia>> {
+  listarPagina(
+    page = 1,
+    search = '',
+    publicado: boolean | null = null,
+  ): Observable<Paginated<Noticia>> {
     let params = new HttpParams().set('page', page);
     if (search) {
       params = params.set('search', search);
+    }
+    if (publicado !== null) {
+      params = params.set('publicado', String(publicado));
     }
     return this.http.get<Paginated<Noticia>>(`${this.base}/`, { params });
   }

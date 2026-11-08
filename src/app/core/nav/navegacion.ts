@@ -22,14 +22,17 @@ export const NAVEGACION: Record<Rol, NavItem[]> = {
   PROFESIONAL: [
     { ruta: '/profesional', etiqueta: 'Panel', exacto: true },
     { ruta: '/profesional/denuncias', etiqueta: 'Casos' },
+    { ruta: '/profesional/perfil', etiqueta: 'Mi perfil' },
     { ruta: '/chat', etiqueta: 'Chat' },
   ],
   ADMINISTRADOR: [
     { ruta: '/admin', etiqueta: 'Panel', exacto: true },
+    { ruta: '/admin/denuncias', etiqueta: 'Casos' },
     { ruta: '/admin/usuarios', etiqueta: 'Usuarios' },
     { ruta: '/admin/noticias', etiqueta: 'Noticias' },
     { ruta: '/admin/podcasts', etiqueta: 'Pódcast' },
     { ruta: '/admin/foro', etiqueta: 'Foro' },
+    { ruta: '/admin/perfil', etiqueta: 'Mi perfil' },
   ],
 };
 

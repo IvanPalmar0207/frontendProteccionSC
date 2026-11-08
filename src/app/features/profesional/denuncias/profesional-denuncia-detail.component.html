@@ -20,11 +20,6 @@
         </div>
       </div>
       <div class="row">
-        @if (!denuncia()!.profesional_asignado) {
-          <button type="button" class="btn btn--soft" (click)="asignarme()" [disabled]="procesando()">
-            Asignarme el caso
-          </button>
-        }
         <button type="button" class="btn btn--primary" (click)="abrirChat()" [disabled]="procesando()">
           Abrir chat
         </button>
@@ -92,20 +87,30 @@
 
     <article class="card stack">
       <h2>Actualizar estado de atención</h2>
+      @if (bloqueada()) {
+        <div class="alert alert--info" role="status">
+          Esta denuncia ha sido completada. Puedes consultar su información y el historial, pero
+          ya no es posible realizar nuevas interacciones.
+        </div>
+      }
       <form class="row row--wrap" [formGroup]="form" (ngSubmit)="cambiarEstado()">
         <div class="field">
           <label for="estado">Nuevo estado</label>
-          <select id="estado" formControlName="estado">
+          <select id="estado" formControlName="estado" [disabled]="bloqueada()">
             <option value="PENDIENTE">Pendiente</option>
             <option value="EN_PROCESO">En proceso</option>
-            <option value="FINALIZADA">Finalizada</option>
+            <option value="FINALIZADA">Completada</option>
           </select>
         </div>
         <div class="field field--grow">
           <label for="observacion">Observación</label>
-          <input id="observacion" type="text" formControlName="observacion" />
+          <input id="observacion" type="text" formControlName="observacion" [disabled]="bloqueada()" />
         </div>
-        <button type="submit" class="btn btn--primary" [disabled]="procesando()">
+        <button
+          type="submit"
+          class="btn btn--primary"
+          [disabled]="procesando() || bloqueada()"
+        >
           Guardar cambio
         </button>
       </form>
@@ -119,7 +124,7 @@
         <ol class="timeline">
           @for (seguimiento of denuncia()!.seguimientos; track seguimiento.id) {
             <li class="timeline__item">
-              <span class="timeline__dot" aria-hidden="true"></span>
+              <span class=" redDot" aria-hidden="true"></span>
               <div>
                 <div class="row row--wrap">
                   @if (seguimiento.estado_anterior) {

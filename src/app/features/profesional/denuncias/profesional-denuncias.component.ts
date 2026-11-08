@@ -33,7 +33,6 @@ export class ProfesionalDenunciasComponent implements OnInit {
   readonly filtros = this.fb.nonNullable.group({
     estado: ['' as EstadoDenuncia | ''],
     modalidad: ['' as Modalidad | ''],
-    mis_denuncias: [false],
   });
 
   ngOnInit(): void {
@@ -43,12 +42,11 @@ export class ProfesionalDenunciasComponent implements OnInit {
 
   private cargar(): void {
     this.cargando.set(true);
-    const { estado, modalidad, mis_denuncias } = this.filtros.getRawValue();
+    const { estado, modalidad } = this.filtros.getRawValue();
     this.denunciaService
       .listarProfesional({
         estado: estado || undefined,
         modalidad: modalidad || undefined,
-        mis_denuncias: mis_denuncias || undefined,
       })
       .subscribe({
         next: (lista) => {

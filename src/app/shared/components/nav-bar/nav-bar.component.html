@@ -1,11 +1,7 @@
 <header class="nav" [class.is-scrolled]="desplazado()" [class.is-open]="menuMovil()">
   <div class="nav__bar container container--ancho">
     <a class="nav__brand" routerLink="/" (click)="cerrarMenus()">
-      <span class="nav__logo" aria-hidden="true">SC</span>
-      <span class="nav__marca">
-        <strong>Protección Inmediata</strong>
-        <small>Denuncia y acompañamiento</small>
-      </span>
+      <img class="nav__logo" src="/logoSC.png" alt="Protección Inmediata SC" />
     </a>
 
     <nav class="nav__links" aria-label="Navegación principal">
@@ -40,12 +36,14 @@
         }
       </div>
 
-      @if (autenticado()) {
+      @if (autenticado() && !esAdmin()) {
         <a class="nav__link" routerLink="/chat" routerLinkActive="is-active">Chat</a>
+      }
 
+      @if (autenticado()) {
         <a
           class="nav__bell"
-          routerLink="/usuario"
+          routerLink="/notificaciones"
           [attr.aria-label]="'Notificaciones: ' + noLeidas() + ' sin leer'"
         >
           <span aria-hidden="true">🔔</span>

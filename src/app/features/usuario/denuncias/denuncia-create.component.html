@@ -1,8 +1,8 @@
-<section class="container stack">
+<section class="container stack form-page">
   <header class="stack stack--sm">
     <h1>Registrar denuncia</h1>
     <p class="muted">
-      Podés elegir registrarla de forma pública o anónima. En ambos casos queda asociada
+      Puedes elegir registrarla de forma pública o anónima. En ambos casos queda asociada
       a tu cuenta para que puedas hacer seguimiento.
     </p>
   </header>
@@ -46,7 +46,7 @@
       <textarea
         id="descripcion"
         formControlName="descripcion"
-        placeholder="Describí lo sucedido con el mayor detalle posible."
+        placeholder="Describe lo sucedido con el mayor detalle posible."
       ></textarea>
       @if (descripcion.touched && descripcion.hasError('required')) {
         <span class="field__error">La descripción es obligatoria.</span>
@@ -63,7 +63,15 @@
       </div>
       <div class="field">
         <label for="fecha_hechos">Fecha de los hechos (opcional)</label>
-        <input id="fecha_hechos" type="date" formControlName="fecha_hechos" />
+        <input id="fecha_hechos" type="date" formControlName="fecha_hechos" [max]="hoy" />
+        @if (fechaHechos.touched && fechaHechos.hasError('fechaFutura')) {
+          <span class="field__error">
+            La fecha de los sucesos no puede ser posterior al día de hoy.
+          </span>
+        }
+        @if (fechaHechos.touched && fechaHechos.hasError('fechaInvalida')) {
+          <span class="field__error">Ingresa una fecha válida.</span>
+        }
       </div>
     </div>
 

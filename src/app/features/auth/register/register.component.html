@@ -2,13 +2,12 @@
   <div class="auth__panel">
     <div class="auth__aside">
       <a class="auth__marca" routerLink="/">
-        <span class="auth__logo">SC</span>
-        <strong>Protección Inmediata</strong>
+        <img class="auth__logo" src="/logoSC.png" alt="Protección Inmediata SC" />
       </a>
-      <h2>Creá tu cuenta en un minuto</h2>
-      <p>Con tu cuenta podés denunciar, hacer seguimiento y hablar con un profesional.</p>
+      <h2>Crea tu cuenta en un minuto</h2>
+      <p>Con tu cuenta puedes denunciar, hacer seguimiento y hablar con un profesional.</p>
       <ul class="auth__lista">
-        <li><span aria-hidden="true">🔒</span> Podés denunciar de forma anónima</li>
+        <li><span aria-hidden="true">🔒</span> Puedes denunciar de forma anónima</li>
         <li><span aria-hidden="true">💬</span> Chat privado con acompañamiento</li>
         <li><span aria-hidden="true">📈</span> Seguimiento de tu caso</li>
       </ul>
@@ -29,7 +28,7 @@
           <span class="field__error">El nombre completo es obligatorio.</span>
         }
         @if (nombre.touched && nombre.hasError('minlength')) {
-          <span class="field__error">Ingresá al menos 3 caracteres.</span>
+          <span class="field__error">Ingresa al menos 3 caracteres.</span>
         }
       </div>
 
@@ -40,15 +39,38 @@
           <span class="field__error">El correo electrónico es obligatorio.</span>
         }
         @if (email.touched && email.hasError('email')) {
-          <span class="field__error">Ingresá un correo electrónico válido.</span>
+          <span class="field__error">Ingresa un correo electrónico válido.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="documento">Número de documento</label>
+        <input id="documento" type="text" formControlName="documento" autocomplete="off" />
+        <span class="field__hint">Identificador único e inmutable de tu cuenta.</span>
+        @if (documento.touched && documento.hasError('required')) {
+          <span class="field__error">El número de documento es obligatorio.</span>
+        }
+        @if (documento.touched && documento.hasError('minlength')) {
+          <span class="field__error">Ingresa al menos 4 caracteres.</span>
+        }
+        @if (documento.touched && documento.hasError('pattern')) {
+          <span class="field__error">Usa solo letras, números y guiones.</span>
         }
       </div>
 
       <div class="field">
         <label for="telefono">Teléfono (opcional)</label>
-        <input id="telefono" type="tel" formControlName="telefono" autocomplete="tel" />
+        <input
+          id="telefono"
+          type="tel"
+          formControlName="telefono"
+          autocomplete="tel"
+          inputmode="numeric"
+          maxlength="10"
+          appSoloDigitos
+        />
         @if (telefono.touched && telefono.hasError('pattern')) {
-          <span class="field__error">Ingresá un teléfono válido.</span>
+          <span class="field__error">Ingresa un teléfono válido (solo números, 7 a 10 dígitos).</span>
         }
       </div>
 
@@ -75,7 +97,7 @@
         {{ enviando() ? 'Creando cuenta…' : 'Crear cuenta' }}
       </button>
 
-      <p class="auth__pie muted">¿Ya tenés cuenta? <a routerLink="/login">Iniciá sesión</a></p>
+      <p class="auth__pie muted">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
     </form>
   </div>
 </section>

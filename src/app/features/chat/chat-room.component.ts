@@ -4,6 +4,7 @@ import {
   Component,
   OnDestroy,
   OnInit,
+  computed,
   effect,
   inject,
   signal,
@@ -42,6 +43,8 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
   readonly enviando = signal(false);
   readonly usuarioId = this.auth.usuarioActual;
   readonly estadoConexion = this.socket.estadoConexion;
+  /** A finished report keeps its history readable but accepts no new messages. */
+  readonly bloqueada = computed(() => this.conversacion()?.denuncia.estado === 'FINALIZADA');
 
   constructor() {
     // On reconnect, recover any messages sent while the socket was down.
@@ -86,6 +89,9 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
   }
 
   enviar(): void {
+    if (this.bloqueada()) {
+      return;
+    }
     const texto = (this.form.getRawValue().contenido || '').trim();
     if (!texto) {
       return;

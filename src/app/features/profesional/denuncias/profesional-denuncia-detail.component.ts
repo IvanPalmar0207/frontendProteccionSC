@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -35,6 +35,8 @@ export class ProfesionalDenunciaDetailComponent implements OnInit {
   readonly cargando = signal(true);
   readonly denuncia = signal<Denuncia | null>(null);
   readonly procesando = signal(false);
+  /** A finished report is read-only: no state changes allowed. */
+  readonly bloqueada = computed(() => this.denuncia()?.estado === 'FINALIZADA');
 
   readonly form = this.fb.nonNullable.group({
     estado: ['PENDIENTE' as EstadoDenuncia, Validators.required],
@@ -58,21 +60,8 @@ export class ProfesionalDenunciaDetailComponent implements OnInit {
     });
   }
 
-  asignarme(): void {
-    this.procesando.set(true);
-    this.denunciaService.asignarme(this.id).subscribe({
-      next: (denuncia) => {
-        this.denuncia.set(denuncia);
-        this.form.patchValue({ estado: denuncia.estado, observacion: '' });
-        this.procesando.set(false);
-        this.notificaciones.exito('Caso asignado correctamente.');
-      },
-      error: () => this.procesando.set(false),
-    });
-  }
-
   cambiarEstado(): void {
-    if (this.form.invalid) {
+    if (this.bloqueada() || this.form.invalid) {
       return;
     }
     this.procesando.set(true);

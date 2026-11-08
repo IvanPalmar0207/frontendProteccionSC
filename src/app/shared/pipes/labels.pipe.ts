@@ -16,7 +16,7 @@ const MODALIDADES: Record<Modalidad, string> = {
 const ESTADOS: Record<EstadoDenuncia, string> = {
   PENDIENTE: 'Pendiente',
   EN_PROCESO: 'En proceso',
-  FINALIZADA: 'Finalizada',
+  FINALIZADA: 'Completada',
 };
 
 const TIPOS: Record<TipoSituacion, string> = {

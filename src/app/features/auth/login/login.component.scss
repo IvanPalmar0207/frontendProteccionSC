@@ -26,7 +26,8 @@
 
     h2 { margin: $e-3 0 0; }
     p { color: $carbon-suave; }
-    img { margin-top: auto; width: 100%; max-width: 320px; }
+    // Only the illustration: the logo inside .auth__marca must keep its own size.
+    > img { margin-top: auto; width: 100%; max-width: 320px; }
   }
 
   &__marca {
@@ -38,15 +39,12 @@
   }
 
   &__logo {
-    display: grid;
-    place-items: center;
-    width: 34px;
-    height: 34px;
-    border-radius: $radio-sm;
-    background: $rojo;
-    color: $blanco;
-    font-size: $fs-xs;
-    font-weight: 700;
+    display: block;
+    width: auto;
+    height: 72px;
+    max-height: 72px;
+    object-fit: contain;
+    flex: 0 0 auto;
   }
 
   &__form {

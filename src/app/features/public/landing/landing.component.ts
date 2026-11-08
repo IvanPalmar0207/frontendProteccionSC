@@ -54,7 +54,7 @@ export class LandingComponent implements OnInit {
   readonly pasos: Paso[] = [
     {
       numero: '01',
-      titulo: 'Creás tu cuenta',
+      titulo: 'Creas tu cuenta',
       texto: 'Te registrás con tu correo en menos de un minuto y accedés a tu espacio personal.',
       foto: '/photos/proceso-1.webp',
       alt: 'Personas conversando en un espacio de trabajo luminoso',
@@ -62,7 +62,7 @@ export class LandingComponent implements OnInit {
     {
       numero: '02',
       titulo: 'Registrás la denuncia',
-      texto: 'Elegís modalidad pública o anónima y describís lo sucedido con el detalle que puedas.',
+      texto: 'Eliges modalidad pública o anónima y describes lo sucedido con el detalle que puedas.',
       foto: '/photos/proceso-2.webp',
       alt: 'Personas conversando en una mesa, compartiendo información',
     },

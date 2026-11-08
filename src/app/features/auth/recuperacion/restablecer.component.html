@@ -11,7 +11,7 @@
         <span class="recovery__icono" aria-hidden="true">⛔</span>
         <h1>Enlace inválido o expirado</h1>
         <p class="muted">
-          El enlace de recuperación ya no es válido. Podés solicitar uno nuevo.
+          El enlace de recuperación ya no es válido. Puedes solicitar uno nuevo.
         </p>
         <a class="btn btn--primary btn--block" routerLink="/recuperar">Solicitar nuevo enlace</a>
         <a class="recovery__volver muted" routerLink="/login">Volver al inicio de sesión</a>
@@ -21,7 +21,7 @@
         <span class="recovery__icono" aria-hidden="true">✅</span>
         <h1>Contraseña actualizada</h1>
         <p class="muted">
-          Ya podés iniciar sesión con tu nueva contraseña. Por seguridad, cerramos las sesiones
+          Ya puedes iniciar sesión con tu nueva contraseña. Por seguridad, cerramos las sesiones
           anteriores.
         </p>
         <a class="btn btn--primary btn--block" routerLink="/login">Ir a iniciar sesión</a>
@@ -30,7 +30,7 @@
       @default {
         <span class="recovery__icono" aria-hidden="true">🔐</span>
         <h1>Nueva contraseña</h1>
-        <p class="muted">Elegí una contraseña segura de al menos 8 caracteres.</p>
+        <p class="muted">Elige una contraseña segura de al menos 8 caracteres.</p>
 
         <form class="stack" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
           <div class="field">

@@ -1,0 +1,96 @@
+<section class="container stack form-page--wide">
+  <header class="stack stack--sm">
+    <h1>Casos y asignación</h1>
+    <p class="muted">
+      Supervisa las denuncias y asigna o cambia el profesional responsable. El contenido de
+      los chats privados no es accesible desde aquí.
+    </p>
+  </header>
+
+  <div class="row row--wrap">
+    <div class="field">
+      <label for="asignacion">Asignación</label>
+      <select
+        id="asignacion"
+        [ngModel]="asignacion()"
+        (ngModelChange)="asignacion.set($event); cambiarFiltro()"
+      >
+        <option value="">Todas</option>
+        <option value="pendientes">Pendientes de asignación</option>
+        <option value="asignadas">Con profesional</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="estado">Estado</label>
+      <select
+        id="estado"
+        [ngModel]="estado()"
+        (ngModelChange)="estado.set($event); cambiarFiltro()"
+      >
+        <option value="">Todos</option>
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="EN_PROCESO">En proceso</option>
+        <option value="FINALIZADA">Completada</option>
+      </select>
+    </div>
+  </div>
+
+  @if (cargando()) {
+    <div class="tabla-wrap"><div class="skeleton skeleton--media"></div></div>
+  } @else if (denuncias().length === 0) {
+    <app-empty-state titulo="Sin casos" mensaje="No hay denuncias que coincidan con los filtros." />
+  } @else {
+    <div class="tabla-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Identificador</th>
+            <th>Modalidad</th>
+            <th>Estado</th>
+            <th>Profesional asignado</th>
+            <th>Asignar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (denuncia of denuncias(); track denuncia.id) {
+            <tr>
+              <td><strong>{{ denuncia.identificador }}</strong></td>
+              <td>
+                <span [class]="denuncia.es_anonima ? 'badge badge--soft' : 'badge badge--ok'">
+                  {{ denuncia.modalidad | modalidad }}
+                </span>
+              </td>
+              <td><span class="badge">{{ denuncia.estado | estado }}</span></td>
+              <td>
+                {{ denuncia.profesional_asignado?.nombre_completo || 'Sin asignar' }}
+              </td>
+              <td class="row row--wrap">
+                <select
+                  class="select select--sm"
+                  [value]="profesionalSeleccionado(denuncia) ?? ''"
+                  (change)="seleccionar(denuncia, $any($event.target).value)"
+                  [attr.aria-label]="'Profesional para la denuncia ' + denuncia.identificador"
+                >
+                  <option value="">Sin asignar</option>
+                  @for (profesional of profesionales(); track profesional.id) {
+                    <option [value]="profesional.id">
+                      {{ profesional.nombre_completo }} ({{ profesional.casos_activos }})
+                    </option>
+                  }
+                </select>
+                <button
+                  type="button"
+                  class="btn btn--primary btn--sm"
+                  (click)="asignar(denuncia)"
+                  [disabled]="!profesionalSeleccionado(denuncia) || guardandoId() === denuncia.id"
+                >
+                  {{ denuncia.profesional_asignado ? 'Reasignar' : 'Asignar' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

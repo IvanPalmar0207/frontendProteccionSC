@@ -1,5 +1,5 @@
 <section class="contenido">
-  <div class="container seccion">
+  <div class="container seccion form-page--wide">
     <a class="volver" routerLink="/foro">← Volver al foro</a>
 
     @if (cargando()) {
@@ -38,7 +38,7 @@
         </h2>
 
         @if (publicacion()!.respuestas.length === 0) {
-          <p class="muted">Todavía no hay respuestas. Podés iniciar la conversación.</p>
+          <p class="muted">Todavía no hay respuestas. Puedes iniciar la conversación.</p>
         } @else {
           <ul class="respuestas__lista">
             @for (respuesta of publicacion()!.respuestas; track respuesta.id; let i = $index) {
@@ -65,8 +65,8 @@
           </ul>
         }
 
-        <form class="card responder" [formGroup]="form" (ngSubmit)="responder()" novalidate>
-          <h3>Escribí una respuesta</h3>
+        <form class="card responder form-page" [formGroup]="form" (ngSubmit)="responder()" novalidate>
+          <h3>Escribe una respuesta</h3>
           <div class="field">
             <label class="sr-only" for="contenido">Tu respuesta</label>
             <textarea id="contenido" formControlName="contenido" placeholder="Compartí tu respuesta con respeto."></textarea>
@@ -74,7 +74,7 @@
               <span class="field__error">La respuesta no puede estar vacía.</span>
             }
             @if (contenido.touched && contenido.hasError('minlength')) {
-              <span class="field__error">Escribí al menos 2 caracteres.</span>
+              <span class="field__error">Escribe al menos 2 caracteres.</span>
             }
           </div>
           <div class="row">

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, Subject, throwError, tap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { LoginResponse, Rol, Usuario } from '../models/api.models';
@@ -11,6 +11,7 @@ import { TokenService } from './token.service';
 export interface RegistroPayload {
   email: string;
   nombre_completo: string;
+  documento: string;
   telefono?: string;
   password: string;
   password_confirm: string;
@@ -29,6 +30,7 @@ export class AuthService {
 
   private readonly usuario = signal<Usuario | null>(null);
   private readonly cargando = signal(false);
+  private refreshEnCurso: Subject<string> | null = null;
 
   readonly usuarioActual = this.usuario.asReadonly();
   readonly cargandoSesion = this.cargando.asReadonly();
@@ -105,6 +107,43 @@ export class AuthService {
     });
   }
 
+  /**
+   * Renews the access token using the stored refresh token.
+   *
+   * Single-flight: concurrent callers share one in-flight request, so several
+   * 401s at the same time trigger a single refresh. Errors propagate to the
+   * caller (and, through it, to the error interceptor).
+   */
+  refrescarToken(): Observable<string> {
+    const refresh = this.tokens.refreshToken;
+    if (!refresh) {
+      return throwError(() => new Error('No hay refresh token disponible.'));
+    }
+    if (this.refreshEnCurso) {
+      return this.refreshEnCurso.asObservable();
+    }
+
+    const subject = new Subject<string>();
+    this.refreshEnCurso = subject;
+
+    this.http
+      .post<{ access: string }>(`${environment.apiUrl}/auth/refresh/`, { refresh })
+      .subscribe({
+        next: (respuesta) => {
+          this.tokens.guardar(respuesta.access, refresh);
+          this.refreshEnCurso = null;
+          subject.next(respuesta.access);
+          subject.complete();
+        },
+        error: (error) => {
+          this.refreshEnCurso = null;
+          subject.error(error);
+        },
+      });
+
+    return subject.asObservable();
+  }
+
   cargarSesion(): void {
     if (!this.tokens.accessToken || this.usuario() !== null) {
       return;
@@ -152,7 +191,7 @@ export class AuthService {
 
   validarSesion(): boolean {
     if (!this.tokens.accessToken) {
-      this.notificaciones.error('Iniciá sesión para continuar.');
+      this.notificaciones.error('Inicia sesión para continuar.');
       return false;
     }
     return true;

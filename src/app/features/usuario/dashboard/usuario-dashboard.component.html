@@ -36,44 +36,12 @@
       </article>
       <article class="card stat stat--finalizada">
         <span class="stat__value">{{ resumen().finalizadas }}</span>
-        <span class="stat__label">Finalizadas</span>
+        <span class="stat__label">Completadas</span>
       </article>
     </div>
   }
 
-  <section class="card stack">
-    <div class="row row--between">
-      <h2>Notificaciones</h2>
-      @if (notificaciones().length) {
-        <button type="button" class="btn btn--ghost btn--sm" (click)="marcarTodas()">
-          Marcar todas como leídas
-        </button>
-      }
-    </div>
-
-    @if (notificaciones().length === 0) {
-      <app-empty-state titulo="Sin notificaciones" mensaje="Acá verás las novedades de tus denuncias." />
-    } @else {
-      <ul class="notif">
-        @for (notificacion of notificaciones(); track notificacion.id) {
-          <li class="notif__item" [class.notif__item--nueva]="!notificacion.leida">
-            <div>
-              <strong>{{ notificacion.titulo }}</strong>
-              @if (notificacion.mensaje) {
-                <p class="muted">{{ notificacion.mensaje }}</p>
-              }
-              <span class="muted">{{ notificacion.creado_en | date: 'short' }}</span>
-            </div>
-            @if (!notificacion.leida) {
-              <button type="button" class="btn btn--soft btn--sm" (click)="marcarLeida(notificacion)">
-                Marcar leída
-              </button>
-            }
-          </li>
-        }
-      </ul>
-    }
-  </section>
+  <app-notificaciones />
 
   <section class="card stack">
     <div class="row row--between">
@@ -86,7 +54,7 @@
     } @else if (denuncias().length === 0) {
       <app-empty-state
         titulo="Todavía no registraste denuncias"
-        mensaje="Podés registrar una denuncia pública o anónima cuando lo necesites."
+        mensaje="Puedes registrar una denuncia pública o anónima cuando lo necesites."
       />
     } @else {
       <ul class="lista">

@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Modalidad, TipoSituacion } from '../../../core/models/api.models';
 import { DenunciaService } from '../../../core/services/denuncia.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { fechaSucesosValidator, hoyIso } from '../../../core/validators/fecha-sucesos';
 
 @Component({
   selector: 'app-denuncia-create',
@@ -20,6 +21,8 @@ export class DenunciaCreateComponent {
   private readonly notificaciones = inject(NotificationService);
 
   readonly enviando = signal(false);
+  /** Today: the maximum selectable date for the events. */
+  readonly hoy = hoyIso();
 
   readonly tipos: { valor: TipoSituacion; etiqueta: string }[] = [
     { valor: 'VIOLENCIA_INTRAFAMILIAR', etiqueta: 'Violencia intrafamiliar' },
@@ -33,7 +36,7 @@ export class DenunciaCreateComponent {
     tipo_situacion: ['OTRO' as TipoSituacion, Validators.required],
     descripcion: ['', [Validators.required, Validators.minLength(10)]],
     ubicacion: [''],
-    fecha_hechos: [''],
+    fecha_hechos: ['', [fechaSucesosValidator()]],
   });
 
   get modalidad() {
@@ -41,6 +44,9 @@ export class DenunciaCreateComponent {
   }
   get descripcion() {
     return this.form.controls.descripcion;
+  }
+  get fechaHechos() {
+    return this.form.controls.fecha_hechos;
   }
 
   seleccionarModalidad(modalidad: Modalidad): void {

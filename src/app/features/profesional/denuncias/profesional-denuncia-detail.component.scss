@@ -21,6 +21,16 @@
   flex-direction: column;
   gap: $e-4;
 
+  .redDot{      
+    position: absolute;
+    left: calc(1 * 1rem + 4px);    
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff5657;
+    border: 2px solid #ffffff;
+  }
+
   &__item p { margin: $e-1 0; }
 
   &__dot {
@@ -32,5 +42,11 @@
     border-radius: 50%;
     background: $rojo;
     border: 2px solid $blanco;
+  }
+}
+
+@media (max-width : 645px) {
+   .redDot{      
+    left: calc(1 * 1rem - 4px) !important; 
   }
 }

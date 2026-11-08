@@ -19,7 +19,7 @@ export function roleGuard(roles: Rol[]): CanActivateFn {
     if (rolActual && roles.includes(rolActual)) {
       return true;
     }
-    notificaciones.error('No tenés permisos para acceder a esa sección.');
+    notificaciones.error('No tienes permisos para acceder a esa sección.');
     return router.createUrlTree([auth.rutaInicio()]);
   };
 }

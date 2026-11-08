@@ -1,0 +1,30 @@
+@use '../../../styles/variables' as *;
+
+.notif {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $e-2;
+
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $e-3;
+    padding: $e-3 $e-4;
+    border: 1px solid $borde-suave;
+    border-radius: $radio-sm;
+    background: $blanco;
+
+    &--nueva {
+      border-color: $rosa-claro;
+      background: $fondo-calido;
+    }
+
+    p {
+      margin: $e-1 0;
+    }
+  }
+}

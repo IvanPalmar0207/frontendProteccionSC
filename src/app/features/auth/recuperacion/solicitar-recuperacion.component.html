@@ -2,19 +2,19 @@
   <div class="recovery__card card stack aparecer">
     @if (enviado()) {
       <span class="recovery__icono" aria-hidden="true">📧</span>
-      <h1>Revisá tu correo</h1>
+      <h1>Revisa tu correo</h1>
       <p class="muted">
         Si el correo está registrado, te enviamos un enlace para restablecer tu contraseña.
         El enlace vence en pocos minutos y sólo puede usarse una vez.
       </p>
       <div class="alert alert--info">
-        No compartas el enlace con nadie. Si no lo ves, revisá la carpeta de spam.
+        No compartas el enlace con nadie. Si no lo ves, revisa la carpeta de spam.
       </div>
       <a class="btn btn--primary btn--block" routerLink="/login">Volver al inicio de sesión</a>
     } @else {
       <span class="recovery__icono" aria-hidden="true">🔑</span>
       <h1>Recuperar contraseña</h1>
-      <p class="muted">Ingresá tu correo y te enviaremos un enlace de un solo uso.</p>
+      <p class="muted">Ingresa tu correo y te enviaremos un enlace de un solo uso.</p>
 
       @if (errorServidor()) {
         <div class="alert alert--error">{{ errorServidor() }}</div>
@@ -28,7 +28,7 @@
             <span class="field__error">El correo electrónico es obligatorio.</span>
           }
           @if (email.touched && email.hasError('email')) {
-            <span class="field__error">Ingresá un correo electrónico válido.</span>
+            <span class="field__error">Ingresa un correo electrónico válido.</span>
           }
         </div>
         <button type="submit" class="btn btn--primary btn--block" [disabled]="enviando()">

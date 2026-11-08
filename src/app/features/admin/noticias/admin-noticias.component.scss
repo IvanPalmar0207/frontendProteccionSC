@@ -11,3 +11,10 @@ form { max-width: 980px; }
 .tabla-wrap { overflow-x: auto; }
 
 .field input { min-width: 260px; }
+
+// Results area: the loading hint reserves its own line so the list never shifts.
+.resultados__estado {
+  display: block;
+  min-height: 1.2em;
+  font-size: $fs-xs;
+}

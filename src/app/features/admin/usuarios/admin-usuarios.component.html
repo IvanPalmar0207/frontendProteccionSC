@@ -2,7 +2,7 @@
   <header class="row row--between row--wrap">
     <div class="stack stack--sm">
       <h1>Gestión de usuarios</h1>
-      <p class="muted">Administrá roles y estado de las cuentas de la plataforma.</p>
+      <p class="muted">Administra roles y estado de las cuentas de la plataforma.</p>
     </div>
     <div class="field">
       <label class="sr-only" for="buscar">Buscar usuario</label>
@@ -40,9 +40,13 @@
               <td>{{ usuario.email }}</td>
               <td>{{ usuario.nombre_completo }}</td>
               <td>
-                <select [value]="usuario.role" (change)="cambiarRol(usuario, $event)">
+                <select
+                  class="select select--sm"
+                  (change)="cambiarRol(usuario, $any($event.target).value)"
+                  [attr.aria-label]="'Rol de ' + usuario.email"
+                >
                   @for (rol of roles; track rol) {
-                    <option [value]="rol">{{ rol | rol }}</option>
+                    <option [value]="rol" [selected]="rol === usuario.role">{{ rol | rol }}</option>
                   }
                 </select>
               </td>

@@ -1,7 +1,15 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnInit,
+  inject,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Subject, catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
 
 import { CategoriaNoticia, Noticia } from '../../../core/models/api.models';
 import { NoticiaService } from '../../../core/services/noticia.service';
@@ -20,9 +28,15 @@ export class AdminNoticiasComponent implements OnInit {
   private readonly noticiaService = inject(NoticiaService);
   private readonly notificaciones = inject(NotificationService);
   private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly busqueda$ = new Subject<string>();
+  /** Any filter/page change re-queries; switchMap cancels the previous request. */
+  private readonly recargar$ = new Subject<void>();
 
   readonly cargando = signal(true);
+  /** True while any list request is in flight; never hides existing rows. */
+  readonly actualizando = signal(false);
   readonly guardando = signal(false);
   readonly noticias = signal<Noticia[]>([]);
   readonly total = signal(0);
@@ -32,6 +46,8 @@ export class AdminNoticiasComponent implements OnInit {
   readonly imagenActual = signal<string | null>(null);
   /** undefined = untouched, null = cleared, File = replacement. */
   readonly imagenSeleccionada = signal<File | null | undefined>(undefined);
+  /** Publication-state filter: null = all, true = published, false = drafts. */
+  readonly estado = signal<boolean | null>(null);
 
   busqueda = '';
 
@@ -60,18 +76,55 @@ export class AdminNoticiasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cargar();
+    // A text search needs at least two characters and ~400 ms of inactivity;
+    // switchMap guarantees a slow earlier response can never overwrite a newer
+    // one, and a single character never issues a search request.
     this.busqueda$
-      .pipe(debounceTime(350), distinctUntilChanged())
-      .subscribe(() => {
+      .pipe(debounceTime(400), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe((valor) => {
+        if (valor.trim().length === 1) {
+          return;
+        }
         this.page.set(1);
         this.cargar();
       });
+
+    this.recargar$
+      .pipe(
+        switchMap(() => {
+          this.actualizando.set(true);
+          return this.noticiaService.listarPagina(this.page(), this.busqueda, this.estado()).pipe(
+            // Keep the reactive stream alive after an HTTP error.
+            catchError(() => {
+              this.actualizando.set(false);
+              this.cargando.set(false);
+              return of(null);
+            }),
+          );
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((pagina) => {
+        this.actualizando.set(false);
+        this.cargando.set(false);
+        if (pagina) {
+          this.noticias.set(pagina.results);
+          this.total.set(pagina.count);
+        }
+      });
+
+    this.cargar();
   }
 
   onBuscar(valor: string): void {
     this.busqueda = valor;
     this.busqueda$.next(valor);
+  }
+
+  cambiarEstado(valor: string): void {
+    this.estado.set(valor === '' ? null : valor === 'true');
+    this.page.set(1);
+    this.cargar();
   }
 
   cambiarPagina(pagina: number): void {
@@ -150,14 +203,6 @@ export class AdminNoticiasComponent implements OnInit {
   }
 
   private cargar(): void {
-    this.cargando.set(true);
-    this.noticiaService.listarPagina(this.page(), this.busqueda).subscribe({
-      next: (pagina) => {
-        this.noticias.set(pagina.results);
-        this.total.set(pagina.count);
-        this.cargando.set(false);
-      },
-      error: () => this.cargando.set(false),
-    });
+    this.recargar$.next();
   }
 }

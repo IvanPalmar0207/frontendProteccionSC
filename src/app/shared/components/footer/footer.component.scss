@@ -23,15 +23,12 @@
   }
 
   &__logo-badge {
-    display: grid;
-    place-items: center;
-    width: 34px;
-    height: 34px;
-    border-radius: $radio-sm;
-    background: $rojo;
-    color: $blanco;
-    font-size: $fs-xs;
-    font-weight: 700;
+    display: block;
+    width: auto;
+    height: 64px;
+    max-height: 64px;
+    object-fit: contain;
+    flex: 0 0 auto;
   }
 
   &__col {

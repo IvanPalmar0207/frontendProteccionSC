@@ -89,14 +89,23 @@ export const routes: Routes = [
   {
     path: 'chat',
     title: 'Conversaciones · Protección Inmediata SC',
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard(['USUARIO', 'PROFESIONAL'])],
     loadComponent: () => import('./features/chat/chat-list.component').then((m) => m.ChatListComponent),
   },
   {
     path: 'chat/:id',
     title: 'Chat · Protección Inmediata SC',
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard(['USUARIO', 'PROFESIONAL'])],
     loadComponent: () => import('./features/chat/chat-room.component').then((m) => m.ChatRoomComponent),
+  },
+  {
+    path: 'notificaciones',
+    title: 'Notificaciones · Protección Inmediata SC',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/notificaciones/notificaciones-page.component').then(
+        (m) => m.NotificacionesPageComponent,
+      ),
   },
 
   // User panel
@@ -174,6 +183,12 @@ export const routes: Routes = [
             (m) => m.ProfesionalDenunciaDetailComponent,
           ),
       },
+      {
+        path: 'perfil',
+        title: 'Mi perfil · Protección Inmediata SC',
+        loadComponent: () =>
+          import('./features/usuario/perfil/perfil.component').then((m) => m.PerfilComponent),
+      },
     ],
   },
 
@@ -188,6 +203,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/admin/dashboard/admin-dashboard.component').then(
             (m) => m.AdminDashboardComponent,
+          ),
+      },
+      {
+        path: 'denuncias',
+        title: 'Casos · Protección Inmediata SC',
+        loadComponent: () =>
+          import('./features/admin/denuncias/admin-denuncias.component').then(
+            (m) => m.AdminDenunciasComponent,
           ),
       },
       {
@@ -219,6 +242,12 @@ export const routes: Routes = [
         title: 'Foro · Protección Inmediata SC',
         loadComponent: () =>
           import('./features/admin/foro/admin-foro.component').then((m) => m.AdminForoComponent),
+      },
+      {
+        path: 'perfil',
+        title: 'Mi perfil · Protección Inmediata SC',
+        loadComponent: () =>
+          import('./features/usuario/perfil/perfil.component').then((m) => m.PerfilComponent),
       },
     ],
   },

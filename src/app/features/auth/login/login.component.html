@@ -2,8 +2,7 @@
   <div class="auth__panel">
     <div class="auth__aside">
       <a class="auth__marca" routerLink="/">
-        <span class="auth__logo">SC</span>
-        <strong>Protección Inmediata</strong>
+        <img class="auth__logo" src="/logoSC.png" alt="Protección Inmediata SC" />
       </a>
       <h2>Tu espacio seguro para pedir ayuda</h2>
       <p>Accedé a tus denuncias, al chat con el profesional asignado y a los recursos de la plataforma.</p>
@@ -12,7 +11,7 @@
 
     <form class="auth__form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
       <h1>Iniciar sesión</h1>
-      <p class="muted">Ingresá con el correo con el que te registraste.</p>
+      <p class="muted">Ingresa con el correo con el que te registraste.</p>
 
       <div class="field">
         <label for="email">Correo electrónico</label>
@@ -27,7 +26,7 @@
           <span class="field__error">El correo electrónico es obligatorio.</span>
         }
         @if (email.touched && email.hasError('email')) {
-          <span class="field__error">Ingresá un correo electrónico válido.</span>
+          <span class="field__error">Ingresa un correo electrónico válido.</span>
         }
       </div>
 
@@ -60,7 +59,7 @@
 
       <div class="auth__enlaces">
         <a routerLink="/recuperar">¿Olvidaste tu contraseña?</a>
-        <span class="muted">¿No tenés cuenta? <a routerLink="/register">Creá una</a></span>
+        <span class="muted">¿No tienes cuenta? <a routerLink="/register">Crea una</a></span>
       </div>
     </form>
   </div>

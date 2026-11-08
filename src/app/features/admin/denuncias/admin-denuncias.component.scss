@@ -1,0 +1,13 @@
+@use '../../../../styles/variables' as *;
+
+.tabla-wrap {
+  overflow-x: auto;
+}
+
+.field select {
+  min-width: 200px;
+}
+
+td select {
+  max-width: 260px;
+}

@@ -24,7 +24,10 @@ export class App {
   readonly mostrarSideNav = computed(() => {
     const ruta = this.url().split('?')[0];
     const esPublica = ruta === '/' || ruta === '/login' || ruta === '/register';
-    return this.auth.autenticado() && !esPublica;
+    // The normal user navigates from the top bar and the dashboard cards; the
+    // side panel is reserved for the operational roles (professional/admin).
+    const usaPanelLateral = this.auth.role() === 'PROFESIONAL' || this.auth.role() === 'ADMINISTRADOR';
+    return this.auth.autenticado() && !esPublica && usaPanelLateral;
   });
 
   constructor() {

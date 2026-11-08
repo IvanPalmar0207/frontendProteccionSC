@@ -1,7 +1,7 @@
 <section class="container stack">
   <header class="stack stack--sm">
-    <h1>Casos de atención</h1>
-    <p class="muted">Consultá los casos disponibles o asignados y actualizá su estado.</p>
+    <h1>Mis casos asignados</h1>
+    <p class="muted">Estos son los casos bajo tu responsabilidad. Actualiza su estado aquí.</p>
   </header>
 
   <form class="card row row--wrap" [formGroup]="filtros">
@@ -11,7 +11,7 @@
         <option value="">Todos</option>
         <option value="PENDIENTE">Pendiente</option>
         <option value="EN_PROCESO">En proceso</option>
-        <option value="FINALIZADA">Finalizada</option>
+        <option value="FINALIZADA">Completada</option>
       </select>
     </div>
     <div class="field">
@@ -22,19 +22,15 @@
         <option value="ANONIMA">Anónima</option>
       </select>
     </div>
-    <div class="field">
-      <label>Asignación</label>
-      <label class="check">
-        <input type="checkbox" formControlName="mis_denuncias" />
-        Sólo mis casos
-      </label>
-    </div>
   </form>
 
   @if (cargando()) {
     <p class="muted">Cargando casos…</p>
   } @else if (denuncias().length === 0) {
-    <app-empty-state titulo="Sin casos" mensaje="No hay denuncias que coincidan con los filtros." />
+    <app-empty-state
+      titulo="Sin casos asignados"
+      mensaje="No tienes casos asignados actualmente."
+    />
   } @else {
     <div class="tabla-wrap">
       <table class="table">

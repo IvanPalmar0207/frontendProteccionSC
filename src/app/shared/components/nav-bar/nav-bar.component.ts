@@ -36,6 +36,7 @@ export class NavBarComponent implements OnDestroy {
   readonly menuUsuario = signal(false);
 
   readonly recursos = RECURSOS;
+  readonly esAdmin = computed(() => this.auth.role() === 'ADMINISTRADOR');
   readonly enlacesPanel = computed<NavItem[]>(() => {
     const role = this.auth.role();
     return role ? (NAVEGACION[role] ?? []) : [];

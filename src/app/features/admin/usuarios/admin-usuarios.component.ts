@@ -49,8 +49,7 @@ export class AdminUsuariosComponent implements OnInit {
     this.cargar();
   }
 
-  cambiarRol(usuario: Usuario, event: Event): void {
-    const role = (event.target as HTMLSelectElement).value as Rol;
+  cambiarRol(usuario: Usuario, role: Rol): void {
     this.usuariosService.actualizar(usuario.id, { role }).subscribe({
       next: (actualizado) => {
         this.usuarios.update((lista) =>

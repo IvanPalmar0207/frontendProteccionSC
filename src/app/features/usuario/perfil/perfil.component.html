@@ -1,4 +1,4 @@
-<section class="container stack">
+<section class="container stack form-page">
   <header class="stack stack--sm">
     <h1>Mi perfil</h1>
     <p class="muted">Actualizá tus datos personales. El correo electrónico no se puede modificar.</p>
@@ -8,9 +8,9 @@
     <p class="muted">Cargando perfil…</p>
   } @else {
     <form class="card stack" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-      <div class="field">
+      <div class="field field--inmutable">
         <label for="email">Correo electrónico</label>
-        <input id="email" type="email" [value]="email()" disabled />
+        <input id="email" type="email" [value]="email()" readonly aria-readonly="true" />
         <span class="field__hint">El correo identifica tu cuenta y no puede cambiarse.</span>
       </div>
 
@@ -21,25 +21,54 @@
           <span class="field__error">El nombre completo es obligatorio.</span>
         }
         @if (nombre.touched && nombre.hasError('minlength')) {
-          <span class="field__error">Ingresá al menos 3 caracteres.</span>
+          <span class="field__error">Ingresa al menos 3 caracteres.</span>
         }
       </div>
 
       <div class="grid">
         <div class="field">
           <label for="telefono">Teléfono</label>
-          <input id="telefono" type="tel" formControlName="telefono" />
+          <input
+            id="telefono"
+            type="tel"
+            formControlName="telefono"
+            inputmode="numeric"
+            maxlength="10"
+            appSoloDigitos
+          />
+          @if (telefono.touched && telefono.hasError('pattern')) {
+            <span class="field__error">Ingresa un teléfono válido (solo números, 7 a 10 dígitos).</span>
+          }
         </div>
-        <div class="field">
-          <label for="documento">Documento</label>
-          <input id="documento" type="text" formControlName="documento" />
+        <div class="field field--inmutable">
+          <label for="documento">Número de documento</label>
+          <input id="documento" type="text" [value]="documento()" readonly aria-readonly="true" />
+          <span class="field__hint">
+            El documento es un identificador único y no puede modificarse.
+          </span>
         </div>
         <div class="field">
           <label for="fecha_nacimiento">Fecha de nacimiento</label>
-          <input id="fecha_nacimiento" type="date" formControlName="fecha_nacimiento" />
+          <input
+            id="fecha_nacimiento"
+            type="date"
+            formControlName="fecha_nacimiento"
+            [max]="fechaMaxima"
+          />
+          @if (fechaNacimiento.touched && fechaNacimiento.hasError('edadMinima')) {
+            <span class="field__error">
+              La persona debe tener al menos 10 años para registrarse.
+            </span>
+          }
+          @if (fechaNacimiento.touched && fechaNacimiento.hasError('fechaFutura')) {
+            <span class="field__error">La fecha de nacimiento no puede ser futura.</span>
+          }
+          @if (fechaNacimiento.touched && fechaNacimiento.hasError('fechaInvalida')) {
+            <span class="field__error">Ingresa una fecha de nacimiento válida.</span>
+          }
         </div>
         <div class="field">
-          <label for="direccion">Dirección</label>
+          <label for="direccion">Dirección (Opcional)</label>
           <input id="direccion" type="text" formControlName="direccion" />
         </div>
       </div>

@@ -23,7 +23,7 @@ function mensajeDeError(error: HttpErrorResponse): string {
   }
   switch (error.status) {
     case 403:
-      return 'No tenés permisos para realizar esta acción.';
+      return 'No tienes permisos para realizar esta acción.';
     case 404:
       return 'No se encontró el recurso solicitado.';
     case 0:
@@ -45,15 +45,23 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      const esAuth = req.url.includes('/auth/login') || req.url.includes('/auth/register');
+      // The refresh and recovery endpoints handle their own 401s; only the
+      // user's own requests should close the session.
+      const esAuth =
+        req.url.includes('/auth/login') ||
+        req.url.includes('/auth/register') ||
+        req.url.includes('/auth/refresh') ||
+        req.url.includes('/auth/password-reset');
 
       if (error.status === 401) {
         auth.limpiarSesion();
-        if (!esAuth) {
-          notificaciones.error('Tu sesión expiró. Iniciá sesión nuevamente.');
-          router.navigate(['/login']);
-        } else {
+        if (req.url.includes('/auth/register')) {
+          // The registration form reports its own errors with SweetAlert2.
+        } else if (esAuth) {
           notificaciones.error('Correo o contraseña incorrectos.');
+        } else {
+          notificaciones.error('Tu sesión expiró. Inicia sesión nuevamente.');
+          router.navigate(['/login']);
         }
       } else if (!esAuth) {
         notificaciones.error(mensajeDeError(error));

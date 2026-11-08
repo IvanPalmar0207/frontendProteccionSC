@@ -1,4 +1,4 @@
-<section class="container stack">
+<section class="container stack form-page--wide">
   <header class="stack stack--sm">
     <h1>Gestión de pódcast</h1>
     <p class="muted">
@@ -7,7 +7,7 @@
     </p>
   </header>
 
-  <form class="card stack" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+  <form class="card stack form-page--wide" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
     <h2>{{ editandoId() ? 'Editar episodio' : 'Nuevo episodio' }}</h2>
 
     <div class="grid grid--2">
@@ -75,25 +75,43 @@
     </div>
   </form>
 
-  @if (cargando()) {
-    <p class="muted">Cargando episodios…</p>
-  } @else {
+  <div class="resultados" [attr.aria-busy]="actualizando()">
     <div class="row row--between row--wrap">
-      <h2>Episodios publicados</h2>
-      <div class="field">
-        <label class="sr-only" for="buscar">Buscar episodio</label>
-        <input
-          id="buscar"
-          type="search"
-          placeholder="Buscar por título, programa…"
-          [ngModel]="busqueda"
-          (ngModelChange)="onBuscar($event)"
-        />
+      <h2>Episodios</h2>
+      <div class="row row--wrap">
+        <div class="field">
+          <label class="sr-only" for="estado">Estado de publicación</label>
+          <select
+            id="estado"
+            [ngModel]="estado() === null ? '' : (estado() ? 'true' : 'false')"
+            (ngModelChange)="cambiarEstado($event)"
+          >
+            <option value="">Todas</option>
+            <option value="true">Publicados</option>
+            <option value="false">Borradores</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="sr-only" for="buscar">Buscar episodio</label>
+          <input
+            id="buscar"
+            type="search"
+            placeholder="Buscar por título, programa…"
+            [ngModel]="busqueda"
+            (ngModelChange)="onBuscar($event)"
+          />
+        </div>
       </div>
     </div>
 
-    @if (podcasts().length === 0) {
-      <p class="muted">No hay episodios que coincidan con la búsqueda.</p>
+    <span class="resultados__estado muted" role="status" aria-live="polite">
+      {{ actualizando() && !cargando() ? 'Actualizando…' : '' }}
+    </span>
+
+    @if (cargando()) {
+      <div class="tabla-wrap"><div class="skeleton skeleton--media"></div></div>
+    } @else if (podcasts().length === 0) {
+      <p class="muted">No hay episodios que coincidan con los filtros.</p>
     } @else {
       <div class="tabla-wrap">
         <table class="table">
@@ -142,5 +160,5 @@
         (cambiar)="cambiarPagina($event)"
       />
     }
-  }
+  </div>
 </section>

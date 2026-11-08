@@ -4,7 +4,7 @@
   @if (cargando()) {
     <p class="muted">Cargando conversación…</p>
   } @else if (!conversacion()) {
-    <div class="alert alert--error">No se encontró la conversación o no tenés acceso a ella.</div>
+    <div class="alert alert--error">No se encontró la conversación o no tienes acceso a ella.</div>
   } @else {
     <header class="row row--between row--wrap">
       <div class="stack stack--sm">
@@ -14,10 +14,13 @@
           <span class="badge">{{ conversacion()!.denuncia.estado | estado }}</span>
         </div>
       </div>
-      <span class="conexion" [class]="'conexion--' + estadoConexion()">
+      <span class="conexion" [class]="'conexion--' + estadoConexion()" role="status">
         @switch (estadoConexion()) {
           @case ('conectado') { En línea }
           @case ('conectando') { Conectando… }
+          @case ('reintentando') { Reconectando… }
+          @case ('sin-conexion') { Sin conexión }
+          @case ('rechazado') { Acceso denegado }
           @default { Desconectado }
         }
       </span>
@@ -25,7 +28,7 @@
 
     <div class="chat__ventana" role="log" aria-live="polite">
       @if (mensajes().length === 0) {
-        <p class="muted text-center">Todavía no hay mensajes. Escribí el primero.</p>
+        <p class="muted text-center">Todavía no hay mensajes. Escribe el primero.</p>
       } @else {
         @for (mensaje of mensajes(); track mensaje.id) {
           <div class="mensaje" [class.mensaje--propio]="esPropio(mensaje)">
@@ -39,6 +42,13 @@
       }
     </div>
 
+    @if (bloqueada()) {
+      <div class="alert alert--info" role="status">
+        Esta denuncia ha sido completada. Puedes consultar su información y el historial, pero
+        ya no es posible realizar nuevas interacciones.
+      </div>
+    }
+
     <form class="chat__form" [formGroup]="form" (ngSubmit)="enviar()" novalidate>
       <div class="field field--grow">
         <label class="sr-only" for="contenido">Mensaje</label>
@@ -46,11 +56,14 @@
           id="contenido"
           type="text"
           formControlName="contenido"
-          placeholder="Escribí un mensaje…"
+          placeholder="Escribe un mensaje…"
           autocomplete="off"
+          [disabled]="bloqueada()"
         />
       </div>
-      <button type="submit" class="btn btn--primary" [disabled]="enviando()">Enviar</button>
+      <button type="submit" class="btn btn--primary" [disabled]="enviando() || bloqueada()">
+        Enviar
+      </button>
     </form>
   }
 </section>
