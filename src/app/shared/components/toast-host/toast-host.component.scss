@@ -3,7 +3,9 @@
 .toasts {
   position: fixed;
   right: $e-4;
-  bottom: $e-4;
+  // Clear the hosting provider's "Powered by Netlify" badge, which sits in the
+  // bottom-right corner and would otherwise overlap the toasts.
+  bottom: calc(#{$e-4} + 52px);
   z-index: 60;
   display: flex;
   flex-direction: column;
